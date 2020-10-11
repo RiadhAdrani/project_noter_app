@@ -1,3 +1,13 @@
 <resources>
     <string name="app_name">Noter</string>
+
+    <string name="cancel">Cancel</string>
+    <string name="save">Save</string>
+
+    <!-- NOTE ACTIVITY -->
+    <string name="titleHint">Note Name</string>
+    <string name="titleDefault">New Note</string>
+
+    <string name="contentHint">What\'s new today\? </string>
+
 </resources>
