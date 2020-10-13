@@ -3,6 +3,8 @@
 
     <string name="cancel">Cancel</string>
     <string name="save">Save</string>
+    <string name="options">Options</string>
+    <string name="new_note">New Note</string>
 
     <!-- NOTE ACTIVITY -->
     <string name="titleHint">Note Name</string>
