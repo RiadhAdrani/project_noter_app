@@ -2,6 +2,7 @@ package com.example.noter;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -17,24 +18,33 @@ import java.io.InputStreamReader;
 
 public class NoteActivity extends AppCompatActivity {
 
-    private static final String FILE_NAME = "newNote.txt";
+    private String FILE_NAME ;
 
     private EditText titleText;
     private EditText contentText;
     private Button cancelButton;
     private Button saveButton;
+    private Note note;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.note_activity_layout);
 
+        Intent i = getIntent();
+        note = (Note) i.getSerializableExtra("note");
+
+        FILE_NAME = note.title;
+
         titleText = findViewById(R.id.note_title);
         contentText = findViewById(R.id.note_text);
         cancelButton = findViewById(R.id.cancel_button);
         saveButton = findViewById(R.id.save_button);
 
-        loadNote();
+
+        titleText.setText(note.title);
+        contentText.setText(note.content);
+        // contentText.setText(retrieveTextFromTXT(FILE_NAME));
 
         saveButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -67,7 +77,9 @@ public class NoteActivity extends AppCompatActivity {
         }
     }
 
-    public void loadNote(){
+    public String retrieveTextFromTXT(String fileName){
+        String mText = "";
+
         FileInputStream fis = null;
         try {
             fis = openFileInput(FILE_NAME);
@@ -81,6 +93,7 @@ public class NoteActivity extends AppCompatActivity {
             }
 
             contentText.setText(sb.toString());
+            mText = sb.toString();
 
         } catch (FileNotFoundException e) {
             e.printStackTrace();
@@ -95,5 +108,6 @@ public class NoteActivity extends AppCompatActivity {
                 }
             }
         }
+        return mText;
     }
 }

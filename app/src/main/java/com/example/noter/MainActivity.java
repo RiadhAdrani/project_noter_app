@@ -1,25 +1,21 @@
 package com.example.noter;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
-import android.widget.Button;
-import android.widget.Toast;
-
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
+import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Random;
 
-public class MainActivity extends Activity {
+public class MainActivity extends Activity implements Serializable {
 
     ArrayList<Note> exampleCategory = new ArrayList<Note>();
     RecyclerView mRecyclerView;
-    RecyclerView.Adapter mAdapter;
+    NoteAdapter mAdapter;
     RecyclerView.LayoutManager mLayoutManager;
 
     FloatingActionButton fab;
@@ -74,10 +70,23 @@ public class MainActivity extends Activity {
 
         mRecyclerView.setLayoutManager(mLayoutManager);
         mRecyclerView.setAdapter(mAdapter);
+
+        mAdapter.setOnItemClickListener(new NoteAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(int position) {
+                loadNote(position);
+            }
+        });
+    }
+
+    void loadNote(int position){
+        Intent i = new Intent(this, NoteActivity.class);
+        i.putExtra("note", exampleCategory.get(position));
+        startActivity(i);
     }
 
     void addNote(){
         exampleCategory.add(0,new Note("new Note ("+ (int) (Math.random()*10) +")",R.drawable.icon_big,"new_note"));
-        buildRecyclerView();
+        mAdapter.notifyItemInserted(0);
     }
 }

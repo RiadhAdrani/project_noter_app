@@ -47,7 +47,6 @@
             android:layout_height="match_parent"
             android:src="@drawable/three_dot_vert"
             android:contentDescription="@string/options"
-            android:contextClickable="true"
             />
 
         

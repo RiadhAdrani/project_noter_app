@@ -1,10 +1,9 @@
 package com.example.noter;
 
-import android.content.Context;
-
+import java.io.Serializable;
 import java.util.Date;
 
-public class Note {
+public class Note implements Serializable {
 
     public Date creation;
     public Date lastModified;

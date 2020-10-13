@@ -14,6 +14,15 @@ import java.util.ArrayList;
 public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.myViewHolder> {
 
     ArrayList<Note> mNoteList;
+    OnItemClickListener mListener;
+
+    public interface OnItemClickListener {
+        void onItemClick(int position);
+    }
+
+    public void setOnItemClickListener(OnItemClickListener listener){
+        mListener = listener;
+    }
 
     public static class myViewHolder extends RecyclerView.ViewHolder{
 
@@ -21,12 +30,24 @@ public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.myViewHolder> 
         public TextView mTitle;
         public TextView mContentPreview;
 
-        public myViewHolder(@NonNull View itemView) {
+        public myViewHolder(@NonNull View itemView, final OnItemClickListener listener) {
             super(itemView);
 
             mImageView = itemView.findViewById(R.id.card_icon);
             mTitle = itemView.findViewById(R.id.card_title);
             mContentPreview = itemView.findViewById(R.id.card_preview);
+
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    if (listener != null){
+                        int position = getAdapterPosition();
+                        if (position != RecyclerView.NO_POSITION){
+                            listener.onItemClick(position);
+                        }
+                    }
+                }
+            });
         }
     }
 
@@ -38,7 +59,7 @@ public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.myViewHolder> 
     @Override
     public myViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.note_card_layout,parent,false);
-        myViewHolder mvh = new myViewHolder(v);
+        myViewHolder mvh = new myViewHolder(v, mListener);
         return mvh;
     }
 
