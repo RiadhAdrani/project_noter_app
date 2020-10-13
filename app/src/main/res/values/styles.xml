@@ -2,9 +2,57 @@
     <!-- Base application theme. -->
     <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
         <!-- Customize your theme here. -->
-        <item name="colorPrimary">@color/green_charcoal</item>
-        <item name="colorPrimaryDark">@color/green_persian</item>
-        <item name="colorAccent">@color/brown_sandy</item>
+        <item name="colorPrimary">@color/green_persian</item>
+        <item name="colorPrimaryDark">@color/green_charcoal</item>
+        <item name="colorAccent">@color/orange_red_burnt_sienna</item>
+
+        <item name="colorSecondary">@color/green_persian</item>
+        <item name="colorOnSecondary">@color/green_charcoal</item>
+        <item name="colorOnSurface">@color/brown_sandy</item>
+        <item name="shapeAppearanceSmallComponent">@style/ShapeAppearance.App.SmallComponent</item>
+    </style>
+
+    <style name="ShapeAppearance.App.SmallComponent" parent="ShapeAppearance.MaterialComponents.SmallComponent">
+        <item name="cornerFamily">cut</item>
+        <item name="cornerSize">4dp</item>
+    </style>
+
+    <style name="mainActivityRecyclerView">
+
+    </style>
+
+    <style name="cardStyle">
+        <item name="backgroundColor">@color/green_persian</item>
+    </style>
+
+    <style name="cardTitleStyle">
+        <item name="android:textSize">16sp</item>
+        <item name="android:textColor">@android:color/black</item>
+    </style>
+
+    <style name="cardContentStyle">
+        <item name="android:textSize">12sp</item>
+        <item name="android:textColor">@android:color/darker_gray</item>
+        <item name="android:minLines">1</item>
+        <item name="android:maxLines">2</item>
+    </style>
+
+    <style name="mainActivityFloatingActionButton">
+        <item name="android:fillColor">@color/green_persian</item>
+        <item name="colorSecondary">@color/green_charcoal</item>
+        <item name="colorOnSecondary">@color/green_persian</item>
+        <item name="colorOnSurface">@color/orange_yellow_crayola</item>
+    </style>
+
+    <style name="noteActivityTitleStyle">
+        <item name="android:textSize">24sp</item>
+        <item name="android:textColor">@android:color/black</item>
+    </style>
+
+    <style name="noteActivityContentTextStyle">
+        <item name="android:textSize">16sp</item>
+        <item name="android:textColor">@android:color/black</item>
+
     </style>
 
 </resources>
