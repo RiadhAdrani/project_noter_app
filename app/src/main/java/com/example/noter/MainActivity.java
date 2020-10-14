@@ -2,13 +2,17 @@ package com.example.noter;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
 import java.io.Serializable;
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 
 public class MainActivity extends Activity implements Serializable {
@@ -25,16 +29,18 @@ public class MainActivity extends Activity implements Serializable {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main_activity_layout);
 
+        exampleCategory = loadNoteFromSharedPreferences();
         fab = findViewById(R.id.floating_action_button);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                saveNoteToSharedPreferences(exampleCategory);
                 addNote();
             }
         });
 
 
-        useDummyElements();
+        // useDummyElements();
         buildRecyclerView();
 
     }
@@ -83,6 +89,29 @@ public class MainActivity extends Activity implements Serializable {
         Intent i = new Intent(this, NoteActivity.class);
         i.putExtra("note", exampleCategory.get(position));
         startActivity(i);
+    }
+
+    void saveNoteToSharedPreferences(ArrayList<Note> noteList){
+        SharedPreferences sharedPreferences = getSharedPreferences("shared preferences", MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        Gson gson = new Gson();
+        String json = gson.toJson(noteList);
+        editor.putString("task list",json);
+        editor.apply();
+    }
+
+    ArrayList<Note> loadNoteFromSharedPreferences(){
+        ArrayList<Note> noteList = new ArrayList<Note>();
+        SharedPreferences sharedPreferences = getSharedPreferences("shared preferences", MODE_PRIVATE);
+        Gson gson = new Gson();
+        String json = sharedPreferences.getString("task list",null);
+        Type type = new TypeToken<ArrayList<Note>>() {}.getType();
+        noteList = gson.fromJson(json,type);
+
+        if (noteList == null){
+            return new ArrayList<Note>();
+        } else
+            return noteList;
     }
 
     void addNote(){
