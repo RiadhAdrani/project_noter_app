@@ -17,7 +17,9 @@
             android:id="@+id/card_icon"
             android:layout_width="75dp"
             android:layout_height="75dp"
-            android:layout_margin="4dp"/>
+            android:layout_margin="4dp"
+            android:padding="12dp"
+            android:src="@drawable/icon_small"/>
         <LinearLayout
             android:layout_width="0dp"
             android:layout_weight="1"
@@ -28,6 +30,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
                     android:layout_weight="1.5"
+                    android:gravity="bottom"
                     android:text="@string/titleDefault"
                     android:layout_marginHorizontal="4dp"
                     android:layout_marginVertical="2dp"
@@ -45,11 +48,13 @@
 
         <ImageView
             android:id="@+id/card_options"
-            android:layout_width="20dp"
+            android:layout_width="32dp"
             android:layout_height="match_parent"
             android:src="@drawable/three_dot_vert"
+            android:scaleType="fitCenter"
             android:contentDescription="@string/options"
-            android:layout_marginHorizontal="2dp"
+            android:layout_marginHorizontal="8dp"
+
             />
 
         

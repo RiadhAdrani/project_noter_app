@@ -18,6 +18,7 @@ public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.myViewHolder> 
 
     public interface OnItemClickListener {
         void onItemClick(int position);
+        void onOptionClick(int position);
     }
 
     public void setOnItemClickListener(OnItemClickListener listener){
@@ -29,6 +30,7 @@ public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.myViewHolder> 
         public ImageView mImageView;
         public TextView mTitle;
         public TextView mContentPreview;
+        public ImageView mOptions;
 
         public myViewHolder(@NonNull View itemView, final OnItemClickListener listener) {
             super(itemView);
@@ -36,6 +38,7 @@ public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.myViewHolder> 
             mImageView = itemView.findViewById(R.id.card_icon);
             mTitle = itemView.findViewById(R.id.card_title);
             mContentPreview = itemView.findViewById(R.id.card_preview);
+            mOptions = itemView.findViewById(R.id.card_options);
 
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -44,6 +47,18 @@ public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.myViewHolder> 
                         int position = getAdapterPosition();
                         if (position != RecyclerView.NO_POSITION){
                             listener.onItemClick(position);
+                        }
+                    }
+                }
+            });
+
+            mOptions.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    if (listener != null){
+                        int position = getAdapterPosition();
+                        if (position != RecyclerView.NO_POSITION){
+                            listener.onOptionClick(position);
                         }
                     }
                 }
