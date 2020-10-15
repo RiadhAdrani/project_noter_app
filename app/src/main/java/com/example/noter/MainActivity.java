@@ -1,8 +1,12 @@
 package com.example.noter;
 
 import android.app.Activity;
+import android.content.ClipData;
+import android.content.ClipboardManager;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.icu.number.LocalizedNumberFormatter;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Toast;
@@ -36,8 +40,7 @@ public class MainActivity extends Activity implements Serializable {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                saveNoteToSharedPreferences(mList);
-                addNote();
+                addNote(0);
             }
         });
 
@@ -45,6 +48,40 @@ public class MainActivity extends Activity implements Serializable {
         // useDummyElements();
         buildRecyclerView();
 
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        mList = loadNoteFromSharedPreferences();
+        Toast.makeText(this,"Notes Loaded", Toast.LENGTH_LONG);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        saveNoteToSharedPreferences(mList);
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        saveNoteToSharedPreferences(mList);
+
+    }
+
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+        mList = loadNoteFromSharedPreferences();
+        mAdapter.notifyDataSetChanged();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        mList = loadNoteFromSharedPreferences();
+        mAdapter.notifyDataSetChanged();
     }
 
     void buildRecyclerView(){
@@ -58,9 +95,6 @@ public class MainActivity extends Activity implements Serializable {
 
         mLayoutManager = new LinearLayoutManager(this);
         mAdapter = new NoteAdapter(mList,this);
-
-        mRecyclerView.setLayoutManager(mLayoutManager);
-        mRecyclerView.setAdapter(mAdapter);
 
         mAdapter.setOnItemClickListener(new NoteAdapter.OnItemClickListener() {
             @Override
@@ -89,24 +123,41 @@ public class MainActivity extends Activity implements Serializable {
                 deleteNote(position);
             }
         });
+
+        mRecyclerView.setLayoutManager(mLayoutManager);
+        mRecyclerView.setAdapter(mAdapter);
     }
 
     void duplicateNote(int position){
         mList.add(position,mList.get(position));
-        mAdapter.notifyItemInserted(position);
-        saveNoteToSharedPreferences(mList);
+
+        // Need to be more optimized
+        buildRecyclerView();
     }
 
     void copyNoteContent(int position){
-        // COPY CONTENT
-        // ! ! !
+        ClipboardManager clipboard = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
+        ClipData clip = ClipData.newPlainText("Note Content", mList.get(position).content);
+        clipboard.setPrimaryClip(clip);
         Toast.makeText(getApplicationContext(),getString(R.string.copy_content_toast),Toast.LENGTH_LONG).show();
     }
 
     void deleteNote(int position){
+        Toast.makeText(this,"Deleted item ("+ (position+1) +")",Toast.LENGTH_LONG).show();
         mList.remove(position);
-        mAdapter.notifyItemRemoved(position);
-        saveNoteToSharedPreferences(mList);
+
+        // Need to be more optimized
+        buildRecyclerView();
+    }
+
+    void addNote(int position){
+        if (mList.size() != 0) mList.add(position,new Note("new Note ("+ (int) (Math.random()*1000) +")",R.drawable.icon_big,"new_note"));
+        else mList.add(new Note("new Note ("+ (int) (Math.random()*1000) +")",R.drawable.icon_big,"new_note"));
+
+        Toast.makeText(this,"Added a new note @ position 1",Toast.LENGTH_LONG).show();
+
+        // Need to be more optimized
+        buildRecyclerView();
     }
 
     void loadNote(int position){
@@ -114,7 +165,6 @@ public class MainActivity extends Activity implements Serializable {
         i.putExtra("note", mList.get(position));
         startActivity(i);
     }
-
 
     void saveNoteToSharedPreferences(ArrayList<Note> noteList){
         SharedPreferences sharedPreferences = getSharedPreferences("shared preferences", MODE_PRIVATE);
@@ -137,12 +187,6 @@ public class MainActivity extends Activity implements Serializable {
             return new ArrayList<Note>();
         } else
             return noteList;
-    }
-
-    void addNote(){
-        mList.add(0,new Note("new Note ("+ (int) (Math.random()*10) +")",R.drawable.icon_big,"new_note"));
-        mAdapter.notifyItemInserted(0);
-        saveNoteToSharedPreferences(mList);
     }
 
 
