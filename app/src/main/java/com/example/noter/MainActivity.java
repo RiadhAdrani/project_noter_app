@@ -5,6 +5,8 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Toast;
+
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -45,23 +47,6 @@ public class MainActivity extends Activity implements Serializable {
 
     }
 
-    void useDummyElements(){
-        // Testing the RecyclerView
-        // Dummy element ahead
-        mList.add(new Note("note 1",R.drawable.icon_big,"one"));
-        mList.add(new Note("note 2",R.drawable.icon_big,"two"));
-        mList.add(new Note("note 3",R.drawable.icon_big,"three"));
-        mList.add(new Note("note 4",R.drawable.icon_big,"four"));
-        mList.add(new Note("note 5",R.drawable.icon_big,"five"));
-        mList.add(new Note("note 6",R.drawable.icon_big,"six"));
-        mList.add(new Note("note 7",R.drawable.icon_big,"seven"));
-        mList.add(new Note("note 8",R.drawable.icon_big,"eight"));
-        mList.add(new Note("note 9",R.drawable.icon_big,"nine"));
-        mList.add(new Note("note 10",R.drawable.icon_big,"ten"));
-        mList.add(new Note("note 11",R.drawable.icon_big,"eleven"));
-        mList.add(new Note("note 12",R.drawable.icon_big,"twelve"));
-    }
-
     void buildRecyclerView(){
         mRecyclerView = findViewById(R.id.category_RecyclerView);
 
@@ -72,7 +57,7 @@ public class MainActivity extends Activity implements Serializable {
         mRecyclerView.setHasFixedSize(false);
 
         mLayoutManager = new LinearLayoutManager(this);
-        mAdapter = new NoteAdapter(mList);
+        mAdapter = new NoteAdapter(mList,this);
 
         mRecyclerView.setLayoutManager(mLayoutManager);
         mRecyclerView.setAdapter(mAdapter);
@@ -85,10 +70,43 @@ public class MainActivity extends Activity implements Serializable {
 
             @Override
             public void onOptionClick(int position) {
+//                deleteNote(position);
+//                saveNoteToSharedPreferences(mList);
+            }
+
+            @Override
+            public void onDuplicateClick(int position) {
+                duplicateNote(position);
+            }
+
+            @Override
+            public void onCopyContentClick(int position) {
+                copyNoteContent(position);
+            }
+
+            @Override
+            public void onDeleteClick(int position) {
                 deleteNote(position);
-                saveNoteToSharedPreferences(mList);
             }
         });
+    }
+
+    void duplicateNote(int position){
+        mList.add(position,mList.get(position));
+        mAdapter.notifyItemInserted(position);
+        saveNoteToSharedPreferences(mList);
+    }
+
+    void copyNoteContent(int position){
+        // COPY CONTENT
+        // ! ! !
+        Toast.makeText(getApplicationContext(),getString(R.string.copy_content_toast),Toast.LENGTH_LONG).show();
+    }
+
+    void deleteNote(int position){
+        mList.remove(position);
+        mAdapter.notifyItemRemoved(position);
+        saveNoteToSharedPreferences(mList);
     }
 
     void loadNote(int position){
@@ -96,6 +114,7 @@ public class MainActivity extends Activity implements Serializable {
         i.putExtra("note", mList.get(position));
         startActivity(i);
     }
+
 
     void saveNoteToSharedPreferences(ArrayList<Note> noteList){
         SharedPreferences sharedPreferences = getSharedPreferences("shared preferences", MODE_PRIVATE);
@@ -123,10 +142,29 @@ public class MainActivity extends Activity implements Serializable {
     void addNote(){
         mList.add(0,new Note("new Note ("+ (int) (Math.random()*10) +")",R.drawable.icon_big,"new_note"));
         mAdapter.notifyItemInserted(0);
+        saveNoteToSharedPreferences(mList);
     }
 
-    void deleteNote(int position){
-        mList.remove(position);
-        mAdapter.notifyItemRemoved(position);
+
+    // --------------------------------------------------------------------------------------------------------------------//
+    // -------------------------------------------- FUNCTIONS GRAVEYARD ---------------------------------------------------//
+    // --------------------------------------------------------------------------------------------------------------------//
+
+    void useDummyElements(){
+        // Testing the RecyclerView
+        // Dummy element ahead
+        mList.add(new Note("note 1",R.drawable.icon_big,"one"));
+        mList.add(new Note("note 2",R.drawable.icon_big,"two"));
+        mList.add(new Note("note 3",R.drawable.icon_big,"three"));
+        mList.add(new Note("note 4",R.drawable.icon_big,"four"));
+        mList.add(new Note("note 5",R.drawable.icon_big,"five"));
+        mList.add(new Note("note 6",R.drawable.icon_big,"six"));
+        mList.add(new Note("note 7",R.drawable.icon_big,"seven"));
+        mList.add(new Note("note 8",R.drawable.icon_big,"eight"));
+        mList.add(new Note("note 9",R.drawable.icon_big,"nine"));
+        mList.add(new Note("note 10",R.drawable.icon_big,"ten"));
+        mList.add(new Note("note 11",R.drawable.icon_big,"eleven"));
+        mList.add(new Note("note 12",R.drawable.icon_big,"twelve"));
     }
+
 }

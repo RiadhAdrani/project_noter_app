@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item android:id="@+id/card_option_duplicate"
+        android:title="@string/duplicate_note"
+        app:showAsAction="never"
+        />
+    <item android:id="@+id/card_option_copy_content"
+        android:title="@string/copy_content"
+        app:showAsAction="never"
+        />
+    <item android:id="@+id/card_option_delete"
+        android:title="@string/delete_note"
+        app:showAsAction="never"
+        />
+</menu>
