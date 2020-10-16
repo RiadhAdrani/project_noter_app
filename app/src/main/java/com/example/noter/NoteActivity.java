@@ -3,11 +3,14 @@ package com.example.noter;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
+
+import com.google.gson.Gson;
 
 import java.io.BufferedReader;
 import java.io.FileInputStream;
@@ -15,10 +18,13 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.ArrayList;
 
 public class NoteActivity extends AppCompatActivity {
 
-    private String FILE_NAME ;
+    private String FILE_NAME = "file_name";
+    private int noteIndex = -1;
+    private ArrayList<Note> mList = new ArrayList<>();
 
     private EditText titleText;
     private EditText contentText;
@@ -33,8 +39,8 @@ public class NoteActivity extends AppCompatActivity {
 
         Intent i = getIntent();
         note = (Note) i.getSerializableExtra("note");
-
-        FILE_NAME = note.title;
+        noteIndex = (int) i.getSerializableExtra("note_index");
+        mList = (ArrayList<Note>) i.getSerializableExtra("note_list");
 
         titleText = findViewById(R.id.note_title);
         contentText = findViewById(R.id.note_text);
@@ -44,17 +50,49 @@ public class NoteActivity extends AppCompatActivity {
 
         titleText.setText(note.title);
         contentText.setText(note.content);
-        // contentText.setText(retrieveTextFromTXT(FILE_NAME));
 
         saveButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                saveNote();
+                saveNote(noteIndex);
+            }
+        });
+        cancelButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                cancel();
             }
         });
     }
 
-    public void saveNote (){
+    void saveNoteListToSharedPreferences(ArrayList<Note> noteList){
+        SharedPreferences sharedPreferences = getSharedPreferences("shared preferences", MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        Gson gson = new Gson();
+        String json = gson.toJson(noteList);
+        editor.putString("task list",json);
+        editor.apply();
+    }
+
+    void saveNote(int position){
+        if (position != -1){
+            mList.get(position).title = titleText.getText().toString();
+            mList.get(position).content = contentText.getText().toString();
+        } else {
+            mList.add(0,new Note(titleText.getText().toString(),contentText.getText().toString(),R.drawable.icon_big));
+        }
+
+        saveNoteListToSharedPreferences(mList);
+        cancel();
+    }
+
+    void cancel(){
+        Intent i = new Intent(this, MainActivity.class);
+        startActivity(i);
+        finish();
+    }
+
+    public void saveNoteAsTXT (){
         String text = contentText.getText().toString();
         FileOutputStream fos = null;
 

@@ -6,7 +6,6 @@ import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.icu.number.LocalizedNumberFormatter;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Toast;
@@ -40,10 +39,9 @@ public class MainActivity extends Activity implements Serializable {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                addNote(0);
+                createNewNote(-1);
             }
         });
-
 
         // useDummyElements();
         buildRecyclerView();
@@ -54,7 +52,6 @@ public class MainActivity extends Activity implements Serializable {
     protected void onStart() {
         super.onStart();
         mList = loadNoteFromSharedPreferences();
-        Toast.makeText(this,"Notes Loaded", Toast.LENGTH_LONG);
     }
 
     @Override
@@ -74,14 +71,14 @@ public class MainActivity extends Activity implements Serializable {
     protected void onRestart() {
         super.onRestart();
         mList = loadNoteFromSharedPreferences();
-        mAdapter.notifyDataSetChanged();
+        buildRecyclerView();
     }
 
     @Override
     protected void onResume() {
         super.onResume();
         mList = loadNoteFromSharedPreferences();
-        mAdapter.notifyDataSetChanged();
+        buildRecyclerView();
     }
 
     void buildRecyclerView(){
@@ -133,6 +130,9 @@ public class MainActivity extends Activity implements Serializable {
 
         // Need to be more optimized
         buildRecyclerView();
+
+        // mAdapter.notifyDataSetChanged();
+        // mAdapter.notifyItemInserted(position);
     }
 
     void copyNoteContent(int position){
@@ -143,26 +143,38 @@ public class MainActivity extends Activity implements Serializable {
     }
 
     void deleteNote(int position){
-        Toast.makeText(this,"Deleted item ("+ (position+1) +")",Toast.LENGTH_LONG).show();
         mList.remove(position);
 
         // Need to be more optimized
         buildRecyclerView();
+
+        //mAdapter.notifyDataSetChanged();
+        //mAdapter.notifyItemRemoved(position);
     }
 
-    void addNote(int position){
+    void createNewNote(int position){
+        Intent i = new Intent(this, NoteActivity.class);
+        i.putExtra("note", new Note(getString(R.string.new_note),""));
+        i.putExtra("note_index", position);
+        i.putExtra("note_list",mList);
+        startActivity(i);
+    }
+
+    void addDummyNote(int position){
         if (mList.size() != 0) mList.add(position,new Note("new Note ("+ (int) (Math.random()*1000) +")",R.drawable.icon_big,"new_note"));
         else mList.add(new Note("new Note ("+ (int) (Math.random()*1000) +")",R.drawable.icon_big,"new_note"));
 
-        Toast.makeText(this,"Added a new note @ position 1",Toast.LENGTH_LONG).show();
-
         // Need to be more optimized
         buildRecyclerView();
+//        mAdapter.notifyDataSetChanged();
+//        mAdapter.notifyItemInserted(position);
     }
 
     void loadNote(int position){
         Intent i = new Intent(this, NoteActivity.class);
         i.putExtra("note", mList.get(position));
+        i.putExtra("note_index", position);
+        i.putExtra("note_list",mList);
         startActivity(i);
     }
 

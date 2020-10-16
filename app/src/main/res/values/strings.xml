@@ -8,6 +8,8 @@
     <string name="duplicate_note">Duplicate</string>
     <string name="copy_content">Copy Content</string>
     <string name="copy_content_toast">Content Copied !</string>
+    <string name="note_created">Note created !</string>
+    <string name="note_saved">Note saved !</string>
     <string name="delete_note">Delete</string>
 
     <!-- NOTE ACTIVITY -->
