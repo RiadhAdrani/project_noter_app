@@ -160,16 +160,6 @@ public class MainActivity extends Activity implements Serializable {
         startActivity(i);
     }
 
-    void addDummyNote(int position){
-        if (mList.size() != 0) mList.add(position,new Note("new Note ("+ (int) (Math.random()*1000) +")",R.drawable.icon_big,"new_note"));
-        else mList.add(new Note("new Note ("+ (int) (Math.random()*1000) +")",R.drawable.icon_big,"new_note"));
-
-        // Need to be more optimized
-        buildRecyclerView();
-//        mAdapter.notifyDataSetChanged();
-//        mAdapter.notifyItemInserted(position);
-    }
-
     void loadNote(int position){
         Intent i = new Intent(this, NoteActivity.class);
         i.putExtra("note", mList.get(position));
@@ -209,18 +199,27 @@ public class MainActivity extends Activity implements Serializable {
     void useDummyElements(){
         // Testing the RecyclerView
         // Dummy element ahead
-        mList.add(new Note("note 1",R.drawable.icon_big,"one"));
-        mList.add(new Note("note 2",R.drawable.icon_big,"two"));
-        mList.add(new Note("note 3",R.drawable.icon_big,"three"));
-        mList.add(new Note("note 4",R.drawable.icon_big,"four"));
-        mList.add(new Note("note 5",R.drawable.icon_big,"five"));
-        mList.add(new Note("note 6",R.drawable.icon_big,"six"));
-        mList.add(new Note("note 7",R.drawable.icon_big,"seven"));
-        mList.add(new Note("note 8",R.drawable.icon_big,"eight"));
-        mList.add(new Note("note 9",R.drawable.icon_big,"nine"));
-        mList.add(new Note("note 10",R.drawable.icon_big,"ten"));
-        mList.add(new Note("note 11",R.drawable.icon_big,"eleven"));
-        mList.add(new Note("note 12",R.drawable.icon_big,"twelve"));
+//        mList.add(new Note("note 1",R.drawable.icon_big,"one"));
+//        mList.add(new Note("note 2",R.drawable.icon_big,"two"));
+//        mList.add(new Note("note 3",R.drawable.icon_big,"three"));
+//        mList.add(new Note("note 4",R.drawable.icon_big,"four"));
+//        mList.add(new Note("note 5",R.drawable.icon_big,"five"));
+//        mList.add(new Note("note 6",R.drawable.icon_big,"six"));
+//        mList.add(new Note("note 7",R.drawable.icon_big,"seven"));
+//        mList.add(new Note("note 8",R.drawable.icon_big,"eight"));
+//        mList.add(new Note("note 9",R.drawable.icon_big,"nine"));
+//        mList.add(new Note("note 10",R.drawable.icon_big,"ten"));
+//        mList.add(new Note("note 11",R.drawable.icon_big,"eleven"));
+//        mList.add(new Note("note 12",R.drawable.icon_big,"twelve"));
+    }
+
+    void addDummyNote(int position){
+//        if (mList.size() != 0) mList.add(position,new Note("new Note ("+ (int) (Math.random()*1000) +")","new_note"));
+//        else mList.add(new Note("new Note ("+ (int) (Math.random()*1000) +")","new_note"));
+//        Need to be more optimized
+//        buildRecyclerView();
+//        mAdapter.notifyDataSetChanged();
+//        mAdapter.notifyItemInserted(position);
     }
 
 }

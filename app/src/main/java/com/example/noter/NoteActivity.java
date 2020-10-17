@@ -1,6 +1,8 @@
 package com.example.noter;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -8,6 +10,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
@@ -26,8 +29,12 @@ public class NoteActivity extends AppCompatActivity {
     private int noteIndex = -1;
     private ArrayList<Note> mList = new ArrayList<>();
 
+    private ArrayList<Icon> iconList = new ArrayList<>();
+    final static int numberOfColumns = 3;
+
     private EditText titleText;
     private EditText contentText;
+    private ImageView noteIcon;
     private Button cancelButton;
     private Button saveButton;
     private Note note;
@@ -46,10 +53,21 @@ public class NoteActivity extends AppCompatActivity {
         contentText = findViewById(R.id.note_text);
         cancelButton = findViewById(R.id.cancel_button);
         saveButton = findViewById(R.id.save_button);
-
+        noteIcon = findViewById(R.id.note_icon);
 
         titleText.setText(note.title);
         contentText.setText(note.content);
+
+        if (noteIndex != -1 ) noteIcon.setImageResource(note.nIcon);
+        else noteIcon.setImageResource(R.drawable.icon_small);
+
+        noteIcon.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                createDummyIconList();
+                buildIconDialog();
+            }
+        });
 
         saveButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -63,6 +81,44 @@ public class NoteActivity extends AppCompatActivity {
                 cancel();
             }
         });
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        finish();
+    }
+
+    void buildIconDialog(){
+        final PickIconDialog iconDialog = new PickIconDialog(this);
+        iconDialog.show(getSupportFragmentManager(),"icon Dialog");
+
+        iconDialog.setOnCreate(new PickIconDialog.OnCreate() {
+            @Override
+            public void buildRecyclerView() {
+                buildIconRecyclerView(iconDialog.dialog);
+            }
+        });
+
+    }
+
+    void buildIconRecyclerView(View view){
+        RecyclerView mRecyclerView;
+        IconAdapter mAdapter;
+        RecyclerView.LayoutManager mLayoutManager;
+
+        mRecyclerView = view.findViewById(R.id.icon_list_recyclerView);
+
+        // If the list contains an always fixed number of element,
+        // set the boolean in the next line of code to TRUE
+        // In the case of this note app, the size may vary by deleting/adding new notes
+        // should be set to FALSE (if not using dummy data)
+        mRecyclerView.setHasFixedSize(false);
+
+        mLayoutManager = new GridLayoutManager(this,numberOfColumns);
+        mAdapter = new IconAdapter(iconList);
+        mRecyclerView.setLayoutManager(mLayoutManager);
+        mRecyclerView.setAdapter(mAdapter);
     }
 
     void saveNoteListToSharedPreferences(ArrayList<Note> noteList){
@@ -147,5 +203,26 @@ public class NoteActivity extends AppCompatActivity {
             }
         }
         return mText;
+    }
+
+    public void createDummyIconList(){
+        iconList.add(new Icon(R.drawable.icon_big,"icon big"));
+        iconList.add(new Icon(R.drawable.ic_launcher_background,"icon"));
+        iconList.add(new Icon(R.drawable.icon_small,"icon small"));
+        iconList.add(new Icon(R.drawable.ic_launcher_background,"icon"));
+        iconList.add(new Icon(R.drawable.icon_small,"icon small"));
+        iconList.add(new Icon(R.drawable.icon_big,"icon big"));
+        iconList.add(new Icon(R.drawable.icon_big,"icon big"));
+        iconList.add(new Icon(R.drawable.ic_launcher_background,"icon"));
+        iconList.add(new Icon(R.drawable.icon_small,"icon small"));
+        iconList.add(new Icon(R.drawable.ic_launcher_background,"icon"));
+        iconList.add(new Icon(R.drawable.icon_small,"icon small"));
+        iconList.add(new Icon(R.drawable.icon_big,"icon big"));
+        iconList.add(new Icon(R.drawable.icon_big,"icon big"));
+        iconList.add(new Icon(R.drawable.ic_launcher_background,"icon"));
+        iconList.add(new Icon(R.drawable.icon_small,"icon small"));
+        iconList.add(new Icon(R.drawable.ic_launcher_background,"icon"));
+        iconList.add(new Icon(R.drawable.icon_small,"icon small"));
+        iconList.add(new Icon(R.drawable.icon_big,"icon big"));
     }
 }
