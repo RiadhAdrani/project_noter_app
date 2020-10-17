@@ -154,7 +154,7 @@ public class MainActivity extends Activity implements Serializable {
 
     void createNewNote(int position){
         Intent i = new Intent(this, NoteActivity.class);
-        i.putExtra("note", new Note(getString(R.string.new_note),""));
+        i.putExtra("note", new Note(getString(R.string.new_note),"",R.drawable.icon_big));
         i.putExtra("note_index", position);
         i.putExtra("note_list",mList);
         startActivity(i);

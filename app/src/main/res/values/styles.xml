@@ -5,11 +5,13 @@
         <item name="colorPrimary">@color/green_persian</item>
         <item name="colorPrimaryDark">@color/green_charcoal</item>
         <item name="colorAccent">@color/orange_red_burnt_sienna</item>
+    </style>
 
-        <item name="colorSecondary">@color/green_persian</item>
-        <item name="colorOnSecondary">@color/green_charcoal</item>
-        <item name="colorOnSurface">@color/brown_sandy</item>
-        <item name="shapeAppearanceSmallComponent">@style/ShapeAppearance.App.SmallComponent</item>
+    <style name="MainActivityTheme" parent="Theme.AppCompat.Light.NoActionBar">
+        <!-- Customize your theme here. -->
+        <item name="colorPrimary">@color/green_persian</item>
+        <item name="colorPrimaryDark">@color/green_charcoal</item>
+        <item name="colorAccent">@color/orange_red_burnt_sienna</item>
     </style>
 
     <style name="ShapeAppearance.App.SmallComponent" parent="ShapeAppearance.MaterialComponents.SmallComponent">

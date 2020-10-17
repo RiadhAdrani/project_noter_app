@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -92,17 +93,15 @@ public class NoteActivity extends AppCompatActivity {
     void buildIconDialog(){
         final PickIconDialog iconDialog = new PickIconDialog(this);
         iconDialog.show(getSupportFragmentManager(),"icon Dialog");
-
         iconDialog.setOnCreate(new PickIconDialog.OnCreate() {
             @Override
             public void buildRecyclerView() {
-                buildIconRecyclerView(iconDialog.dialog);
+                buildIconRecyclerView(iconDialog.dialog,iconDialog);
             }
         });
-
     }
 
-    void buildIconRecyclerView(View view){
+    void buildIconRecyclerView(View view, final PickIconDialog dialog){
         RecyclerView mRecyclerView;
         IconAdapter mAdapter;
         RecyclerView.LayoutManager mLayoutManager;
@@ -117,6 +116,16 @@ public class NoteActivity extends AppCompatActivity {
 
         mLayoutManager = new GridLayoutManager(this,numberOfColumns);
         mAdapter = new IconAdapter(iconList);
+        mAdapter.setOnItemClickListener(new IconAdapter.OnItemClickListener() {
+
+            @Override
+            public void onItemClickListener(int position) {
+                note.nIcon = iconList.get(position).id;
+                noteIcon.setImageResource(iconList.get(position).id);
+                dialog.dismiss();
+            }
+        });
+
         mRecyclerView.setLayoutManager(mLayoutManager);
         mRecyclerView.setAdapter(mAdapter);
     }
@@ -134,8 +143,9 @@ public class NoteActivity extends AppCompatActivity {
         if (position != -1){
             mList.get(position).title = titleText.getText().toString();
             mList.get(position).content = contentText.getText().toString();
+            mList.get(position).nIcon = note.nIcon;
         } else {
-            mList.add(0,new Note(titleText.getText().toString(),contentText.getText().toString(),R.drawable.icon_big));
+            mList.add(0,new Note(titleText.getText().toString(),contentText.getText().toString(),note.nIcon));
         }
 
         saveNoteListToSharedPreferences(mList);

@@ -11,10 +11,10 @@
     <string name="delete_note">Delete</string>
 
     <!-- TOASTS | MESSAGES | ALERTS -->
-    <string name="copy_content_toast">Content Copied !</string>
+    <string name="copy_content_toast">Content copied to clipboard !</string>
     <string name="note_created">Note created !</string>
     <string name="note_saved">Note saved !</string>
-    <string name="add_icon">Add a suitable icon</string>
+    <string name="add_icon">Select a suitable icon</string>
     <string name="icon_name_placeholder">Icon name</string>
 
     <!-- PLACEHOLDERS -->
