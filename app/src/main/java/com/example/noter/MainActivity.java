@@ -34,7 +34,7 @@ public class MainActivity extends Activity implements Serializable {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main_activity_layout);
 
-        mList = loadNoteFromSharedPreferences();
+        // mList = loadNoteFromSharedPreferences();
         fab = findViewById(R.id.floating_action_button);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -154,7 +154,7 @@ public class MainActivity extends Activity implements Serializable {
 
     void createNewNote(int position){
         Intent i = new Intent(this, NoteActivity.class);
-        i.putExtra("note", new Note(getString(R.string.new_note),"",R.drawable.icon_big));
+        i.putExtra("note", new Note(getString(R.string.new_note),"",new Icon(R.drawable.icon_small,"Default Icon")));
         i.putExtra("note_index", position);
         i.putExtra("note_list",mList);
         startActivity(i);
@@ -173,7 +173,7 @@ public class MainActivity extends Activity implements Serializable {
         SharedPreferences.Editor editor = sharedPreferences.edit();
         Gson gson = new Gson();
         String json = gson.toJson(noteList);
-        editor.putString("task list",json);
+        editor.putString("notes",json);
         editor.apply();
     }
 
@@ -181,7 +181,7 @@ public class MainActivity extends Activity implements Serializable {
         ArrayList<Note> noteList = new ArrayList<Note>();
         SharedPreferences sharedPreferences = getSharedPreferences("shared preferences", MODE_PRIVATE);
         Gson gson = new Gson();
-        String json = sharedPreferences.getString("task list",null);
+        String json = sharedPreferences.getString("notes",null);
         Type type = new TypeToken<ArrayList<Note>>() {}.getType();
         noteList = gson.fromJson(json,type);
 

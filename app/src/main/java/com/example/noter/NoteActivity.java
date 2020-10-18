@@ -4,7 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.content.Context;
+import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -59,13 +59,16 @@ public class NoteActivity extends AppCompatActivity {
         titleText.setText(note.title);
         contentText.setText(note.content);
 
-        if (noteIndex != -1 ) noteIcon.setImageResource(note.nIcon);
+        if (noteIndex != -1 ) {
+            noteIcon.setImageResource(note.nIcon.id);
+        }
         else noteIcon.setImageResource(R.drawable.icon_small);
 
         noteIcon.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                createDummyIconList();
+                iconList = new MyResources(getApplicationContext()).GET_ICON_LIST();
+                // createDummyIconList();
                 buildIconDialog();
             }
         });
@@ -120,7 +123,7 @@ public class NoteActivity extends AppCompatActivity {
 
             @Override
             public void onItemClickListener(int position) {
-                note.nIcon = iconList.get(position).id;
+                note.nIcon = iconList.get(position);
                 noteIcon.setImageResource(iconList.get(position).id);
                 dialog.dismiss();
             }
@@ -135,7 +138,7 @@ public class NoteActivity extends AppCompatActivity {
         SharedPreferences.Editor editor = sharedPreferences.edit();
         Gson gson = new Gson();
         String json = gson.toJson(noteList);
-        editor.putString("task list",json);
+        editor.putString("notes",json);
         editor.apply();
     }
 
@@ -216,23 +219,12 @@ public class NoteActivity extends AppCompatActivity {
     }
 
     public void createDummyIconList(){
-        iconList.add(new Icon(R.drawable.icon_big,"icon big"));
-        iconList.add(new Icon(R.drawable.ic_launcher_background,"icon"));
-        iconList.add(new Icon(R.drawable.icon_small,"icon small"));
-        iconList.add(new Icon(R.drawable.ic_launcher_background,"icon"));
-        iconList.add(new Icon(R.drawable.icon_small,"icon small"));
-        iconList.add(new Icon(R.drawable.icon_big,"icon big"));
-        iconList.add(new Icon(R.drawable.icon_big,"icon big"));
-        iconList.add(new Icon(R.drawable.ic_launcher_background,"icon"));
-        iconList.add(new Icon(R.drawable.icon_small,"icon small"));
-        iconList.add(new Icon(R.drawable.ic_launcher_background,"icon"));
-        iconList.add(new Icon(R.drawable.icon_small,"icon small"));
-        iconList.add(new Icon(R.drawable.icon_big,"icon big"));
-        iconList.add(new Icon(R.drawable.icon_big,"icon big"));
-        iconList.add(new Icon(R.drawable.ic_launcher_background,"icon"));
-        iconList.add(new Icon(R.drawable.icon_small,"icon small"));
-        iconList.add(new Icon(R.drawable.ic_launcher_background,"icon"));
-        iconList.add(new Icon(R.drawable.icon_small,"icon small"));
-        iconList.add(new Icon(R.drawable.icon_big,"icon big"));
+        iconList.add(new Icon(R.drawable.icon_big,"Noter"));
+        iconList.add(new Icon(R.drawable.ic_launcher_background,"Background"));
+        iconList.add(new Icon(R.drawable.ic_options_0,"Options 1"));
+        iconList.add(new Icon(R.drawable.ic_workplace_0,"Workplace 1"));
+        iconList.add(new Icon(R.drawable.ic_workplace_1,"Workplace 2"));
+        iconList.add(new Icon(R.drawable.ic_screwdriver_0,"Screwdriver 1"));
+
     }
 }

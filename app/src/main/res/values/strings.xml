@@ -22,4 +22,11 @@
     <string name="titleDefault">New Note</string>
     <string name="contentHint">What\'s new today\? </string>
 
+    <!-- ICONS -->
+    <string name="ic_noter">Noter</string>
+    <string name="ic_workplace_0">Workplace 1</string>
+    <string name="ic_workplace_1">Workplace 2</string>
+    <string name="ic_options_0">Options 1</string>
+    <string name="ic_screwdriver_0">Screwdriver 1</string>
+
 </resources>

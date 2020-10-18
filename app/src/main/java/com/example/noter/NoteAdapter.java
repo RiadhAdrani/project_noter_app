@@ -107,7 +107,7 @@ public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.myViewHolder> 
     @Override
     public void onBindViewHolder(@NonNull myViewHolder holder, int position) {
         Note currentNote = mNoteList.get(position);
-        holder.mImageView.setImageResource(currentNote.nIcon);
+        holder.mImageView.setImageResource(currentNote.nIcon.id);
         holder.mTitle.setText(currentNote.title);
         holder.mContentPreview.setText(currentNote.content);
     }

@@ -37,6 +37,7 @@
         <item name="android:textColor">@android:color/darker_gray</item>
         <item name="android:minLines">1</item>
         <item name="android:maxLines">2</item>
+        <item name="android:textStyle">italic</item>
     </style>
 
     <style name="mainActivityFloatingActionButton">

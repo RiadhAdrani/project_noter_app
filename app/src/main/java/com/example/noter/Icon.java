@@ -1,6 +1,8 @@
 package com.example.noter;
 
-public class Icon {
+import java.io.Serializable;
+
+public class Icon implements Serializable {
     int id;
     String name;
 
