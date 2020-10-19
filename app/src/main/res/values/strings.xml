@@ -28,5 +28,14 @@
     <string name="ic_workplace_1">Workplace 2</string>
     <string name="ic_options_0">Options 1</string>
     <string name="ic_screwdriver_0">Screwdriver 1</string>
+    <string name="ic_computer_0">Computer 1</string>
+    <string name="ic_monitor_0">Monitor 1</string>
+    <string name="ic_cu_0">Central Unit 1</string>
+    <string name="ic_telephone_0">Telephone 1</string>
+    <string name="ic_telephone_1">Telephone 2</string>
+    <string name="ic_database_0">Database</string>
+    <string name="ic_bonfire_0">Bonfire</string>
+
+    <!-- ICONS UID -->
 
 </resources>

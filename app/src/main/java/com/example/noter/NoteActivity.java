@@ -60,7 +60,7 @@ public class NoteActivity extends AppCompatActivity {
         contentText.setText(note.content);
 
         if (noteIndex != -1 ) {
-            noteIcon.setImageResource(note.nIcon.id);
+            noteIcon.setImageResource(note.getIcon(getApplicationContext()).id);
         }
         else noteIcon.setImageResource(R.drawable.icon_small);
 
@@ -123,7 +123,7 @@ public class NoteActivity extends AppCompatActivity {
 
             @Override
             public void onItemClickListener(int position) {
-                note.nIcon = iconList.get(position);
+                note.iconUID = iconList.get(position).uid;
                 noteIcon.setImageResource(iconList.get(position).id);
                 dialog.dismiss();
             }
@@ -146,9 +146,9 @@ public class NoteActivity extends AppCompatActivity {
         if (position != -1){
             mList.get(position).title = titleText.getText().toString();
             mList.get(position).content = contentText.getText().toString();
-            mList.get(position).nIcon = note.nIcon;
+            mList.get(position).iconUID = note.iconUID;
         } else {
-            mList.add(0,new Note(titleText.getText().toString(),contentText.getText().toString(),note.nIcon));
+            mList.add(0,new Note(getApplicationContext()));
         }
 
         saveNoteListToSharedPreferences(mList);
@@ -218,13 +218,11 @@ public class NoteActivity extends AppCompatActivity {
         return mText;
     }
 
-    public void createDummyIconList(){
-        iconList.add(new Icon(R.drawable.icon_big,"Noter"));
-        iconList.add(new Icon(R.drawable.ic_launcher_background,"Background"));
-        iconList.add(new Icon(R.drawable.ic_options_0,"Options 1"));
-        iconList.add(new Icon(R.drawable.ic_workplace_0,"Workplace 1"));
-        iconList.add(new Icon(R.drawable.ic_workplace_1,"Workplace 2"));
-        iconList.add(new Icon(R.drawable.ic_screwdriver_0,"Screwdriver 1"));
+    public void createDummyIconList(int n){
+        MyResources resources = new MyResources(getApplicationContext());
+        for (int i = 0 ; i < n ; i++){
+            iconList.add(resources.GET_ICON_LIST().get( (int) (Math.random()*resources.GET_ICON_LIST().size()) ));
+        }
 
     }
 }
