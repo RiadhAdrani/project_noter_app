@@ -8,6 +8,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -85,6 +86,9 @@ public class NoteActivity extends AppCompatActivity {
                 cancel();
             }
         });
+
+        Toast.makeText(this,new MyDate().FORMAT_DATE_LONG(note.lastModifiedDate),Toast.LENGTH_SHORT).show();
+        Log.d("DEBUG_TIME",""+note.title+ " (Last Modified): " +note.lastModifiedDate.getTime());
     }
 
     @Override
@@ -147,6 +151,7 @@ public class NoteActivity extends AppCompatActivity {
             mList.get(position).title = titleText.getText().toString();
             mList.get(position).content = contentText.getText().toString();
             mList.get(position).iconUID = note.iconUID;
+            mList.get(position).lastModifiedDate = new MyDate().GET_CURRENT_DATE();
         } else {
             Note mNote = new Note(getApplicationContext());
             mNote.title = titleText.getText().toString();

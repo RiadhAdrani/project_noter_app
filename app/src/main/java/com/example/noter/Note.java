@@ -1,6 +1,5 @@
 package com.example.noter;
 
-import android.app.Application;
 import android.content.Context;
 
 import java.io.Serializable;
@@ -8,8 +7,8 @@ import java.util.Date;
 
 public class Note implements Serializable {
 
-    public Date creation;
-    public Date lastModified;
+    public Date creationDate;
+    public Date lastModifiedDate;
     public String content;
     public String title;
     public String iconUID;
@@ -19,6 +18,8 @@ public class Note implements Serializable {
         this.title = context.getString(R.string.titleDefault);
         this.content = "";
         this.iconUID = new MyResources(context).GET_ICON_LIST().get(0).uid;
+        this.creationDate = new MyDate().GET_CURRENT_DATE();
+        this.lastModifiedDate = new MyDate().GET_CURRENT_DATE();
     }
 
     Icon getIcon(Context context){
