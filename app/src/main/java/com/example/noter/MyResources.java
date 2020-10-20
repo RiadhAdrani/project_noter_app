@@ -20,30 +20,42 @@ public class MyResources implements Serializable {
         list.add(new Icon(R.drawable.icon_small,context.getString(R.string.ic_noter),"ic_default"));
 
         // WORKPLACE
-        list.add(new Icon(R.drawable.ic_workplace_0,context.getString(R.string.ic_workplace_0),"ic_workplace_0"));
-        list.add(new Icon(R.drawable.ic_workplace_1,context.getString(R.string.ic_workplace_1),"ic_workplace_1"));
+        list.add(new Icon(R.drawable.ic_workplace_0,context.getString(R.string.ic_workplace),"ic_workplace_0"));
+        list.add(new Icon(R.drawable.ic_workplace_1,context.getString(R.string.ic_workplace),"ic_workplace_1"));
 
         // OPTIONS
         list.add(new Icon(R.drawable.ic_options_0,context.getString(R.string.ic_options_0),"ic_options_0"));
 
         // SCREWDRIVER
-        list.add(new Icon(R.drawable.ic_screwdriver_0,context.getString(R.string.ic_screwdriver_0),"ic_screwdriver_0"));
+        list.add(new Icon(R.drawable.ic_screwdriver_0,context.getString(R.string.ic_screwdriver),"ic_screwdriver_0"));
 
         // COMPUTER
-        list.add(new Icon(R.drawable.ic_computer_0,context.getString(R.string.ic_computer_0),"ic_computer_0"));
+        list.add(new Icon(R.drawable.ic_computer_0,context.getString(R.string.ic_computer),"ic_computer_0"));
 
         // CENTRAL UNIT
-        list.add(new Icon(R.drawable.ic_cu_0,context.getString(R.string.ic_cu_0),"ic_centralUnit_0"));
+        list.add(new Icon(R.drawable.ic_cu_0,context.getString(R.string.ic_cu),"ic_centralUnit_0"));
 
         // MONITOR
-        list.add(new Icon(R.drawable.ic_monitor_0,context.getString(R.string.ic_monitor_0),"ic_monitor_0"));
+        list.add(new Icon(R.drawable.ic_monitor_0,context.getString(R.string.ic_monitor),"ic_monitor_0"));
 
         // TELEPHONE
-        list.add(new Icon(R.drawable.ic_telephone_0,context.getString(R.string.ic_telephone_0),"ic_telephone_0"));
-        list.add(new Icon(R.drawable.ic_telephone_1,context.getString(R.string.ic_telephone_1),"ic_telephone_1"));
+        list.add(new Icon(R.drawable.ic_telephone_0,context.getString(R.string.ic_telephone),"ic_telephone_0"));
+        list.add(new Icon(R.drawable.ic_telephone_1,context.getString(R.string.ic_telephone),"ic_telephone_1"));
+
+        // SMART PHONES
+        list.add(new Icon(R.drawable.ic_smartphone_0,context.getString(R.string.ic_smartphone),"ic_smartPhone_0"));
+        list.add(new Icon(R.drawable.ic_smartphone_1,context.getString(R.string.ic_smartphone),"ic_smartPhone_1"));
+
+        // FOLDER
+        list.add(new Icon(R.drawable.ic_folder_0,context.getString(R.string.ic_folder),"ic_folder_0"));
+        list.add(new Icon(R.drawable.ic_folder_1,context.getString(R.string.ic_folder),"ic_folder_1"));
+
+        // FOLDER
+        list.add(new Icon(R.drawable.ic_file_0,context.getString(R.string.ic_file),"ic_file_0"));
+        list.add(new Icon(R.drawable.ic_file_1,context.getString(R.string.ic_file),"ic_file_1"));
 
         // DARK SOULS
-        list.add(new Icon(R.drawable.ic_bonfire_0,context.getString(R.string.ic_bonfire_0),"ic_bonfire_0"));
+        list.add(new Icon(R.drawable.ic_bonfire_0,context.getString(R.string.ic_bonfire),"ic_bonfire_0"));
 
         ICON_LIST = list;
     }

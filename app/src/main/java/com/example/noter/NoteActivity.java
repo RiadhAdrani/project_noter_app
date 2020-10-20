@@ -31,7 +31,7 @@ public class NoteActivity extends AppCompatActivity {
     private ArrayList<Note> mList = new ArrayList<>();
 
     private ArrayList<Icon> iconList = new ArrayList<>();
-    final static int numberOfColumns = 3;
+    final static int numberOfColumns = 5;
 
     private EditText titleText;
     private EditText contentText;
@@ -148,7 +148,11 @@ public class NoteActivity extends AppCompatActivity {
             mList.get(position).content = contentText.getText().toString();
             mList.get(position).iconUID = note.iconUID;
         } else {
-            mList.add(0,new Note(getApplicationContext()));
+            Note mNote = new Note(getApplicationContext());
+            mNote.title = titleText.getText().toString();
+            mNote.content = contentText.getText().toString();
+            mNote.iconUID = note.iconUID;
+            mList.add(0,mNote);
         }
 
         saveNoteListToSharedPreferences(mList);

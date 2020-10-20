@@ -24,17 +24,18 @@
 
     <!-- ICONS -->
     <string name="ic_noter">Noter</string>
-    <string name="ic_workplace_0">Workplace 1</string>
-    <string name="ic_workplace_1">Workplace 2</string>
-    <string name="ic_options_0">Options 1</string>
-    <string name="ic_screwdriver_0">Screwdriver 1</string>
-    <string name="ic_computer_0">Computer 1</string>
-    <string name="ic_monitor_0">Monitor 1</string>
-    <string name="ic_cu_0">Central Unit 1</string>
-    <string name="ic_telephone_0">Telephone 1</string>
-    <string name="ic_telephone_1">Telephone 2</string>
-    <string name="ic_database_0">Database</string>
-    <string name="ic_bonfire_0">Bonfire</string>
+    <string name="ic_workplace">Workplace</string>
+    <string name="ic_options_0">Options</string>
+    <string name="ic_screwdriver">Screwdriver</string>
+    <string name="ic_computer">Computer</string>
+    <string name="ic_monitor">Monitor</string>
+    <string name="ic_cu">Central Unit</string>
+    <string name="ic_telephone">Telephone</string>
+    <string name="ic_smartphone">Smart Phone</string>
+    <string name="ic_database">Database</string>
+    <string name="ic_folder">Folder</string>
+    <string name="ic_file">File</string>
+    <string name="ic_bonfire">Bonfire</string>
 
     <!-- ICONS UID -->
 
