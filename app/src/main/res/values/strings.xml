@@ -9,6 +9,10 @@
     <string name="duplicate_note">Duplicate</string>
     <string name="copy_content">Copy Content</string>
     <string name="delete_note">Delete</string>
+    <string name="sort">Sort</string>
+    <string name="sort_alpha">Title</string>
+    <string name="sort_creation">Creation date</string>
+    <string name="sort_modified">Modification date</string>
 
     <!-- TOASTS | MESSAGES | ALERTS -->
     <string name="copy_content_toast">Content copied to clipboard !</string>
@@ -16,6 +20,9 @@
     <string name="note_saved">Note saved !</string>
     <string name="add_icon">Select a suitable icon</string>
     <string name="icon_name_placeholder">Icon name</string>
+    <string name="sorted_by_title">Sorted by Title</string>
+    <string name="sorted_by_creation">Sorted by Creation Date</string>
+    <string name="sorted_by_modification">Sorted by Last Modification</string>
 
     <!-- PLACEHOLDERS -->
     <string name="titleHint">Note Name</string>
@@ -35,6 +42,9 @@
     <string name="ic_database">Database</string>
     <string name="ic_folder">Folder</string>
     <string name="ic_file">File</string>
+    <string name="ic_locker">Locker</string>
+    <string name="ic_key">Key</string>
+    <string name="ic_coffee">Coffee</string>
     <string name="ic_bonfire">Bonfire</string>
 
     <!-- ICONS UID -->

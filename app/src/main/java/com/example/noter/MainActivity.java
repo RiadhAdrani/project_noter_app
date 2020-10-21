@@ -7,9 +7,14 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
+import android.widget.Toolbar;
 
+import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -34,7 +39,10 @@ public class MainActivity extends Activity implements Serializable {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main_activity_layout);
 
-        // mList = loadNoteFromSharedPreferences();
+        Toolbar toolbar = findViewById(R.id.main_toolbar);
+        setActionBar(toolbar);
+
+        mList = loadNoteFromSharedPreferences();
         fab = findViewById(R.id.floating_action_button);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -46,6 +54,13 @@ public class MainActivity extends Activity implements Serializable {
         // useDummyElements();
         buildRecyclerView();
 
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.sorting_option_menu,menu);
+        return true;
     }
 
     @Override
@@ -79,6 +94,28 @@ public class MainActivity extends Activity implements Serializable {
         super.onResume();
         mList = loadNoteFromSharedPreferences();
         buildRecyclerView();
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        switch (item.getItemId()){
+            case R.id.sort_alpha: ; sortByAlpha(); return true;
+            case R.id.sort_creation : sortByCreation(); return true;
+            case R.id.sort_modified : sortByModified(); return true;
+            default: return super.onOptionsItemSelected(item);
+        }
+    }
+
+    void sortByAlpha(){
+        Toast.makeText(this,getString(R.string.sorted_by_title),Toast.LENGTH_SHORT).show();
+    }
+
+    void sortByCreation(){
+        Toast.makeText(this,getString(R.string.sorted_by_creation),Toast.LENGTH_SHORT).show();
+    }
+
+    void sortByModified(){
+        Toast.makeText(this,getString(R.string.sorted_by_modification),Toast.LENGTH_SHORT).show();
     }
 
     void buildRecyclerView(){
