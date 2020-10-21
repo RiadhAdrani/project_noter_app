@@ -87,7 +87,7 @@ public class NoteActivity extends AppCompatActivity {
             }
         });
 
-        Toast.makeText(this,new MyDate().FORMAT_DATE_LONG(note.lastModifiedDate),Toast.LENGTH_SHORT).show();
+        // Toast.makeText(this,new MyDate().FORMAT_DATE_LONG(note.lastModifiedDate),Toast.LENGTH_SHORT).show();
         Log.d("DEBUG_TIME",""+note.title+ " (Last Modified): " +note.lastModifiedDate.getTime());
     }
 

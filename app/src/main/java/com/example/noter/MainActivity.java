@@ -27,7 +27,7 @@ import java.util.ArrayList;
 
 public class MainActivity extends Activity implements Serializable {
 
-    ArrayList<Note> mList = new ArrayList<Note>();
+    ArrayList<Note> mList = new ArrayList<>();
     RecyclerView mRecyclerView;
     NoteAdapter mAdapter;
     RecyclerView.LayoutManager mLayoutManager;
@@ -99,7 +99,7 @@ public class MainActivity extends Activity implements Serializable {
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()){
-            case R.id.sort_alpha: ; sortByAlpha(); return true;
+            case R.id.sort_alpha: sortByAlpha(); return true;
             case R.id.sort_creation : sortByCreation(); return true;
             case R.id.sort_modified : sortByModified(); return true;
             default: return super.onOptionsItemSelected(item);
@@ -107,15 +107,98 @@ public class MainActivity extends Activity implements Serializable {
     }
 
     void sortByAlpha(){
+        saveNoteToSharedPreferences(mList = QuickSortAlpha(mList));
+        buildRecyclerView();
         Toast.makeText(this,getString(R.string.sorted_by_title),Toast.LENGTH_SHORT).show();
     }
 
+    ArrayList<Note> QuickSortAlpha(ArrayList<Note> list){
+        if (list.size() <= 1) return list;
+        ArrayList<Note> high = new ArrayList<>();
+        ArrayList<Note> low = new ArrayList<>();
+        ArrayList<Note> equal = new ArrayList<>();
+        Note e = list.get( (int) (Math.random() *list.size()) );
+        for (Note x : list) {
+            switch (StringComparison(x.title,e.title)){
+                case  0: equal.add(x)   ; break;
+                case -1: low.add(x)     ; break;
+                case  1: high.add(x)    ; break;
+            }
+        }
+
+        ArrayList<Note> temp = new ArrayList<>();
+        temp.addAll(QuickSortAlpha(low));
+        temp.addAll(equal);
+        temp.addAll(QuickSortAlpha(high));
+
+        return temp;
+    }
+
+    int StringComparison(String a, String b){
+        int size;
+        size = Math.min(a.length(), b.length());
+        for (int i = 0; i < size; i++) {
+            if (a.toLowerCase().charAt(i) < b.toLowerCase().charAt(i)) return -1; // A is before B
+            if (a.toLowerCase().charAt(i) > b.toLowerCase().charAt(i)) return  1; // A is after B
+        }
+        if (a.length() < b.length()) return -1;
+        else if (a.length() > b.length()) return 1;
+
+        return 0;
+    }
+
     void sortByCreation(){
+        saveNoteToSharedPreferences(mList = QuickSortCreation(mList));
+        buildRecyclerView();
         Toast.makeText(this,getString(R.string.sorted_by_creation),Toast.LENGTH_SHORT).show();
     }
 
+    ArrayList<Note> QuickSortCreation(ArrayList<Note> list){
+        if (list.size() <= 1) return list;
+        ArrayList<Note> high = new ArrayList<>();
+        ArrayList<Note> low = new ArrayList<>();
+        ArrayList<Note> equal = new ArrayList<>();
+        Note e = list.get( (int) (Math.random() *list.size()) );
+
+        for (Note x : list) {
+            if (x.creationDate.getTime() < e.creationDate.getTime()) low.add(x);
+            else if (x.creationDate.getTime() > e.creationDate.getTime()) high.add(x);
+            else equal.add(x);
+        }
+
+        ArrayList<Note> temp = new ArrayList<>();
+        temp.addAll(QuickSortAlpha(low));
+        temp.addAll(equal);
+        temp.addAll(QuickSortAlpha(high));
+
+        return temp;
+    }
+
     void sortByModified(){
+        saveNoteToSharedPreferences(mList = QuickSortModification(mList));
+        buildRecyclerView();
         Toast.makeText(this,getString(R.string.sorted_by_modification),Toast.LENGTH_SHORT).show();
+    }
+
+    ArrayList<Note> QuickSortModification(ArrayList<Note> list){
+        if (list.size() <= 1) return list;
+        ArrayList<Note> high = new ArrayList<>();
+        ArrayList<Note> low = new ArrayList<>();
+        ArrayList<Note> equal = new ArrayList<>();
+        Note e = list.get( (int) (Math.random() *list.size()) );
+
+        for (Note x : list) {
+            if (x.lastModifiedDate.getTime() < e.lastModifiedDate.getTime()) low.add(x);
+            else if (x.lastModifiedDate.getTime() > e.lastModifiedDate.getTime()) high.add(x);
+            else equal.add(x);
+        }
+
+        ArrayList<Note> temp = new ArrayList<>();
+        temp.addAll(QuickSortAlpha(low));
+        temp.addAll(equal);
+        temp.addAll(QuickSortAlpha(high));
+
+        return temp;
     }
 
     void buildRecyclerView(){
@@ -215,7 +298,7 @@ public class MainActivity extends Activity implements Serializable {
     }
 
     ArrayList<Note> loadNoteFromSharedPreferences(){
-        ArrayList<Note> noteList = new ArrayList<Note>();
+        ArrayList<Note> noteList = new ArrayList<>();
         SharedPreferences sharedPreferences = getSharedPreferences("shared preferences", MODE_PRIVATE);
         Gson gson = new Gson();
         String json = sharedPreferences.getString("notes",null);
