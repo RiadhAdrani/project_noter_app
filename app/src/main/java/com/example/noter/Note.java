@@ -24,6 +24,8 @@ public class Note implements Serializable {
     // Unique ID used to load the correspondent icon from MyResources
     public String iconUID;
 
+    public Category category;
+
     // basic constructor;
     public Note(Context context){
         this.title = context.getString(R.string.titleDefault);
@@ -31,6 +33,7 @@ public class Note implements Serializable {
         this.iconUID = new MyResources(context).GET_ICON_LIST().get(0).uid;
         this.creationDate = new MyDate().GET_CURRENT_DATE();
         this.lastModifiedDate = new MyDate().GET_CURRENT_DATE();
+        this.category = new Category(new MyResources(context).ALL_NOTES);
     }
 
     Icon getIcon(Context context){

@@ -4,7 +4,7 @@
     <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
         <item name="colorPrimary">@color/green_persian</item>
         <item name="colorPrimaryDark">@color/green_persian</item>
-        <item name="colorAccent">@color/orange_red_burnt_sienna</item>
+        <item name="colorAccent">@color/orange_yellow_crayola</item>
     </style>
 
 
@@ -27,6 +27,7 @@
         <item name="colorSecondary">@color/green_charcoal</item>
         <item name="colorOnSecondary">@color/green_persian</item>
         <item name="colorOnSurface">@color/orange_yellow_crayola</item>
+        <item name="fabCustomSize">65dp</item>
     </style>
 
     <!-- /////////////////////////////////////////////////////////////////////////////////////// -->
@@ -38,6 +39,11 @@
         <item name="android:textColor">@android:color/black</item>
     </style>
 
+    <style name="black_standard_18sp">
+        <item name="android:textSize">18sp</item>
+        <item name="android:textColor">@android:color/black</item>
+    </style>
+
     <style name="black_standard_16sp">
         <item name="android:textSize">16sp</item>
         <item name="android:textColor">@android:color/black</item>
@@ -45,6 +51,11 @@
 
     <style name="black_standard_12sp">
         <item name="android:textSize">12sp</item>
+        <item name="android:textColor">@android:color/black</item>
+    </style>
+
+    <style name="black_standard_14sp">
+        <item name="android:textSize">14sp</item>
         <item name="android:textColor">@android:color/black</item>
     </style>
 

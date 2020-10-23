@@ -2,7 +2,7 @@
 
         <!--
         XML file describing Note template
-        for the CategoryActivity Recycler View
+        for the MainActivity Recycler View
         -->
 
 <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
@@ -56,14 +56,31 @@
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
                     android:layout_weight="1.5"
-                    android:gravity="bottom"
+                    android:gravity="center_vertical"
                     android:text="@string/titleDefault"
                     android:maxLines="1"
                     android:minLines="1"
                     android:maxLength="20"
                     android:layout_marginHorizontal="4dp"
-                    android:layout_marginVertical="2dp"
-                    style="@style/black_standard_16sp"/>
+                    android:layout_marginTop="2dp"
+                    style="@style/black_standard_18sp"/>
+
+            <!--
+                TextView for Note.title
+                -->
+            <TextView
+                android:id="@+id/card_category"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1.5"
+                android:gravity="center_vertical"
+                android:text="@string/categoryDefault"
+                android:maxLines="1"
+                android:minLines="1"
+                android:maxLength="20"
+                android:textStyle="italic"
+                android:layout_marginHorizontal="4dp"
+                style="@style/black_standard_14sp"/>
 
                  <!--
                 TextView for Note.content
@@ -71,11 +88,12 @@
                 <TextView
                     android:id="@+id/card_preview"
                     android:layout_width="match_parent"
+                    android:gravity="center_vertical"
                     android:layout_height="0dp"
                     android:layout_weight="2"
                     android:text="@string/contentHint"
                     android:layout_marginHorizontal="4dp"
-                    android:layout_marginVertical="2dp"
+                    android:layout_marginBottom="2dp"
                     style="@style/darker_grey_standard_12sp_two_lines"/>
         </LinearLayout>
 

@@ -54,6 +54,7 @@ public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.myViewHolder> 
 
         public ImageView mImageView;
         public TextView mTitle;
+        public TextView mCategory;
         public TextView mContentPreview;
         public ImageView mOptions;
         public PopupMenu mPopup;
@@ -63,6 +64,7 @@ public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.myViewHolder> 
 
             mImageView = itemView.findViewById(R.id.card_icon);
             mTitle = itemView.findViewById(R.id.card_title);
+            mCategory = itemView.findViewById(R.id.card_category);
             mContentPreview = itemView.findViewById(R.id.card_preview);
             mOptions = itemView.findViewById(R.id.card_options);
 
@@ -134,6 +136,12 @@ public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.myViewHolder> 
         Note currentNote = mNoteList.get(position);
         holder.mImageView.setImageResource(new MyResources(mContext).GET_ICON(currentNote.iconUID).id);
         holder.mTitle.setText(currentNote.title);
+
+        if (currentNote.category == null){
+            currentNote.category = new Category("something");
+        }
+
+        holder.mCategory.setText(currentNote.category.UID);
         holder.mContentPreview.setText(currentNote.content);
     }
 

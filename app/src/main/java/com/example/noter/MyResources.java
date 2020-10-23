@@ -13,6 +13,8 @@ public class MyResources implements Serializable {
     // Very important
     Context context;
 
+    public static String ALL_NOTES = "No category";
+
     // Contains the list of available icons
     private ArrayList<Icon> ICON_LIST = new ArrayList<>();
 

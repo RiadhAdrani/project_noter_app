@@ -27,12 +27,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 
-public class CategoryActivity extends Activity implements Serializable {
-
-    // ↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓
-    // Projected :
-    // Activity Used to display a Category object
-    // ↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑
+public class MainActivity extends Activity implements Serializable {
 
     // Activity Displaying the multiple notes of the selected category.
 
@@ -64,14 +59,14 @@ public class CategoryActivity extends Activity implements Serializable {
 
         // Setting the toolbar for the current activity
         // Could be customized via R.layout.category_activity_layout
-        Toolbar toolbar = findViewById(R.id.main_toolbar);
+        Toolbar toolbar = findViewById(R.id.category_toolbar);
         setActionBar(toolbar);
 
         // Loading notes from SharedPreferences
         mList = loadNoteFromSharedPreferences();
 
         // Fetching the Floating Action bar in the layout
-        fab = findViewById(R.id.floating_action_button);
+        fab = findViewById(R.id.category_fab);
 
         // Overriding the function of the Floating action bar
         fab.setOnClickListener(new View.OnClickListener() {

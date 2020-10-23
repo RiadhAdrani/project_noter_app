@@ -9,9 +9,11 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
@@ -23,6 +25,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 public class NoteActivity extends AppCompatActivity {
     // Activity used to display a Note object
@@ -56,10 +59,10 @@ public class NoteActivity extends AppCompatActivity {
     // View of the editable Note.iconUID
     private ImageView noteIcon;
 
-    // Cancel Button used to discard changes and return to CategoryActivity
+    // Cancel Button used to discard changes and return to MainActivity
     private Button cancelButton;
 
-    // Cancel Button used to save changes and return to CategoryActivity
+    // Cancel Button used to save changes and return to MainActivity
     private Button saveButton;
 
     @Override
@@ -74,7 +77,7 @@ public class NoteActivity extends AppCompatActivity {
 
         Intent i = getIntent();
 
-        // Getting the necessary data from CategoryActivity
+        // Getting the necessary data from MainActivity
         // and saving them as local (Class) variable
         note = (Note) i.getSerializableExtra("note");
         noteIndex = (int) i.getSerializableExtra("note_index");
@@ -222,7 +225,7 @@ public class NoteActivity extends AppCompatActivity {
     void saveNote(int position){
         // Local note saving
 
-        // if (position != -1){
+        if (position != -1){
             // if it is an old note
 
             mList.get(position).title = titleText.getText().toString();
@@ -230,25 +233,24 @@ public class NoteActivity extends AppCompatActivity {
             mList.get(position).iconUID = note.iconUID;
             mList.get(position).lastModifiedDate = new MyDate().GET_CURRENT_DATE();
 
-        // }
+        }
 
-        // else {
-            // [USELESS]
-            // Note mNote = new Note(getApplicationContext());
-            // mNote.title = titleText.getText().toString();
-            // mNote.content = contentText.getText().toString();
-            // mNote.iconUID = note.iconUID;
-            // mList.add(0,mNote);
-        // }
+        else {
+            Note mNote = new Note(getApplicationContext());
+            mNote.title = titleText.getText().toString();
+            mNote.content = contentText.getText().toString();
+            mNote.iconUID = note.iconUID;
+            mList.add(0,mNote);
+        }
 
         saveNoteListToSharedPreferences(mList);
         cancel();
     }
 
     void cancel(){
-        // Pass the user to CategoryActivity
+        // Pass the user to MainActivity
 
-        Intent i = new Intent(this, CategoryActivity.class);
+        Intent i = new Intent(this, MainActivity.class);
         startActivity(i);
         finish();
     }

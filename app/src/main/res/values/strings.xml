@@ -35,6 +35,7 @@
     <!-- /////////////////////////////////////////////////////////////////////////////////////// -->
     <string name="titleHint">Note Name</string>
     <string name="titleDefault">New Note</string>
+    <string name="categoryDefault">Default Category</string>
     <string name="contentHint">What\'s new today\? </string>
 
     <!-- /////////////////////////////////////////////////////////////////////////////////////// -->

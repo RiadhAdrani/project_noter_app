@@ -4,7 +4,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -48,13 +47,13 @@ public class IconAdapter extends RecyclerView.Adapter<IconAdapter.myViewHolder> 
         // Actually prepare the template of the element
 
         public ImageView mIcon;
-        public TextView mName;
+        // public TextView mName;
 
         public myViewHolder(@NonNull View itemView, final OnItemClickListener listener) {
             super(itemView);
 
             mIcon = itemView.findViewById(R.id.icon_frame);
-            mName = itemView.findViewById(R.id.icon_name);
+            // mName = itemView.findViewById(R.id.icon_name);
 
             // setting an onClickListener for the icon
             // using the interface method
@@ -90,7 +89,7 @@ public class IconAdapter extends RecyclerView.Adapter<IconAdapter.myViewHolder> 
 
         Icon currentIcon = mList.get(position);
         holder.mIcon.setImageResource(currentIcon.id);
-        holder.mName.setText(currentIcon.name);
+        // holder.mName.setText(currentIcon.name);
     }
 
     @Override
