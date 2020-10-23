@@ -1,5 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 
+<!--
+    XML file describing the layout of the CategoryActivity
+    display information about a single category
+-->
+
 <androidx.coordinatorlayout.widget.CoordinatorLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -13,9 +18,16 @@
         android:layout_height="match_parent"
         >
 
+        <!--
+        including the custom made toolbar
+        -->
         <include android:id="@+id/main_toolbar"
             layout="@layout/toolbar"/>
 
+        <!--
+        RecyclerView that will display the list of the note
+        in the current category
+        -->
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/category_RecyclerView"
             android:layout_width="match_parent"
@@ -26,11 +38,13 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintLeft_toLeftOf="parent"
-            style="@style/mainActivityRecyclerView"
             />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
+        <!--
+        Floating Action bar
+        -->
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/floating_action_button"
             android:layout_width="wrap_content"

@@ -1,7 +1,10 @@
 <resources>
     <string name="app_name">Noter</string>
 
-    <!-- MENUS & BUTTONS -->
+    <!-- /////////////////////////////////////////////////////////////////////////////////////// -->
+    <!--                                  MENUS AND BUTTONS                                      -->
+    <!-- /////////////////////////////////////////////////////////////////////////////////////// -->
+
     <string name="cancel">Cancel</string>
     <string name="save">Save</string>
     <string name="options">Options</string>
@@ -14,7 +17,10 @@
     <string name="sort_creation">Creation date</string>
     <string name="sort_modified">Modification date</string>
 
-    <!-- TOASTS | MESSAGES | ALERTS -->
+    <!-- /////////////////////////////////////////////////////////////////////////////////////// -->
+    <!--                              TOASTS, MESSAGES , ALERTS                                  -->
+    <!-- /////////////////////////////////////////////////////////////////////////////////////// -->
+
     <string name="copy_content_toast">Content copied to clipboard !</string>
     <string name="note_created">Note created !</string>
     <string name="note_saved">Note saved !</string>
@@ -24,12 +30,17 @@
     <string name="sorted_by_creation">Sorted by Creation Date</string>
     <string name="sorted_by_modification">Sorted by Last Modification</string>
 
-    <!-- PLACEHOLDERS -->
+    <!-- /////////////////////////////////////////////////////////////////////////////////////// -->
+    <!--                                   PLACEHOLDERS                                          -->
+    <!-- /////////////////////////////////////////////////////////////////////////////////////// -->
     <string name="titleHint">Note Name</string>
     <string name="titleDefault">New Note</string>
     <string name="contentHint">What\'s new today\? </string>
 
-    <!-- ICONS -->
+    <!-- /////////////////////////////////////////////////////////////////////////////////////// -->
+    <!--                                     ICONS NAME                                          -->
+    <!-- /////////////////////////////////////////////////////////////////////////////////////// -->
+
     <string name="ic_noter">Noter</string>
     <string name="ic_workplace">Workplace</string>
     <string name="ic_options_0">Options</string>
@@ -47,6 +58,5 @@
     <string name="ic_coffee">Coffee</string>
     <string name="ic_bonfire">Bonfire</string>
 
-    <!-- ICONS UID -->
 
 </resources>

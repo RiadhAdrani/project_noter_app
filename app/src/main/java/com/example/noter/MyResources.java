@@ -6,16 +6,39 @@ import java.io.Serializable;
 import java.util.ArrayList;
 
 public class MyResources implements Serializable {
+    // Class used to handle static resources
+    // such as drawable ...
+    // Works as the database of the Application
+
+    // Very important
     Context context;
+
+    // Contains the list of available icons
     private ArrayList<Icon> ICON_LIST = new ArrayList<>();
 
     public MyResources(Context context){
+        // Constructor
+
         this.context = context;
+
+        // fill the icon list
         fillIconList();
     }
 
     private void fillIconList(){
+        // Construct the icon list
+
+        // temp Icon list
         ArrayList<Icon> list = new ArrayList<>();
+
+        // ICON CATEGORIES
+        // ADD YOURS AT THE CUSTOM PART
+        // DO NOT MODIFY ANY LINE IN THE STATIC PART
+
+        // ---------------------------------------------------------------------------------------- //
+        //                                          STATIC                                          //
+        // ---------------------------------------------------------------------------------------- //
+
         // NOTER
         list.add(new Icon(R.drawable.icon_small,context.getString(R.string.ic_noter),"ic_default"));
 
@@ -66,17 +89,29 @@ public class MyResources implements Serializable {
         list.add(new Icon(R.drawable.ic_coffee_0,context.getString(R.string.ic_coffee),"ic_coffee_0"));
         list.add(new Icon(R.drawable.ic_coffee_1,context.getString(R.string.ic_coffee),"ic_coffee_1"));
 
+        // ---------------------------------------------------------------------------------------- //
+        //                                          CUSTOM                                          //
+        // ---------------------------------------------------------------------------------------- //
+
         // DARK SOULS
         list.add(new Icon(R.drawable.ic_bonfire_0,context.getString(R.string.ic_bonfire),"ic_bonfire_0"));
+
+        // ---------------------------------------------------------------------------------------- //
+        // ---------------------------------------------------------------------------------------- //
 
         ICON_LIST = list;
     }
 
     ArrayList<Icon> GET_ICON_LIST(){
+        // return the icon list
+
         return ICON_LIST;
     }
 
     Icon GET_ICON(String uid){
+        // return an icon
+        // with the property Icon.uid equals to uid
+
         for (Icon icon : ICON_LIST) {
             if (uid.equals(icon.uid)) return icon;
         }

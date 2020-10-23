@@ -14,31 +14,51 @@ import androidx.appcompat.app.AppCompatDialogFragment;
 
 public class PickIconDialog extends AppCompatDialogFragment{
 
+    // Class describing the Dialog showing when
+    // the user need to pick an icon
+
+    // interface instance
     OnCreate onCreate;
+
+    // View of the dialog
     View dialog;
+
+    // Context of the Activity
+    // in which the adapter is used.
     Context mContext;
 
     public PickIconDialog(View dialog, Context mContext){
+        // [UNUSED]
+        // Constructor 1
+
         this.dialog = dialog;
         this.mContext = mContext;
     }
 
     public PickIconDialog(Context mContext){
+        // Constructor 2
+
         this.mContext = mContext;
         dialog = new View(mContext);
     }
 
     public interface OnCreate{
+        // Interface containing (Hollow) overridable functions
+
         void buildRecyclerView();
     }
 
     public void setOnCreate(OnCreate onCreate){
+        // Allow the use of the interface
+
         this.onCreate = onCreate;
     }
 
     @NonNull
     @Override
     public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
+        // Function called to build the dialog box
+
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         LayoutInflater inflater = getActivity().getLayoutInflater();
         dialog = inflater.inflate(R.layout.icon_pick_layout,null);

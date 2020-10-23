@@ -16,11 +16,25 @@ import java.util.ArrayList;
 
 public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.myViewHolder> {
 
+    // Note adapter is a custom created Adapter RecyclerView
+    // Used to display notes dynamically
+
+    // Reference to the list that will be fed to the adapter
+    // to be displayed
     ArrayList<Note> mNoteList;
+
+    // Contains overridable functions
+    // mainly onClickListeners
+    // could be implemented in an Activity
     OnItemClickListener mListener;
+
+    // Context of the Activity
+    // in which the adapter is used.
     Context mContext;
 
     public interface OnItemClickListener {
+        // Interface containing (Hollow) overridable functions
+
         void onItemClick(int position);
         void onOptionClick(int position);
         void onDuplicateClick(int position);
@@ -29,10 +43,14 @@ public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.myViewHolder> 
     }
 
     public void setOnItemClickListener(OnItemClickListener listener){
+        // Function that allow the use of the interface
+
         mListener = listener;
     }
 
     public static class myViewHolder extends RecyclerView.ViewHolder{
+        // ViewHolder of every element
+        // Actually prepare the template of the element
 
         public ImageView mImageView;
         public TextView mTitle;
@@ -92,6 +110,8 @@ public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.myViewHolder> 
     }
 
     public NoteAdapter(ArrayList<Note> noteList,Context context){
+        // NoteAdapter constructor
+
         mNoteList = noteList;
         mContext = context;
     }
@@ -99,6 +119,8 @@ public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.myViewHolder> 
     @NonNull
     @Override
     public myViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        // Inflate and load the layout of the element
+
         View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.note_card_layout,parent,false);
         myViewHolder mvh = new myViewHolder(v, mListener,mContext);
         return mvh;
@@ -106,6 +128,9 @@ public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.myViewHolder> 
 
     @Override
     public void onBindViewHolder(@NonNull myViewHolder holder, int position) {
+        // Assign information to the existing View elements
+        // to be displayed
+
         Note currentNote = mNoteList.get(position);
         holder.mImageView.setImageResource(new MyResources(mContext).GET_ICON(currentNote.iconUID).id);
         holder.mTitle.setText(currentNote.title);
@@ -114,6 +139,9 @@ public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.myViewHolder> 
 
     @Override
     public int getItemCount() {
+        // Return the size of the List
+        // needed for the RecyclerView
+
         return mNoteList.size();
     }
 

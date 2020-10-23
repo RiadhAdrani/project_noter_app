@@ -1,4 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
+
+        <!--
+        XML file describing Icon Template
+        for the icon pick layout
+        -->
+
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical"
     android:layout_width="50dp"
@@ -6,6 +12,9 @@
     android:layout_margin="2dp"
     android:background="@color/orange_yellow_crayola">
 
+        <!--
+        Icon drawable
+        -->
     <ImageView
         android:layout_margin="4dp"
         android:id="@+id/icon_frame"
@@ -16,16 +25,16 @@
         android:src="@drawable/icon_small"
         />
 
+        <!--
+       Icon name
+        -->
     <TextView
         android:id="@+id/icon_name"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center"
         android:layout_margin="4dp"
-        android:singleLine="true"
         android:text="@string/icon_name_placeholder"
-
-        android:textSize="8sp"
-        android:textColor="@android:color/black"/>
+        style="@style/black_standard_8sp_single_Line"/>
 
 </LinearLayout>

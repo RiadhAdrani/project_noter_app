@@ -1,4 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
+
+        <!--
+        XML file describing Note template
+        for the CategoryActivity Recycler View
+        -->
+
 <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="100dp"
@@ -8,11 +14,18 @@
     android:layout_marginVertical="4dp"
     style="@style/cardStyle">
 
+    <!--
+    LinearLayout to align everything together
+    proportionally depending on the screen size
+    -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="horizontal">
-        
+
+        <!--
+        ImageView for Note.icon
+        -->
         <ImageView
             android:id="@+id/card_icon"
             android:layout_width="75dp"
@@ -22,12 +35,22 @@
             android:layout_gravity="center"
             android:scaleType="fitCenter"
             android:src="@drawable/icon_small"/>
+
+        <!--
+        LinearLayout grouping
+        Note.title
+        Note.content
+        -->
         <LinearLayout
             android:layout_width="0dp"
             android:layout_weight="1"
             android:layout_height="match_parent"
             android:layout_marginVertical="8dp"
             android:orientation="vertical">
+
+                <!--
+                TextView for Note.title
+                -->
                 <TextView
                     android:id="@+id/card_title"
                     android:layout_width="match_parent"
@@ -40,20 +63,25 @@
                     android:maxLength="20"
                     android:layout_marginHorizontal="4dp"
                     android:layout_marginVertical="2dp"
-                    style="@style/cardTitleStyle"/>
+                    style="@style/black_standard_16sp"/>
+
+                 <!--
+                TextView for Note.content
+                -->
                 <TextView
                     android:id="@+id/card_preview"
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
                     android:layout_weight="2"
                     android:text="@string/contentHint"
-                    android:maxLines="2"
-                    android:minLines="1"
                     android:layout_marginHorizontal="4dp"
                     android:layout_marginVertical="2dp"
-                    style="@style/cardContentStyle"/>
+                    style="@style/darker_grey_standard_12sp_two_lines"/>
         </LinearLayout>
 
+        <!--
+        ImageView for the note drop down option menu
+        -->
         <ImageView
             android:id="@+id/card_options"
             android:layout_width="40dp"
