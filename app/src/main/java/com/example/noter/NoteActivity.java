@@ -9,11 +9,12 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.widget.ArrayAdapter;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Spinner;
+import android.widget.SpinnerAdapter;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
@@ -25,7 +26,6 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
-import java.util.Arrays;
 
 public class NoteActivity extends AppCompatActivity {
     // Activity used to display a Note object
@@ -64,6 +64,13 @@ public class NoteActivity extends AppCompatActivity {
 
     // Cancel Button used to save changes and return to MainActivity
     private Button saveButton;
+
+    // ArrayList containing Categories
+    private ArrayList<Category> categoryList;
+
+    // Adapter for the Category spinner
+    private SpinnerAdapter categoryAdapter;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -139,6 +146,33 @@ public class NoteActivity extends AppCompatActivity {
             }
         });
 
+        // Setting Up the spinner to display available categories
+        Spinner spinner = findViewById(R.id.note_category_spinner);
+
+        useDummyCategoryList();
+
+        categoryAdapter = new CategorySpinner(this,categoryList);
+        spinner.setAdapter(categoryAdapter);
+
+        spinner.setSelection(findCategoryByName(note.category));
+
+        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            // Defining behaviour for selected item
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+
+                // Update user category with the newly selected one
+                note.category = categoryList.get(i);
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
+            }
+        });
+
+
+
         // Used for debugging
         Log.d("DEBUG_TIME",""+note.title+ "(Last Modified): " +note.lastModifiedDate.getTime());
     }
@@ -150,7 +184,40 @@ public class NoteActivity extends AppCompatActivity {
         super.onPause();
 
         // Liberate resources
-        finish();
+        // finish();
+    }
+
+    private int findCategoryByUID(Category mCategory){
+        // Return the index of the note category
+        // found in categoryList
+
+        for (Category c : categoryList) {
+            if (c.UID.equals(mCategory.UID)){
+                return categoryList.indexOf(c);
+            }
+        }
+        return 0;
+    }
+
+    private int findCategoryByName(Category mCategory){
+        // Return the index of the note category
+        // found in categoryList
+
+        for (Category c : categoryList) {
+            if (c.name.equals(mCategory.name)){
+                return categoryList.indexOf(c);
+            }
+        }
+        return 0;
+    }
+
+    private void useDummyCategoryList(){
+        categoryList = new ArrayList<>();
+        categoryList.add(new Category("Default",true));
+        categoryList.add(new Category("Studies",true));
+        categoryList.add(new Category("Sports",true));
+        categoryList.add(new Category("Habits",false));
+        categoryList.add(new Category("MF",false));
     }
 
     void buildIconDialog(){
@@ -231,6 +298,7 @@ public class NoteActivity extends AppCompatActivity {
             mList.get(position).title = titleText.getText().toString();
             mList.get(position).content = contentText.getText().toString();
             mList.get(position).iconUID = note.iconUID;
+            mList.get(position).category = note.category;
             mList.get(position).lastModifiedDate = new MyDate().GET_CURRENT_DATE();
 
         }
@@ -240,6 +308,7 @@ public class NoteActivity extends AppCompatActivity {
             mNote.title = titleText.getText().toString();
             mNote.content = contentText.getText().toString();
             mNote.iconUID = note.iconUID;
+            mNote.category = note.category;
             mList.add(0,mNote);
         }
 

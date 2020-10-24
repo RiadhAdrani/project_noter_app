@@ -141,7 +141,7 @@ public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.myViewHolder> 
             currentNote.category = new Category("something");
         }
 
-        holder.mCategory.setText(currentNote.category.UID);
+        holder.mCategory.setText(currentNote.category.name);
         holder.mContentPreview.setText(currentNote.content);
     }
 
