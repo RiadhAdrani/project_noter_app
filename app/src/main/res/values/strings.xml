@@ -7,6 +7,7 @@
 
     <string name="cancel">Cancel</string>
     <string name="save">Save</string>
+    <string name="confirm">Confirm</string>
     <string name="options">Options</string>
     <string name="new_note">New Note</string>
     <string name="duplicate_note">Duplicate</string>
@@ -29,6 +30,8 @@
     <string name="sorted_by_title">Sorted by Title</string>
     <string name="sorted_by_creation">Sorted by Creation Date</string>
     <string name="sorted_by_modification">Sorted by Last Modification</string>
+    <string name="confirm_default">Confirm action ?</string>
+    <string name="duplicate_category_alert">This category already exists, do you want to continue?</string>
 
     <!-- /////////////////////////////////////////////////////////////////////////////////////// -->
     <!--                                   PLACEHOLDERS                                          -->
@@ -36,7 +39,9 @@
     <string name="titleHint">Note Name</string>
     <string name="titleDefault">New Note</string>
     <string name="categoryDefault">Default Category</string>
+    <string name="newCategory">New category name here …</string>
     <string name="contentHint">What\'s new today\? </string>
+    <string name="inputHint">Your input here</string>
 
     <!-- /////////////////////////////////////////////////////////////////////////////////////// -->
     <!--                                     ICONS NAME                                          -->

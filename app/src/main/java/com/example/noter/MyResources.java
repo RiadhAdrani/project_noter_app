@@ -1,8 +1,13 @@
 package com.example.noter;
 
 import android.content.Context;
+import android.content.SharedPreferences;
+
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
 import java.io.Serializable;
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 
 public class MyResources implements Serializable {
@@ -13,7 +18,23 @@ public class MyResources implements Serializable {
     // Very important
     Context context;
 
-    public static String ALL_NOTES = "No category";
+    // ------------------------------------------------------------------------------------------ //
+    //                                         STATICS                                            //
+    // ------------------------------------------------------------------------------------------ //
+
+    // static keys
+    public static String NOTE_KEY = "NOTER_NOTE";
+    public static String CATEGORY_KEY = "NOTER_CATEGORY";
+
+    // Default category
+    private static String DEFAULT_CATEGORY_NAME = "Default";
+    private static String DEFAULT_CATEGORY_UID = "com.example.noter.default.category";
+    public static Category DEFAULT_CATEGORY = new Category(DEFAULT_CATEGORY_NAME, DEFAULT_CATEGORY_UID);
+
+    // Add new category
+    private static String ADD_CATEGORY_NAME = "Add Category";
+    private static String ADD_CATEGORY_UID = "com.example.noter.add.category";
+    public static Category ADD_CATEGORY = new Category(ADD_CATEGORY_NAME, ADD_CATEGORY_UID);
 
     // Contains the list of available icons
     private ArrayList<Icon> ICON_LIST = new ArrayList<>();
@@ -24,10 +45,15 @@ public class MyResources implements Serializable {
         this.context = context;
 
         // fill the icon list
-        fillIconList();
+        FILL_ICON_LIST();
     }
 
-    private void fillIconList(){
+
+    // ------------------------------------------------------------------------------------------ //
+    //                                         METHODS                                            //
+    // ------------------------------------------------------------------------------------------ //
+
+    private void FILL_ICON_LIST(){
         // Construct the icon list
 
         // temp Icon list
@@ -118,6 +144,49 @@ public class MyResources implements Serializable {
             if (uid.equals(icon.uid)) return icon;
         }
         return ICON_LIST.get(0);
+    }
+
+    void SAVE_CATEGORIES_TO_SHARED_PREFERENCES(ArrayList<Category> list, String TAG){
+
+        // save the categories to the Shared Preference
+        // Uses Gson with Json
+
+        SharedPreferences sharedPreferences = context.getSharedPreferences("shared preferences", Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        Gson gson = new Gson();
+        String json = gson.toJson(list);
+
+        // TAG
+        // The key of the Data
+        // works as an ID
+        // Should be unique, otherwise data will be overridden
+        editor.putString(TAG,json);
+
+        editor.apply();
+    }
+
+    ArrayList<Category> LOAD_CATEGORIES_FROM_SHARED_PREFERENCES(String TAG){
+        // Load the note list from the Shared Preference
+        // Uses Gson with Json
+
+        // Temporary list
+        ArrayList<Category> list ;
+
+        SharedPreferences sharedPreferences = context.getSharedPreferences("shared preferences", Context.MODE_PRIVATE);
+        Gson gson = new Gson();
+
+        // The key of the Data
+        // works as an ID
+        // Should be unique, otherwise data will be overridden
+        String json = sharedPreferences.getString(TAG,null);
+
+        Type type = new TypeToken<ArrayList<Category>>() {}.getType();
+        list = gson.fromJson(json,type);
+
+        if (list == null){
+            return new ArrayList<>();
+        } else
+            return list;
     }
 
 

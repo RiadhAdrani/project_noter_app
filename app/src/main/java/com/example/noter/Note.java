@@ -28,12 +28,13 @@ public class Note implements Serializable {
 
     // basic constructor;
     public Note(Context context){
+        MyResources r = new MyResources(context);
         this.title = context.getString(R.string.titleDefault);
         this.content = "";
-        this.iconUID = new MyResources(context).GET_ICON_LIST().get(0).uid;
+        this.iconUID = r.GET_ICON_LIST().get(0).uid;
         this.creationDate = new MyDate().GET_CURRENT_DATE();
         this.lastModifiedDate = new MyDate().GET_CURRENT_DATE();
-        this.category = new Category(new MyResources(context).ALL_NOTES);
+        this.category = r.DEFAULT_CATEGORY;
     }
 
     Icon getIcon(Context context){

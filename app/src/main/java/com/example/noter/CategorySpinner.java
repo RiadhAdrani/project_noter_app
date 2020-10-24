@@ -1,6 +1,7 @@
 package com.example.noter;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,9 +15,8 @@ import java.util.ArrayList;
 
 public class CategorySpinner extends ArrayAdapter<Category> {
 
-    public CategorySpinner(Context context, ArrayList<Category> categoryList){
-        super(context,0,categoryList);
-
+    public CategorySpinner(Context context, ArrayList<Category> list){
+        super(context,0,list);
     }
 
     @NonNull
@@ -42,10 +42,12 @@ public class CategorySpinner extends ArrayAdapter<Category> {
 
         Category currentItem = getItem(position);
 
+
         if (currentItem != null){
             categoryNameView.setText(currentItem.name);
         }
 
+        Log.d("DEBUG","Initializing spinner element : "+position);
         return convertView;
     }
 }
