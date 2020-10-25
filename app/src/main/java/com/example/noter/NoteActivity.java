@@ -71,9 +71,15 @@ public class NoteActivity extends AppCompatActivity {
     // Adapter for the Category spinner
     private SpinnerAdapter categoryAdapter;
 
+    // Importing my resources
+    // For more documentation check
+    // MyResources Java class file
     private MyResources MY_RESOURCES;
 
+    // Spinner object containing categories
     private Spinner spinner;
+
+    final static int NEW_POSITION = 2;
 
 
     @Override
@@ -89,7 +95,6 @@ public class NoteActivity extends AppCompatActivity {
         Intent i = getIntent();
 
         MY_RESOURCES = new MyResources(this);
-
 
         // Getting the necessary data from MainActivity
         // and saving them as local (Class) variable
@@ -167,27 +172,131 @@ public class NoteActivity extends AppCompatActivity {
         spinner.setAdapter(categoryAdapter);
 
         // Setting initial selected item
-        spinner.setSelection(findCategoryByUID(note.category));
+        spinner.setSelection(findCategoryByUID( MY_RESOURCES.GET_CATEGORY(note.category)));
 
 
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             // Defining behaviour for selected item
             @Override
-            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+            public void onItemSelected(final AdapterView<?> adapterView, View view, int i, long l) {
 
                 Log.d("DEBUG","" + categoryList.get(i).name + " is Selected");
 
                 if (categoryList.get(i).equals(MyResources.ADD_CATEGORY)){
-                    // Create a new category
+                    // If Add Category is selected
+                    // display a new dialog to add a new category
 
-                    buildSimpleInputDialog(spinner);
+                    Log.d("DEBUG_NEW_CATEGORY","adding new category");
 
-                    // Toast used to debug
-                    Toast.makeText(getApplicationContext(),"Adding new category", Toast.LENGTH_SHORT).show();
+                    // creating a new Simple Input Dialog (custom class)
+                    // customizable hint text
+                    // For more documentation about how this works,
+                    // check SimpleInputDialog Java Class file
+                    final SimpleInputDialog dialog = new SimpleInputDialog(getApplicationContext(),getString(R.string.newCategory));
+
+                    dialog.show(getSupportFragmentManager(),"confirm dialog box");
+                    dialog.setButtons(new SimpleInputDialog.Buttons() {
+                        @Override
+                        public void onCancelClickListener() {
+                            // Overriding the action of the cancel button
+
+                            Log.d("DEBUG_NEW_CATEGORY","cancel new category creation");
+
+                            // setting the selected category to the original note category
+                            spinner.setSelection(findCategoryByUID( MY_RESOURCES.GET_CATEGORY(note.category)));
+
+                            // closing the dialog
+                            dialog.dismiss();
+                        }
+
+                        @Override
+                        public void onConfirmClickListener() {
+                            // Overriding the action of the confirm button
+
+                            Log.d("DEBUG_NEW_CATEGORY","creating a new category and saving changes");
+
+                            // creating a temporary category object named by the inputField
+                            final Category newCategory = new Category(dialog.inputField.getText().toString());
+
+                            if (findCategoryByName(newCategory) == -1){
+
+                                // adding the temporary object to the category list
+                                addCategoryAtPosition(newCategory,NEW_POSITION);
+
+                                // saving the category
+                                saveCategory();
+
+                                // reloading the category list
+                                loadCategoryLocally();
+
+                                // updating the spinner and selecting the newly added category
+                                updateCategorySpinner(findCategoryByUID(newCategory));
+
+                                // closing the dialog
+                                dialog.dismiss();
+
+                            } else {
+                                // if the category exist,
+                                // tell the user that a (copy) will be added
+                                // to the category name
+                                // or the user can cancel
+
+                                Log.d("DEBUG_NEW_CATEGORY","Duplicate Detected");
+
+                                final ConfirmDialog confirmDialog = new ConfirmDialog(getApplicationContext(),"Category exist, \"(copy)\" will added at the end.");
+                                confirmDialog.show(getSupportFragmentManager(),"confirm dialog box");
+                                confirmDialog.setButtons(new ConfirmDialog.Buttons() {
+                                    @Override
+                                    public void onCancelClickListener() {
+                                        // Cancel the confirmation dialog box
+                                        // and return to the creation dialog box
+
+                                        Log.d("DEBUG_NEW_CATEGORY","Duplicate fix declined");
+
+                                        // close the confirm dialog box
+                                        confirmDialog.dismiss();
+                                    }
+
+                                    @Override
+                                    public void onConfirmClickListener() {
+                                        // confirm duplicate fix
+                                        // and saving changes
+
+                                        // adding "(copy)" to the temporary category name
+                                        newCategory.name += " (copy)";
+
+                                        // adding the temporary object to the category list
+                                        addCategoryAtPosition(newCategory,NEW_POSITION);
+
+                                        // saving the category
+                                        saveCategory();
+
+                                        // reloading the category list
+                                        loadCategoryLocally();
+
+                                        // updating the spinner and selecting the newly added category
+                                        updateCategorySpinner(findCategoryByUID(newCategory));
+
+                                        // close the confirm dialog box
+                                        confirmDialog.dismiss();
+
+                                        // closing the dialog
+                                        dialog.dismiss();
+
+                                    }
+                                });
+                                // End of the confirmation dialog box Code
+                            }
+                        }
+                    });
+                    // End of the box dialog Code
+
                 }
                 else {
                     // Update user category with the newly selected one
-                    note.category = categoryList.get(i);
+
+                    note.category = categoryList.get(i).UID;
+
                 }
             }
 
@@ -220,68 +329,10 @@ public class NoteActivity extends AppCompatActivity {
         spinner.setAdapter(categoryAdapter);
 
         // Setting initial selected item
-        spinner.setSelection(findCategoryByUID(note.category));
+        spinner.setSelection(index);
+
+        Log.d("DEBUG_NEW_CATEGORY",""+index);
     }
-
-
-    void buildSimpleInputDialog(final Spinner spinner){
-        // display a confirmation dialog box
-
-        final SimpleInputDialog dialog = new SimpleInputDialog(this,getString(R.string.newCategory));
-        dialog.show(getSupportFragmentManager(),"confirm dialog box");
-        dialog.setButtons(new SimpleInputDialog.Buttons() {
-            @Override
-            public void onCancelClickListener() {
-
-                // Code to be executed when Cancel Button is clicked
-
-                // set spinner selected item to the note category
-                spinner.setSelection(findCategoryByUID(note.category));
-
-                // exit dialog box
-                dialog.dismiss();
-
-            }
-
-            @Override
-            public void onConfirmClickListener() {
-
-                // Code to be executed when Confirm Button is clicked
-                Category tempCategory = new Category(dialog.inputField.getText().toString());
-                categoryList.add(categoryList.size()-1,tempCategory);
-                saveCategory();
-                loadCategoryLocally();
-                dialog.dismiss();
-                updateCategorySpinner(findCategoryByUID(tempCategory));
-
-            }
-        });
-    }
-
-    void buildConfirmationDuplicateDialog(final Spinner spinner, final Category mCategory, final SimpleInputDialog mDialog){
-        // display a confirmation dialog box
-
-        final ConfirmDialog dialog = new ConfirmDialog(this,getString(R.string.duplicate_category_alert));
-        dialog.show(getSupportFragmentManager(),"confirm dialog box");
-        dialog.setButtons(new ConfirmDialog.Buttons() {
-            @Override
-            public void onCancelClickListener() {
-                dialog.dismiss();
-            }
-
-            @Override
-            public void onConfirmClickListener() {
-                mCategory.name += " (Copy)";
-                categoryList.add(categoryList.size()-2,mCategory);
-                saveCategory();
-                loadCategoryLocally();
-                spinner.setSelection(categoryList.size()-2);
-                dialog.dismiss();
-                mDialog.dismiss();
-            }
-        });
-    }
-
 
     void loadCategoryLocally(){
         // Prepare the category list to be used in the activity
@@ -293,7 +344,7 @@ public class NoteActivity extends AppCompatActivity {
         categoryList.add(0,MyResources.DEFAULT_CATEGORY);
 
         // Add the "ADD CATEGORY"
-        categoryList.add(MyResources.ADD_CATEGORY);
+        categoryList.add(0,MyResources.ADD_CATEGORY);
     }
 
     void saveCategory(){
@@ -301,13 +352,22 @@ public class NoteActivity extends AppCompatActivity {
         // Saving only the custom made categories
 
         // Removing the Default category
-        categoryList.remove(0);
+        categoryList.remove(findCategoryByUID(MyResources.DEFAULT_CATEGORY));
 
         // Removing the "Add category" category
-        categoryList.remove(categoryList.size()-1);
+        categoryList.remove(findCategoryByUID(MyResources.ADD_CATEGORY));
 
         // Save category list from SharedPreferences
         MY_RESOURCES.SAVE_CATEGORIES_TO_SHARED_PREFERENCES(categoryList,MyResources.CATEGORY_KEY);
+    }
+
+    void addCategoryAtPosition(Category category,int position){
+        if (position < 0 || position > categoryList.size() || categoryList.size() < 3){
+            categoryList.add(category);
+        }
+        else {
+            categoryList.add(position,category);
+        }
     }
 
     private int findCategoryByUID(Category mCategory){
@@ -319,10 +379,14 @@ public class NoteActivity extends AppCompatActivity {
 
                 // if the two UID matches
                 // return the index of the current element
+                Log.d("DEBUG_NEW_CATEGORY","Category "+ mCategory.name +" found !");
 
                 return categoryList.indexOf(c);
             }
         }
+
+        Log.d("DEBUG_NEW_CATEGORY","Category "+ mCategory.name +" NOT found !");
+
         return -1;
     }
 
@@ -336,10 +400,16 @@ public class NoteActivity extends AppCompatActivity {
             // return the index of the current element
 
             if (c.name.equals(mCategory.name)){
+
+                Log.d("DEBUG_NEW_CATEGORY","Category "+ mCategory.name +" found !");
+
                 return categoryList.indexOf(c);
             }
         }
-        return 0;
+
+        Log.d("DEBUG_NEW_CATEGORY","Category "+ mCategory.name +" found !");
+
+        return -1;
     }
 
     void buildIconDialog(){
@@ -440,6 +510,8 @@ public class NoteActivity extends AppCompatActivity {
 
     void cancel(){
         // Pass the user to MainActivity
+
+        // Moving the last used category to the top of the list
 
         Intent i = new Intent(this, MainActivity.class);
         startActivity(i);

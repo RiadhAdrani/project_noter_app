@@ -2,6 +2,7 @@ package com.example.noter;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.util.Log;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -27,12 +28,12 @@ public class MyResources implements Serializable {
     public static String CATEGORY_KEY = "NOTER_CATEGORY";
 
     // Default category
-    private static String DEFAULT_CATEGORY_NAME = "Default";
+    private static String DEFAULT_CATEGORY_NAME = "DEFAULT";
     private static String DEFAULT_CATEGORY_UID = "com.example.noter.default.category";
     public static Category DEFAULT_CATEGORY = new Category(DEFAULT_CATEGORY_NAME, DEFAULT_CATEGORY_UID);
 
     // Add new category
-    private static String ADD_CATEGORY_NAME = "Add Category";
+    private static String ADD_CATEGORY_NAME = "+ CATEGORY";
     private static String ADD_CATEGORY_UID = "com.example.noter.add.category";
     public static Category ADD_CATEGORY = new Category(ADD_CATEGORY_NAME, ADD_CATEGORY_UID);
 
@@ -187,6 +188,30 @@ public class MyResources implements Serializable {
             return new ArrayList<>();
         } else
             return list;
+    }
+
+    String GET_CATEGORY_BY_UID(String uid){
+        for (Category category : LOAD_CATEGORIES_FROM_SHARED_PREFERENCES(CATEGORY_KEY)) {
+            if (category.UID.equals(uid)){
+                Log.d("DEBUG_FIND_CATEGORY","Category "+ category.name + "found !");
+                return category.UID;
+            }
+        }
+
+        Log.d("DEBUG_FIND_CATEGORY","Could not find category's ID, replaced by DEFAULT CATEGORY");
+        return DEFAULT_CATEGORY.UID;
+    }
+
+    Category GET_CATEGORY(String uid){
+        for (Category category : LOAD_CATEGORIES_FROM_SHARED_PREFERENCES(CATEGORY_KEY)) {
+            if (category.UID.equals(uid)){
+                Log.d("DEBUG_FIND_CATEGORY","Category "+ category.name + "found !");
+                return category;
+            }
+        }
+
+        Log.d("DEBUG_FIND_CATEGORY","Could not find category's ID, replaced by DEFAULT CATEGORY");
+        return DEFAULT_CATEGORY;
     }
 
 

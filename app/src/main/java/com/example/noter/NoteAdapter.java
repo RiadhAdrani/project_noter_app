@@ -133,15 +133,17 @@ public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.myViewHolder> 
         // Assign information to the existing View elements
         // to be displayed
 
+        MyResources myResources = new MyResources(mContext);
+
         Note currentNote = mNoteList.get(position);
         holder.mImageView.setImageResource(new MyResources(mContext).GET_ICON(currentNote.iconUID).id);
         holder.mTitle.setText(currentNote.title);
 
         if (currentNote.category == null){
-            currentNote.category = new Category("something");
+            currentNote.category = MyResources.DEFAULT_CATEGORY.UID;
         }
 
-        holder.mCategory.setText(currentNote.category.name);
+        holder.mCategory.setText(myResources.GET_CATEGORY(currentNote.category).name);
         holder.mContentPreview.setText(currentNote.content);
     }
 

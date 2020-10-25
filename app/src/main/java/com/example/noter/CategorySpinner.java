@@ -47,7 +47,7 @@ public class CategorySpinner extends ArrayAdapter<Category> {
             categoryNameView.setText(currentItem.name);
         }
 
-        Log.d("DEBUG","Initializing spinner element : "+position);
+        Log.d("SPINNER_DEBUG","Initializing spinner element : "+position);
         return convertView;
     }
 }
