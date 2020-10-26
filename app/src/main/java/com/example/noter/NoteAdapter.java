@@ -124,8 +124,7 @@ public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.myViewHolder> 
         // Inflate and load the layout of the element
 
         View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.note_card_layout,parent,false);
-        myViewHolder mvh = new myViewHolder(v, mListener,mContext);
-        return mvh;
+        return new myViewHolder(v, mListener,mContext);
     }
 
     @Override

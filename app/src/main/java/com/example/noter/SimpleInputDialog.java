@@ -48,6 +48,13 @@ public class SimpleInputDialog extends AppCompatDialogFragment {
         this.setButtons = buttons;
     }
 
+    @Override
+    public void onAttach(@NonNull Context context) {
+        super.onAttach(context);
+
+        setButtons = (Buttons) context;
+    }
+
     @NonNull
     @Override
     public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {

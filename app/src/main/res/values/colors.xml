@@ -17,9 +17,16 @@
     <color name="green_persian">#2A9D8F</color>
     <color name="green_persian_light">#3ECCBB</color>
     <color name="green_persian_lighter">#6ED8CC</color>
+
     <color name="orange_yellow_crayola">#E9C46A</color>
     <color name="orange_yellow_light">#EFD595</color>
     <color name="brown_sandy">#F4A261</color>
     <color name="orange_red_burnt_sienna">#E76F51</color>
+
+    <color name="beau_blue_lighter">#E6EAEF</color>
+    <color name="beau_blue_light">#8FA2B7</color>
+    <color name="beau_blue">#5F7895</color>
+    <color name="beau_blue_dark">#485A70</color>
+    <color name="beau_blue_darker">#28323E</color>
 
 </resources>

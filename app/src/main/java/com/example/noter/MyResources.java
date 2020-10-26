@@ -214,5 +214,72 @@ public class MyResources implements Serializable {
         return DEFAULT_CATEGORY;
     }
 
+    ArrayList<Category> GET_CATEGORY_LIST(){
+        // Prepare the category list to be used in the activity
+
+        ArrayList<Category> categoryList;
+
+        // Load category list from SharedPreferences
+        categoryList = LOAD_CATEGORIES_FROM_SHARED_PREFERENCES(MyResources.CATEGORY_KEY);
+
+        // Add the Default Category
+        categoryList.add(0,MyResources.DEFAULT_CATEGORY);
+
+        return categoryList;
+    }
+
+    void SAVE_CATEGORY_LIST(ArrayList<Category> categoryList){
+        // Prepare the category list to be saved
+        // Saving only the custom made categories
+
+        // Removing the Default category
+        categoryList.remove(GET_CATEGORY_INDEX_BY_UID(DEFAULT_CATEGORY,categoryList));
+
+        // Save category list from SharedPreferences
+        SAVE_CATEGORIES_TO_SHARED_PREFERENCES(categoryList,MyResources.CATEGORY_KEY);
+    }
+
+    private int GET_CATEGORY_INDEX_BY_UID(Category mCategory, ArrayList<Category> categoryList){
+        // Return the index of the note category
+        // found in categoryList
+
+        for (Category c : categoryList) {
+            if (c.UID.equals(mCategory.UID)){
+
+                // if the two UID matches
+                // return the index of the current element
+                Log.d("DEBUG_NEW_CATEGORY","Category "+ mCategory.name +" found !");
+
+                return categoryList.indexOf(c);
+            }
+        }
+
+        Log.d("DEBUG_NEW_CATEGORY","Category "+ mCategory.name +" NOT found !");
+
+        return -1;
+    }
+
+    private int GET_CATEGORY_INDEX_BY_NAME(Category mCategory, ArrayList<Category> categoryList){
+        // Return the index of the note category
+        // found in categoryList
+
+        for (Category c : categoryList) {
+
+            // if the two names matches
+            // return the index of the current element
+
+            if (c.name.equals(mCategory.name)){
+
+                Log.d("DEBUG_NEW_CATEGORY","Category "+ mCategory.name +" found !");
+
+                return categoryList.indexOf(c);
+            }
+        }
+
+        Log.d("DEBUG_NEW_CATEGORY","Category "+ mCategory.name +" found !");
+
+        return -1;
+    }
+
 
 }

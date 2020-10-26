@@ -7,12 +7,16 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ImageButton;
 import android.widget.Toast;
 import android.widget.Toolbar;
+
+import androidx.appcompat.app.AppCompatDialogFragment;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -31,6 +35,8 @@ public class MainActivity extends Activity implements Serializable {
 
     // Activity Displaying the multiple notes of the selected category.
 
+    MyResources MY_RESOURCES;
+
     // List of Notes
     ArrayList<Note> mList = new ArrayList<>();
 
@@ -47,6 +53,22 @@ public class MainActivity extends Activity implements Serializable {
     // Floating Action Button used to create notes
     FloatingActionButton fab;
 
+    // List of Categories
+    ArrayList<Category> cList = new ArrayList<>();
+
+    // RecyclerView used to display categories
+    RecyclerView cRecyclerView;
+
+    // Custom Adapter
+    // See CategoryAdapter (Class) for more documentation
+    CategoryAdapter cAdapter;
+
+    // LayoutManager which decides how notes are displayed
+    RecyclerView.LayoutManager cLayoutManager;
+
+    // Add Category Button
+    ImageButton addCategoryButton;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -55,15 +77,20 @@ public class MainActivity extends Activity implements Serializable {
         // very important to assign the correct layout
         // because it will be used to fetch elements
         // could cause crashes if not set correctly
-        setContentView(R.layout.category_activity_layout);
+        setContentView(R.layout.main_activity_layout);
+
+        MY_RESOURCES = new MyResources(this);
 
         // Setting the toolbar for the current activity
-        // Could be customized via R.layout.category_activity_layout
+        // Could be customized via R.layout.main_activity_layout
         Toolbar toolbar = findViewById(R.id.category_toolbar);
         setActionBar(toolbar);
 
         // Loading notes from SharedPreferences
         mList = loadNoteFromSharedPreferences();
+
+        // Loading Categories from SharePreferences
+        cList = MY_RESOURCES.GET_CATEGORY_LIST();
 
         // Fetching the Floating Action bar in the layout
         fab = findViewById(R.id.category_fab);
@@ -76,7 +103,62 @@ public class MainActivity extends Activity implements Serializable {
             }
         });
 
+        // Referencing the button from the Activity layout
+        addCategoryButton = findViewById(R.id.add_category_button);
+
+        // Assigning the action of the button
+        addCategoryButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                // creating an Simple Input Alert (custom class)
+                // customizable hint text
+                // For more documentation about how this works,
+                // check SimpleInputDialog Java Class file
+
+                SimpleInputDialog inputDialog = new SimpleInputDialog(getApplicationContext(),"tag");
+            }
+        });
+
         buildRecyclerView();
+        BuildCategoryRecyclerView();
+
+    }
+
+
+    void BuildCategoryRecyclerView(){
+        // Build The RecyclerView
+
+        // find the recycler view in the layout of the activity
+        cRecyclerView = findViewById(R.id.category_recyclerView);
+
+        // If the list contains an always fixed number of element,
+        // set the boolean in the next line of code to TRUE
+        // In the case of this note app, the size may vary by deleting/adding new notes
+        // should be set to FALSE (if not using dummy data)
+        cRecyclerView.setHasFixedSize(false);
+
+        // Setting the Layout of the RecyclerView
+        cLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL,false);
+
+        // Setting the Adapter of the RecyclerView
+        cAdapter = new CategoryAdapter(cList);
+
+        Log.d("DEBUG_CATEGORY_RV","Number of Elements : "+cAdapter.mList.size());
+
+        cAdapter.setOnCategoryClickListener(new CategoryAdapter.OnCategoryClickListener() {
+            @Override
+            public void onClickListener(int position) {
+                Toast.makeText(getApplicationContext(),"Category Clicked !",Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onLongClickListener(int position) {
+                Toast.makeText(getApplicationContext(),"Category Clicked & Hold !",Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        cRecyclerView.setLayoutManager(cLayoutManager);
+        cRecyclerView.setAdapter(cAdapter);
 
     }
 
@@ -210,7 +292,7 @@ public class MainActivity extends Activity implements Serializable {
         // Build The RecyclerView
 
         // find the recycler view in the layout of the activity
-        mRecyclerView = findViewById(R.id.category_RecyclerView);
+        mRecyclerView = findViewById(R.id.note_RecyclerView);
 
         // If the list contains an always fixed number of element,
         // set the boolean in the next line of code to TRUE
@@ -493,6 +575,23 @@ public class MainActivity extends Activity implements Serializable {
         return temp;
     }
 
+
+    private ArrayList<Category> useDummyCategoryList(){
+        ArrayList<Category> categoryList;
+
+        categoryList = new ArrayList<>();
+        categoryList.add(new Category("Default",true));
+        categoryList.add(new Category("Studies",true));
+        categoryList.add(new Category("Sports",true));
+        categoryList.add(new Category("Unity",false));
+        categoryList.add(new Category("Habits",false));
+        categoryList.add(new Category("MF",false));
+        categoryList.add(new Category("Freelance",false));
+        categoryList.add(new Category("Android Studio",false));
+
+        return categoryList;
+    }
+
     void useDummyElements(){
         // Testing the RecyclerView
         // Dummy element ahead
@@ -518,5 +617,4 @@ public class MainActivity extends Activity implements Serializable {
 //        mAdapter.notifyDataSetChanged();
 //        mAdapter.notifyItemInserted(position);
     }
-
 }
