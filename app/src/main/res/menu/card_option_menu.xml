@@ -10,7 +10,7 @@
         app:showAsAction="never"
         />
     <item android:id="@+id/card_option_delete"
-        android:title="@string/delete_note"
+        android:title="@string/delete"
         app:showAsAction="never"
         />
 </menu>

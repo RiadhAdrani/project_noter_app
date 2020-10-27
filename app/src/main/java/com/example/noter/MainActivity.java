@@ -190,7 +190,10 @@ public class MainActivity extends AppCompatActivity implements Serializable {
             }
         });
 
+        // NOT OPTIMIZED ↓↓↓↓↓↓↓↓↓↓
         buildRecyclerView();
+
+        // NOT OPTIMIZED ↓↓↓↓↓↓↓↓↓↓
         BuildCategoryRecyclerView();
 
     }
@@ -201,6 +204,116 @@ public class MainActivity extends AppCompatActivity implements Serializable {
         cList = MY_RESOURCES.GET_CATEGORY_LIST();
     }
 
+    void DisplayCategoryOptionDialog(Category category, int position){
+        final CategoryOptionDialog dialog = new CategoryOptionDialog(category,position);
+        dialog.show(getSupportFragmentManager(),"category option dialog");
+        dialog.setOnCategoryOptionClickListener(new CategoryOptionDialog.onCategoryOptionClickListener() {
+            @Override
+            public void onRenameButtonClick(final int position) {
+
+                if (MY_RESOURCES.CHECK_IF_NAME_EXIST(cList,dialog.inputField.getText().toString())
+                        && !cList.get(position).name.equals(dialog.inputField.getText().toString()) ){
+
+                    final ConfirmDialog confirmDialog = new ConfirmDialog(getApplicationContext(),
+                            "Category exists, do you want it to be renamed "+getSuitableName(cList.get(position).name,cList));
+
+                    confirmDialog.show(getSupportFragmentManager(),"confirm rename dialog");
+
+                    confirmDialog.setButtons(new ConfirmDialog.Buttons() {
+                        @Override
+                        public void onCancelClickListener() {
+                            confirmDialog.dismiss();
+                        }
+
+                        @Override
+                        public void onConfirmClickListener() {
+                            cList.get(position).name = getSuitableName(cList.get(position).name,cList);
+                            MY_RESOURCES.SAVE_CATEGORY_LIST(cList);
+                            cList = MY_RESOURCES.GET_CATEGORY_LIST();
+
+                            // NOT OPTIMIZED ↓↓↓↓↓↓↓↓↓↓
+                            BuildCategoryRecyclerView();
+
+                            // NOT OPTIMIZED ↓↓↓↓↓↓↓↓↓↓
+                            buildRecyclerView();
+
+                            confirmDialog.dismiss();
+                            dialog.dismiss();
+                        }
+                    });
+                } else {
+                    cList.get(position).name = dialog.inputField.getText().toString();
+                    MY_RESOURCES.SAVE_CATEGORY_LIST(cList);
+                    cList = MY_RESOURCES.GET_CATEGORY_LIST();
+
+                    // NOT OPTIMIZED ↓↓↓↓↓↓↓↓↓↓
+                    BuildCategoryRecyclerView();
+
+                    // NOT OPTIMIZED ↓↓↓↓↓↓↓↓↓↓
+                    buildRecyclerView();
+
+                    dialog.dismiss();
+                }
+            }
+
+            @Override
+            public void onDeleteButtonClick(final int position) {
+
+                final ConfirmDialog confirmDialog = new ConfirmDialog(getApplicationContext(),"Are you sure you want to delete "+cList.get(position).name+" ?");
+                confirmDialog.show(getSupportFragmentManager(),"confirm delete category");
+                confirmDialog.setButtons(new ConfirmDialog.Buttons() {
+                    @Override
+                    public void onCancelClickListener() {
+                        confirmDialog.dismiss();
+                    }
+
+                    @Override
+                    public void onConfirmClickListener() {
+
+                        for (Note note : nList) {
+                            if (note.category.equals(cList.get(position).UID))
+                                note.category = MyResources.DEFAULT_CATEGORY.UID;
+                        }
+
+                        cList.remove(position);
+                        MY_RESOURCES.SAVE_CATEGORY_LIST(cList);
+                        cList = MY_RESOURCES.GET_CATEGORY_LIST();
+
+                        saveNoteToSharedPreferences(nList);
+                        nList = loadNoteFromSharedPreferences();
+
+                        buildRecyclerView();
+                        BuildCategoryRecyclerView();
+
+                        Toast.makeText(getApplicationContext(),"Category deleted, Notes updated",Toast.LENGTH_SHORT).show();
+
+                        confirmDialog.dismiss();
+                        dialog.dismiss();
+
+                    }
+                });
+
+
+
+            }
+
+            @Override
+            public void onCancelButtonClick(int position) {
+                dialog.dismiss();
+
+            }
+        });
+    }
+
+    String getSuitableName(String name, ArrayList<Category> list){
+        // Check for duplicate name
+        // and return the appropriate name
+
+        if (MY_RESOURCES.CHECK_IF_NAME_EXIST(list,name)) return getSuitableName(MY_RESOURCES.NEW_CATEGORY_NAME(name),list);
+
+        return name;
+
+    }
 
     void BuildCategoryRecyclerView(){
         // Build The RecyclerView
@@ -236,7 +349,9 @@ public class MainActivity extends AppCompatActivity implements Serializable {
 
             @Override
             public void onLongClickListener(int position) {
-                Toast.makeText(getApplicationContext(),"Category Clicked & Hold !",Toast.LENGTH_SHORT).show();
+
+                if (cList.get(position) != MyResources.DEFAULT_CATEGORY && cList.get(position) != MyResources.ALL_CATEGORY )
+                DisplayCategoryOptionDialog(cList.get(position),position);
             }
         });
 
@@ -534,161 +649,148 @@ public class MainActivity extends AppCompatActivity implements Serializable {
             return noteList;
     }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
     // ------------------------------------------------------------------------------------------ //
     //                                  FUNCTIONS GRAVEYARD                                       //
     // ------------------------------------------------------------------------------------------ //
 
-    ArrayList<Note> QuickSortModification(ArrayList<Note> list){
-        // Function that uses the randomized quick sort algorithm
-        // to sort a list of notes by
-        // the Note.modificationDate property
-        // Uses Recursive call
-
-        if (list.size() <= 1) return list;
-        ArrayList<Note> high = new ArrayList<>();
-        ArrayList<Note> low = new ArrayList<>();
-        ArrayList<Note> equal = new ArrayList<>();
-        Note e = list.get( (int) (Math.random() *list.size()) );
-
-        for (Note x : list) {
-            if (x.creationDate.getTime() < e.creationDate.getTime()) low.add(x);
-            if (x.creationDate.getTime() > e.creationDate.getTime()) high.add(x);
-            if (x.creationDate.getTime() == e.creationDate.getTime()) equal.add(x);
-        }
-
-        ArrayList<Note> temp = new ArrayList<>();
-        temp.addAll(QuickSortModification(low));
-        temp.addAll(equal);
-        temp.addAll(QuickSortModification(high));
-
-        return temp;
-    }
-
-    ArrayList<Note> QuickSortAlpha(ArrayList<Note> list){
-        // Function that uses the randomized quick sort algorithm
-        // to sort a list of notes by
-        // the Note.title property
-        // Uses Recursive call
-
-        if (list.size() <= 1) return list;
-        ArrayList<Note> high = new ArrayList<>();
-        ArrayList<Note> low = new ArrayList<>();
-        ArrayList<Note> equal = new ArrayList<>();
-        Note e = list.get( (int) (Math.random() *list.size()) );
-        for (Note x : list) {
-            switch (StringComparison(x.title,e.title)){
-                case  0: equal.add(x)   ; break;
-                case -1: low.add(x)     ; break;
-                case  1: high.add(x)    ; break;
-            }
-        }
-
-        ArrayList<Note> temp = new ArrayList<>();
-        temp.addAll(QuickSortAlpha(low));
-        temp.addAll(equal);
-        temp.addAll(QuickSortAlpha(high));
-
-        return temp;
-    }
-
-    int StringComparison(String a, String b){
-        // Function used to compare two strings (a) and (b)
-        // Custom made for the Randomized Quick Sorting Function
-        // return -1 if (a) is alphabetically before (b)
-        // return  0 if (a) is alphabetically after  (b)
-        // return  1 if (a) is equal to              (b)
-
-        int size;
-        size = Math.min(a.length(), b.length());
-        for (int i = 0; i < size; i++) {
-            if (a.toLowerCase().charAt(i) < b.toLowerCase().charAt(i)) return -1; // A is before B
-            if (a.toLowerCase().charAt(i) > b.toLowerCase().charAt(i)) return  1; // A is after B
-        }
-        if (a.length() < b.length()) return -1;
-        else if (a.length() > b.length()) return 1;
-
-        return 0;
-    }
-
-    ArrayList<Note> QuickSortCreation(ArrayList<Note> list){
-        // Function that uses the randomized quick sort algorithm
-        // to sort a list of notes by
-        // the Note.creationDate property
-        // Uses Recursive call
-
-        if (list.size() <= 1) return list;
-        ArrayList<Note> high = new ArrayList<>();
-        ArrayList<Note> low = new ArrayList<>();
-        ArrayList<Note> equal = new ArrayList<>();
-        Note e = list.get( (int) (Math.random() *list.size()) );
-
-        for (Note x : list) {
-            if (x.creationDate.getTime() < e.creationDate.getTime()) low.add(x);
-            if (x.creationDate.getTime() > e.creationDate.getTime()) high.add(x);
-            if (x.creationDate.getTime() == e.creationDate.getTime()) equal.add(x);
-        }
-
-        ArrayList<Note> temp = new ArrayList<>();
-        temp.addAll(QuickSortCreation(low));
-        temp.addAll(equal);
-        temp.addAll(QuickSortCreation(high));
-
-        return temp;
-    }
-
-
-    private ArrayList<Category> useDummyCategoryList(){
-        ArrayList<Category> categoryList;
-
-        categoryList = new ArrayList<>();
-        categoryList.add(new Category("Default",true));
-        categoryList.add(new Category("Studies",true));
-        categoryList.add(new Category("Sports",true));
-        categoryList.add(new Category("Unity",false));
-        categoryList.add(new Category("Habits",false));
-        categoryList.add(new Category("MF",false));
-        categoryList.add(new Category("Freelance",false));
-        categoryList.add(new Category("Android Studio",false));
-
-        return categoryList;
-    }
-
-    void useDummyElements(){
-        // Testing the RecyclerView
-        // Dummy element ahead
-//        mList.add(new Note("note 1",R.drawable.icon_big,"one"));
-//        mList.add(new Note("note 2",R.drawable.icon_big,"two"));
-//        mList.add(new Note("note 3",R.drawable.icon_big,"three"));
-//        mList.add(new Note("note 4",R.drawable.icon_big,"four"));
-//        mList.add(new Note("note 5",R.drawable.icon_big,"five"));
-//        mList.add(new Note("note 6",R.drawable.icon_big,"six"));
-//        mList.add(new Note("note 7",R.drawable.icon_big,"seven"));
-//        mList.add(new Note("note 8",R.drawable.icon_big,"eight"));
-//        mList.add(new Note("note 9",R.drawable.icon_big,"nine"));
-//        mList.add(new Note("note 10",R.drawable.icon_big,"ten"));
-//        mList.add(new Note("note 11",R.drawable.icon_big,"eleven"));
-//        mList.add(new Note("note 12",R.drawable.icon_big,"twelve"));
-    }
-
-    void addDummyNote(int position){
-//        if (mList.size() != 0) mList.add(position,new Note("new Note ("+ (int) (Math.random()*1000) +")","new_note"));
-//        else mList.add(new Note("new Note ("+ (int) (Math.random()*1000) +")","new_note"));
-//        Need to be more optimized
-//        buildRecyclerView();
-//        mAdapter.notifyDataSetChanged();
-//        mAdapter.notifyItemInserted(position);
-    }
+//    ArrayList<Note> QuickSortModification(ArrayList<Note> list){
+//        // Function that uses the randomized quick sort algorithm
+//        // to sort a list of notes by
+//        // the Note.modificationDate property
+//        // Uses Recursive call
+//
+//        if (list.size() <= 1) return list;
+//        ArrayList<Note> high = new ArrayList<>();
+//        ArrayList<Note> low = new ArrayList<>();
+//        ArrayList<Note> equal = new ArrayList<>();
+//        Note e = list.get( (int) (Math.random() *list.size()) );
+//
+//        for (Note x : list) {
+//            if (x.creationDate.getTime() < e.creationDate.getTime()) low.add(x);
+//            if (x.creationDate.getTime() > e.creationDate.getTime()) high.add(x);
+//            if (x.creationDate.getTime() == e.creationDate.getTime()) equal.add(x);
+//        }
+//
+//        ArrayList<Note> temp = new ArrayList<>();
+//        temp.addAll(QuickSortModification(low));
+//        temp.addAll(equal);
+//        temp.addAll(QuickSortModification(high));
+//
+//        return temp;
+//    }
+//
+//    ArrayList<Note> QuickSortAlpha(ArrayList<Note> list){
+//        // Function that uses the randomized quick sort algorithm
+//        // to sort a list of notes by
+//        // the Note.title property
+//        // Uses Recursive call
+//
+//        if (list.size() <= 1) return list;
+//        ArrayList<Note> high = new ArrayList<>();
+//        ArrayList<Note> low = new ArrayList<>();
+//        ArrayList<Note> equal = new ArrayList<>();
+//        Note e = list.get( (int) (Math.random() *list.size()) );
+//        for (Note x : list) {
+//            switch (StringComparison(x.title,e.title)){
+//                case  0: equal.add(x)   ; break;
+//                case -1: low.add(x)     ; break;
+//                case  1: high.add(x)    ; break;
+//            }
+//        }
+//
+//        ArrayList<Note> temp = new ArrayList<>();
+//        temp.addAll(QuickSortAlpha(low));
+//        temp.addAll(equal);
+//        temp.addAll(QuickSortAlpha(high));
+//
+//        return temp;
+//    }
+//
+//    int StringComparison(String a, String b){
+//        // Function used to compare two strings (a) and (b)
+//        // Custom made for the Randomized Quick Sorting Function
+//        // return -1 if (a) is alphabetically before (b)
+//        // return  0 if (a) is alphabetically after  (b)
+//        // return  1 if (a) is equal to              (b)
+//
+//        int size;
+//        size = Math.min(a.length(), b.length());
+//        for (int i = 0; i < size; i++) {
+//            if (a.toLowerCase().charAt(i) < b.toLowerCase().charAt(i)) return -1; // A is before B
+//            if (a.toLowerCase().charAt(i) > b.toLowerCase().charAt(i)) return  1; // A is after B
+//        }
+//        if (a.length() < b.length()) return -1;
+//        else if (a.length() > b.length()) return 1;
+//
+//        return 0;
+//    }
+//
+//    ArrayList<Note> QuickSortCreation(ArrayList<Note> list){
+//        // Function that uses the randomized quick sort algorithm
+//        // to sort a list of notes by
+//        // the Note.creationDate property
+//        // Uses Recursive call
+//
+//        if (list.size() <= 1) return list;
+//        ArrayList<Note> high = new ArrayList<>();
+//        ArrayList<Note> low = new ArrayList<>();
+//        ArrayList<Note> equal = new ArrayList<>();
+//        Note e = list.get( (int) (Math.random() *list.size()) );
+//
+//        for (Note x : list) {
+//            if (x.creationDate.getTime() < e.creationDate.getTime()) low.add(x);
+//            if (x.creationDate.getTime() > e.creationDate.getTime()) high.add(x);
+//            if (x.creationDate.getTime() == e.creationDate.getTime()) equal.add(x);
+//        }
+//
+//        ArrayList<Note> temp = new ArrayList<>();
+//        temp.addAll(QuickSortCreation(low));
+//        temp.addAll(equal);
+//        temp.addAll(QuickSortCreation(high));
+//
+//        return temp;
+//    }
+//
+//
+//    private ArrayList<Category> useDummyCategoryList(){
+//        ArrayList<Category> categoryList;
+//
+//        categoryList = new ArrayList<>();
+//        categoryList.add(new Category("Default",true));
+//        categoryList.add(new Category("Studies",true));
+//        categoryList.add(new Category("Sports",true));
+//        categoryList.add(new Category("Unity",false));
+//        categoryList.add(new Category("Habits",false));
+//        categoryList.add(new Category("MF",false));
+//        categoryList.add(new Category("Freelance",false));
+//        categoryList.add(new Category("Android Studio",false));
+//
+//        return categoryList;
+//    }
+//
+//    void useDummyElements(){
+//        // Testing the RecyclerView
+//        // Dummy element ahead
+////        mList.add(new Note("note 1",R.drawable.icon_big,"one"));
+////        mList.add(new Note("note 2",R.drawable.icon_big,"two"));
+////        mList.add(new Note("note 3",R.drawable.icon_big,"three"));
+////        mList.add(new Note("note 4",R.drawable.icon_big,"four"));
+////        mList.add(new Note("note 5",R.drawable.icon_big,"five"));
+////        mList.add(new Note("note 6",R.drawable.icon_big,"six"));
+////        mList.add(new Note("note 7",R.drawable.icon_big,"seven"));
+////        mList.add(new Note("note 8",R.drawable.icon_big,"eight"));
+////        mList.add(new Note("note 9",R.drawable.icon_big,"nine"));
+////        mList.add(new Note("note 10",R.drawable.icon_big,"ten"));
+////        mList.add(new Note("note 11",R.drawable.icon_big,"eleven"));
+////        mList.add(new Note("note 12",R.drawable.icon_big,"twelve"));
+//    }
+//
+//    void addDummyNote(int position){
+////        if (mList.size() != 0) mList.add(position,new Note("new Note ("+ (int) (Math.random()*1000) +")","new_note"));
+////        else mList.add(new Note("new Note ("+ (int) (Math.random()*1000) +")","new_note"));
+////        Need to be more optimized
+////        buildRecyclerView();
+////        mAdapter.notifyDataSetChanged();
+////        mAdapter.notifyItemInserted(position);
+//    }
 }

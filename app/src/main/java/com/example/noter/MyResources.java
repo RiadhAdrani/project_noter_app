@@ -33,7 +33,7 @@ public class MyResources implements Serializable {
     public static Category ALL_CATEGORY = new Category(ALL_CATEGORY_NAME, ALL_CATEGORY_UID);
 
     // Default category
-    private static String DEFAULT_CATEGORY_NAME = "DEFAULT";
+    private static String DEFAULT_CATEGORY_NAME = "Default";
     private static String DEFAULT_CATEGORY_UID = "com.example.noter.default.category";
     public static Category DEFAULT_CATEGORY = new Category(DEFAULT_CATEGORY_NAME, DEFAULT_CATEGORY_UID);
 
@@ -319,6 +319,24 @@ public class MyResources implements Serializable {
         }
 
         return tempList;
+    }
+
+    public boolean CHECK_IF_NAME_EXIST(ArrayList<Category> categoryList, String name){
+
+        if (categoryList.isEmpty()) return false;
+
+        for (Category category : categoryList) {
+            if (category.name.equals(name)) return true;
+        }
+
+        return false;
+
+    }
+
+    public String NEW_CATEGORY_NAME(String name){
+
+        if (name == null) return null;
+        return name + context.getString(R.string.copy);
     }
 
 
