@@ -239,7 +239,7 @@ public class MyResources implements Serializable {
         SAVE_CATEGORIES_TO_SHARED_PREFERENCES(categoryList,MyResources.CATEGORY_KEY);
     }
 
-    private int GET_CATEGORY_INDEX_BY_UID(Category mCategory, ArrayList<Category> categoryList){
+    public int GET_CATEGORY_INDEX_BY_UID(Category mCategory, ArrayList<Category> categoryList){
         // Return the index of the note category
         // found in categoryList
 
@@ -259,7 +259,7 @@ public class MyResources implements Serializable {
         return -1;
     }
 
-    private int GET_CATEGORY_INDEX_BY_NAME(Category mCategory, ArrayList<Category> categoryList){
+    public int GET_CATEGORY_INDEX_BY_NAME(Category mCategory, ArrayList<Category> categoryList){
         // Return the index of the note category
         // found in categoryList
 

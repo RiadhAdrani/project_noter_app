@@ -16,7 +16,7 @@ import android.widget.ImageButton;
 import android.widget.Toast;
 import android.widget.Toolbar;
 
-import androidx.appcompat.app.AppCompatDialogFragment;
+import androidx.appcompat.app.AppCompatActivity;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -31,11 +31,13 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 
-public class MainActivity extends Activity implements Serializable {
+public class MainActivity extends AppCompatActivity implements Serializable {
 
     // Activity Displaying the multiple notes of the selected category.
 
     MyResources MY_RESOURCES;
+
+    static final int NEW_CATEGORY_POSITION = 1;
 
     // List of Notes
     ArrayList<Note> mList = new ArrayList<>();
@@ -115,13 +117,73 @@ public class MainActivity extends Activity implements Serializable {
                 // For more documentation about how this works,
                 // check SimpleInputDialog Java Class file
 
-                SimpleInputDialog inputDialog = new SimpleInputDialog(getApplicationContext(),"tag");
+                final SimpleInputDialog inputDialog = new SimpleInputDialog(getApplicationContext(),"Add new category");
+                inputDialog.show(getSupportFragmentManager(),"add new category" );
+                inputDialog.setButtons(new SimpleInputDialog.Buttons() {
+                    @Override
+                    public void onCancelClickListener() {
+                        inputDialog.dismiss();
+                    }
+
+                    @Override
+                    public void onConfirmClickListener() {
+                        final Category newCategory = new Category(inputDialog.inputField.getText().toString());
+
+                        if (MY_RESOURCES.GET_CATEGORY_INDEX_BY_NAME(newCategory,cList) == -1){
+                            AddCategory(newCategory,NEW_CATEGORY_POSITION);
+
+                            // cAdapter.notifyItemInserted(NEW_CATEGORY_POSITION);
+
+                            // NOT OPTIMIZED ↓↓↓↓↓↓↓↓↓↓
+                            BuildCategoryRecyclerView();
+                            // ↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑
+                        }
+                        else {
+                            final ConfirmDialog dialog = new ConfirmDialog(getApplicationContext(),
+                                    "A category named : \""+newCategory.name+"\" already exists, it will be named \""+newCategory.name+"\" (copy). Continue?");
+                            dialog.show(getSupportFragmentManager(),"add new category");
+                            dialog.setButtons(new ConfirmDialog.Buttons() {
+                                @Override
+                                public void onCancelClickListener() {
+                                    dialog.dismiss();
+                                }
+
+                                @Override
+                                public void onConfirmClickListener() {
+                                    newCategory.name += " (copy)";
+                                    AddCategory(newCategory,NEW_CATEGORY_POSITION);
+
+                                    // cAdapter.notifyItemInserted(NEW_CATEGORY_POSITION);
+
+                                    // NOT OPTIMIZED ↓↓↓↓↓↓↓↓↓↓
+                                    BuildCategoryRecyclerView();
+                                    // ↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑
+
+                                    dialog.dismiss();
+                                }
+                            });
+                        }
+
+                        // NOT OPTIMIZED ↓↓↓↓↓↓↓↓↓↓
+                        // BuildCategoryRecyclerView();
+                        // ↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑
+
+                        inputDialog.dismiss();
+                    }
+                });
+
             }
         });
 
         buildRecyclerView();
         BuildCategoryRecyclerView();
 
+    }
+
+    void AddCategory(Category newCategory, int position){
+        cList.add(position,newCategory);
+        MY_RESOURCES.SAVE_CATEGORY_LIST(cList);
+        cList = MY_RESOURCES.GET_CATEGORY_LIST();
     }
 
 
