@@ -1,6 +1,5 @@
 package com.example.noter;
 
-import android.app.Activity;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
@@ -37,7 +36,10 @@ public class MainActivity extends AppCompatActivity implements Serializable {
 
     MyResources MY_RESOURCES;
 
-    static final int NEW_CATEGORY_POSITION = 1;
+    static final int NEW_CATEGORY_POSITION = 2;
+
+    // Raw list of notes
+    ArrayList<Note> nList = new ArrayList<>();
 
     // List of Notes
     ArrayList<Note> mList = new ArrayList<>();
@@ -71,6 +73,9 @@ public class MainActivity extends AppCompatActivity implements Serializable {
     // Add Category Button
     ImageButton addCategoryButton;
 
+    // current category filter
+    Category currentCategory;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -83,16 +88,26 @@ public class MainActivity extends AppCompatActivity implements Serializable {
 
         MY_RESOURCES = new MyResources(this);
 
+        // Import the current Category filter from sharedPreferences
+        // If the category does not exist (any more, or has been deleted)
+        // assign the current category to the default one.
+        if (currentCategory == null){
+            currentCategory = MyResources.ALL_CATEGORY;
+        }
+
+        // Loading Categories from SharePreferences
+        cList = MY_RESOURCES.GET_CATEGORY_LIST();
+
+        // Loading notes from SharedPreferences
+        nList = loadNoteFromSharedPreferences();
+
+        // Applying existing category filter
+        mList = MY_RESOURCES.FILTER_NOTES_BY_CATEGORY(nList,currentCategory);
+
         // Setting the toolbar for the current activity
         // Could be customized via R.layout.main_activity_layout
         Toolbar toolbar = findViewById(R.id.category_toolbar);
         setActionBar(toolbar);
-
-        // Loading notes from SharedPreferences
-        mList = loadNoteFromSharedPreferences();
-
-        // Loading Categories from SharePreferences
-        cList = MY_RESOURCES.GET_CATEGORY_LIST();
 
         // Fetching the Floating Action bar in the layout
         fab = findViewById(R.id.category_fab);
@@ -210,7 +225,13 @@ public class MainActivity extends AppCompatActivity implements Serializable {
         cAdapter.setOnCategoryClickListener(new CategoryAdapter.OnCategoryClickListener() {
             @Override
             public void onClickListener(int position) {
-                Toast.makeText(getApplicationContext(),"Category Clicked !",Toast.LENGTH_SHORT).show();
+                // Filter notes by the selected category
+
+                mList = MY_RESOURCES.FILTER_NOTES_BY_CATEGORY(nList,cList.get(position));
+                currentCategory = cList.get(position);
+                buildRecyclerView();
+
+                // Toast.makeText(getApplicationContext(),"Category Clicked !",Toast.LENGTH_SHORT).show();
             }
 
             @Override
@@ -239,7 +260,7 @@ public class MainActivity extends AppCompatActivity implements Serializable {
         // Some Updates to be called when the activity Starts
 
         super.onStart();
-        mList = loadNoteFromSharedPreferences();
+        nList = loadNoteFromSharedPreferences();
     }
 
     @Override
@@ -247,7 +268,7 @@ public class MainActivity extends AppCompatActivity implements Serializable {
         // Some Automatic saving
 
         super.onPause();
-        saveNoteToSharedPreferences(mList);
+        saveNoteToSharedPreferences(nList);
     }
 
     @Override
@@ -255,7 +276,7 @@ public class MainActivity extends AppCompatActivity implements Serializable {
         // Some Automatic saving
 
         super.onStop();
-        saveNoteToSharedPreferences(mList);
+        saveNoteToSharedPreferences(nList);
 
     }
 
@@ -264,7 +285,7 @@ public class MainActivity extends AppCompatActivity implements Serializable {
         // Some Updates to be called when the activity Starts
 
         super.onRestart();
-        mList = loadNoteFromSharedPreferences();
+        nList = loadNoteFromSharedPreferences();
         buildRecyclerView();
     }
 
@@ -273,7 +294,7 @@ public class MainActivity extends AppCompatActivity implements Serializable {
         // Some Updates to be called when the activity Starts
 
         super.onResume();
-        mList = loadNoteFromSharedPreferences();
+        nList = loadNoteFromSharedPreferences();
         buildRecyclerView();
     }
 
@@ -300,9 +321,6 @@ public class MainActivity extends AppCompatActivity implements Serializable {
             }
         });
 
-        // Save the list to the Shared Preferences
-        saveNoteToSharedPreferences(mList);
-
         // Update The RecyclerView
         buildRecyclerView();
 
@@ -320,9 +338,6 @@ public class MainActivity extends AppCompatActivity implements Serializable {
             }
         });
 
-        // Save the list to the Shared Preferences
-        saveNoteToSharedPreferences(mList);
-
         // Update The RecyclerView
         buildRecyclerView();
 
@@ -339,9 +354,6 @@ public class MainActivity extends AppCompatActivity implements Serializable {
                 return n1.lastModifiedDate.compareTo(n2.lastModifiedDate);
             }
         });
-
-        // Save the list to the Shared Preferences
-        saveNoteToSharedPreferences(mList);
 
         // Update The RecyclerView
         buildRecyclerView();
@@ -422,7 +434,7 @@ public class MainActivity extends AppCompatActivity implements Serializable {
         // Duplicate a note by inserting the same note
         // in the same position
 
-        mList.add(position,mList.get(position));
+        nList.add(nList.indexOf(mList.get(position)),mList.get(position));
 
         // Need to be more optimized
         buildRecyclerView();
@@ -445,7 +457,7 @@ public class MainActivity extends AppCompatActivity implements Serializable {
     void deleteNote(int position){
         // Remove a note by its position
 
-        mList.remove(position);
+        nList.remove(mList.get(position));
 
         // Need to be more optimized
         buildRecyclerView();
@@ -473,9 +485,9 @@ public class MainActivity extends AppCompatActivity implements Serializable {
         // Load a note in the NoteActivity
 
         Intent i = new Intent(this, NoteActivity.class);
-        i.putExtra("note", mList.get(position));
+        i.putExtra("note", nList.get(position));
         i.putExtra("note_index", position);
-        i.putExtra("note_list",mList);
+        i.putExtra("note_list",nList);
 
         // Start the activity
         startActivity(i);

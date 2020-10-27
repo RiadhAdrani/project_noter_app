@@ -28,6 +28,11 @@ public class MyResources implements Serializable {
     public static String CATEGORY_KEY = "NOTER_CATEGORY";
 
     // Default category
+    private static String ALL_CATEGORY_NAME = "All";
+    private static String ALL_CATEGORY_UID = "com.example.noter.all.category";
+    public static Category ALL_CATEGORY = new Category(ALL_CATEGORY_NAME, ALL_CATEGORY_UID);
+
+    // Default category
     private static String DEFAULT_CATEGORY_NAME = "DEFAULT";
     private static String DEFAULT_CATEGORY_UID = "com.example.noter.default.category";
     public static Category DEFAULT_CATEGORY = new Category(DEFAULT_CATEGORY_NAME, DEFAULT_CATEGORY_UID);
@@ -225,6 +230,9 @@ public class MyResources implements Serializable {
         // Add the Default Category
         categoryList.add(0,MyResources.DEFAULT_CATEGORY);
 
+        // Add the Default Category
+        categoryList.add(0,MyResources.ALL_CATEGORY);
+
         return categoryList;
     }
 
@@ -234,6 +242,9 @@ public class MyResources implements Serializable {
 
         // Removing the Default category
         categoryList.remove(GET_CATEGORY_INDEX_BY_UID(DEFAULT_CATEGORY,categoryList));
+
+        // Removing the all category
+        categoryList.remove(GET_CATEGORY_INDEX_BY_UID(ALL_CATEGORY,categoryList));
 
         // Save category list from SharedPreferences
         SAVE_CATEGORIES_TO_SHARED_PREFERENCES(categoryList,MyResources.CATEGORY_KEY);
@@ -279,6 +290,35 @@ public class MyResources implements Serializable {
         Log.d("DEBUG_NEW_CATEGORY","Category "+ mCategory.name +" found !");
 
         return -1;
+    }
+
+    public ArrayList<Note> FILTER_NOTES_BY_CATEGORY(ArrayList<Note> noteList, Category category ){
+        // Filter a given note list
+        // return a list containing notes having their category equal to
+        // the passed category
+
+        if (noteList == null || noteList.isEmpty()){
+            // if the noteList is empty
+            // return an empty array
+            // avoiding null object exception
+            return new ArrayList<>();
+        }
+
+        if (category == ALL_CATEGORY){
+            // display all notes
+
+            return noteList;
+        }
+
+        ArrayList<Note> tempList = new ArrayList<>();
+
+        for (Note note : noteList) {
+            // filter note by category
+
+            if (note.category.equals(category.UID)) tempList.add(note);
+        }
+
+        return tempList;
     }
 
 
