@@ -343,6 +343,11 @@ public class MainActivity extends AppCompatActivity implements Serializable {
                         // replacing the deleted category with
                         // the Default category in each note having
                         // that category
+
+                        if (currentCategory == cList.get(position)){
+                            currentCategory = MyResources.DEFAULT_CATEGORY;
+                        }
+
                         for (Note note : nList) {
                             if (note.category.equals(cList.get(position).UID))
                                 note.category = MyResources.DEFAULT_CATEGORY.UID;
@@ -362,6 +367,9 @@ public class MainActivity extends AppCompatActivity implements Serializable {
 
                         // getting notes from the shared preferences
                         nList = loadNoteFromSharedPreferences();
+
+                        // filter category
+                        mList = MY_RESOURCES.FILTER_NOTES_BY_CATEGORY(nList,currentCategory);
 
                         // rebuilding the notes recycler view
                         // NOT OPTIMIZED ↓↓↓↓↓↓↓↓↓↓
