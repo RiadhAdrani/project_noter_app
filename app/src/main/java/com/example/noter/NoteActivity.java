@@ -99,8 +99,11 @@ public class NoteActivity extends AppCompatActivity {
         // Getting the necessary data from MainActivity
         // and saving them as local (Class) variable
         note = (Note) i.getSerializableExtra("note");
-        noteIndex = (int) i.getSerializableExtra("note_index");
-        mList = (ArrayList<Note>) i.getSerializableExtra("note_list");
+
+        mList = MY_RESOURCES.LOAD_NOTES_FROM_SHARED_PREFERENCES(MyResources.NOTE_KEY);
+
+        // noteIndex = (int) i.getSerializableExtra("note_index");
+        noteIndex = mList.indexOf(note);
 
         // Getting the View for the Note.title
         titleText = findViewById(R.id.note_title);
@@ -504,7 +507,7 @@ public class NoteActivity extends AppCompatActivity {
             mList.add(0,mNote);
         }
 
-        saveNoteListToSharedPreferences(mList);
+        MY_RESOURCES.SAVE_NOTES_TO_SHARED_PREFERENCES(mList,MyResources.NOTE_KEY);
         cancel();
     }
 

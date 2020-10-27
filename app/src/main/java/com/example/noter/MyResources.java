@@ -136,13 +136,13 @@ public class MyResources implements Serializable {
         ICON_LIST = list;
     }
 
-    ArrayList<Icon> GET_ICON_LIST(){
+    public ArrayList<Icon> GET_ICON_LIST(){
         // return the icon list
 
         return ICON_LIST;
     }
 
-    Icon GET_ICON(String uid){
+    public Icon GET_ICON(String uid){
         // return an icon
         // with the property Icon.uid equals to uid
 
@@ -152,7 +152,7 @@ public class MyResources implements Serializable {
         return ICON_LIST.get(0);
     }
 
-    void SAVE_CATEGORIES_TO_SHARED_PREFERENCES(ArrayList<Category> list, String TAG){
+    public void SAVE_CATEGORIES_TO_SHARED_PREFERENCES(ArrayList<Category> list, String TAG){
 
         // save the categories to the Shared Preference
         // Uses Gson with Json
@@ -171,7 +171,7 @@ public class MyResources implements Serializable {
         editor.apply();
     }
 
-    ArrayList<Category> LOAD_CATEGORIES_FROM_SHARED_PREFERENCES(String TAG){
+    public ArrayList<Category> LOAD_CATEGORIES_FROM_SHARED_PREFERENCES(String TAG){
         // Load the note list from the Shared Preference
         // Uses Gson with Json
 
@@ -195,7 +195,7 @@ public class MyResources implements Serializable {
             return list;
     }
 
-    String GET_CATEGORY_BY_UID(String uid){
+    public String GET_CATEGORY_BY_UID(String uid){
         for (Category category : LOAD_CATEGORIES_FROM_SHARED_PREFERENCES(CATEGORY_KEY)) {
             if (category.UID.equals(uid)){
                 Log.d("DEBUG_FIND_CATEGORY","Category "+ category.name + "found !");
@@ -207,7 +207,7 @@ public class MyResources implements Serializable {
         return DEFAULT_CATEGORY.UID;
     }
 
-    Category GET_CATEGORY(String uid){
+    public Category GET_CATEGORY(String uid){
         for (Category category : LOAD_CATEGORIES_FROM_SHARED_PREFERENCES(CATEGORY_KEY)) {
             if (category.UID.equals(uid)){
                 Log.d("DEBUG_FIND_CATEGORY","Category "+ category.name + "found !");
@@ -219,7 +219,7 @@ public class MyResources implements Serializable {
         return DEFAULT_CATEGORY;
     }
 
-    ArrayList<Category> GET_CATEGORY_LIST(){
+    public ArrayList<Category> GET_CATEGORY_LIST(){
         // Prepare the category list to be used in the activity
 
         ArrayList<Category> categoryList;
@@ -236,7 +236,7 @@ public class MyResources implements Serializable {
         return categoryList;
     }
 
-    void SAVE_CATEGORY_LIST(ArrayList<Category> categoryList){
+    public void SAVE_CATEGORY_LIST(ArrayList<Category> categoryList){
         // Prepare the category list to be saved
         // Saving only the custom made categories
 
@@ -333,10 +333,69 @@ public class MyResources implements Serializable {
 
     }
 
-    public String NEW_CATEGORY_NAME(String name){
+    public String GET_SUITABLE_NAME(String name, ArrayList<Category> list){
+        // Check for duplicate name
+        // and return the appropriate name
 
-        if (name == null) return null;
-        return name + context.getString(R.string.copy);
+        if (this.CHECK_IF_NAME_EXIST(list,name)) {
+            Log.d("DEBUG_CATEGORY_OPTIONS","Category named :"+name+" exists");
+            return GET_SUITABLE_NAME(name +" "+context.getString(R.string.copy),list);
+        }
+
+
+        return name;
+
+    }
+
+    public void SAVE_NOTES_TO_SHARED_PREFERENCES(ArrayList<Note> list, String TAG){
+
+        // save the categories to the Shared Preference
+        // Uses Gson with Json
+
+        SharedPreferences sharedPreferences = context.getSharedPreferences("shared preferences", Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        Gson gson = new Gson();
+        String json = gson.toJson(list);
+
+        // TAG
+        // The key of the Data
+        // works as an ID
+        // Should be unique, otherwise data will be overridden
+        editor.putString(TAG,json);
+
+        editor.apply();
+    }
+
+    public ArrayList<Note> LOAD_NOTES_FROM_SHARED_PREFERENCES(String TAG){
+        // Load the note list from the Shared Preference
+        // Uses Gson with Json
+
+        // Temporary list
+        ArrayList<Note> list ;
+
+        SharedPreferences sharedPreferences = context.getSharedPreferences("shared preferences", Context.MODE_PRIVATE);
+        Gson gson = new Gson();
+
+        // The key of the Data
+        // works as an ID
+        // Should be unique, otherwise data will be overridden
+        String json = sharedPreferences.getString(TAG,null);
+
+        Type type = new TypeToken<ArrayList<Note>>() {}.getType();
+        list = gson.fromJson(json,type);
+
+        if (list == null){
+            return new ArrayList<>();
+        } else
+            return list;
+    }
+
+    public Note GET_NOTE(ArrayList<Note> list,Note note){
+        for (Note n : list) {
+            if (note.equals(n)) return n;
+        }
+
+        return new Note(context);
     }
 
 

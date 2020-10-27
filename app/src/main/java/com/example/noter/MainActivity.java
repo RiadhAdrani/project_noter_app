@@ -132,8 +132,11 @@ public class MainActivity extends AppCompatActivity implements Serializable {
                 // For more documentation about how this works,
                 // check SimpleInputDialog Java Class file
 
+                // create a simple input dialog
                 final SimpleInputDialog inputDialog = new SimpleInputDialog(getApplicationContext(),"Add new category");
                 inputDialog.show(getSupportFragmentManager(),"add new category" );
+
+                // overriding the interface methods
                 inputDialog.setButtons(new SimpleInputDialog.Buttons() {
                     @Override
                     public void onCancelClickListener() {
@@ -142,9 +145,14 @@ public class MainActivity extends AppCompatActivity implements Serializable {
 
                     @Override
                     public void onConfirmClickListener() {
+
+                        // create a temporary category
                         final Category newCategory = new Category(inputDialog.inputField.getText().toString());
 
+                        // if category does not exist
                         if (MY_RESOURCES.GET_CATEGORY_INDEX_BY_NAME(newCategory,cList) == -1){
+
+                            // add new category as it is
                             AddCategory(newCategory,NEW_CATEGORY_POSITION);
 
                             // cAdapter.notifyItemInserted(NEW_CATEGORY_POSITION);
@@ -154,18 +162,32 @@ public class MainActivity extends AppCompatActivity implements Serializable {
                             // ↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑
                         }
                         else {
+                            // else
+                            // a category with the same name exist
+                            // trying to find a solution
+                            // for the duplicate
+
+                            // create a confirm dialog
                             final ConfirmDialog dialog = new ConfirmDialog(getApplicationContext(),
-                                    "A category named : \""+newCategory.name+"\" already exists, it will be named \""+newCategory.name+"\" (copy). Continue?");
+                                    "A category named : \""+newCategory.name+"\" already exists, it will be named \""+MY_RESOURCES.GET_SUITABLE_NAME(newCategory.name,cList)+"\". Continue?");
                             dialog.show(getSupportFragmentManager(),"add new category");
+
+                            // overriding interface's methods
                             dialog.setButtons(new ConfirmDialog.Buttons() {
                                 @Override
                                 public void onCancelClickListener() {
+
+                                    // close dialog and exit
                                     dialog.dismiss();
                                 }
 
                                 @Override
                                 public void onConfirmClickListener() {
-                                    newCategory.name += " (copy)";
+
+                                    // getting a suitable category name
+                                    newCategory.name = MY_RESOURCES.GET_SUITABLE_NAME(newCategory.name,cList);
+
+                                    // adding the suitable category name
                                     AddCategory(newCategory,NEW_CATEGORY_POSITION);
 
                                     // cAdapter.notifyItemInserted(NEW_CATEGORY_POSITION);
@@ -174,6 +196,7 @@ public class MainActivity extends AppCompatActivity implements Serializable {
                                     BuildCategoryRecyclerView();
                                     // ↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑
 
+                                    // close and exit
                                     dialog.dismiss();
                                 }
                             });
@@ -183,6 +206,8 @@ public class MainActivity extends AppCompatActivity implements Serializable {
                         // BuildCategoryRecyclerView();
                         // ↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑
 
+                        // dismissing the simple input dialog
+                        // for both cases
                         inputDialog.dismiss();
                     }
                 });
@@ -199,36 +224,63 @@ public class MainActivity extends AppCompatActivity implements Serializable {
     }
 
     void AddCategory(Category newCategory, int position){
+        // Add newCategory to the list of categories
+        // @ index position
+
+        // Add a new category to the list
         cList.add(position,newCategory);
+
+        // saving the category list
+        // to the shared preferences
         MY_RESOURCES.SAVE_CATEGORY_LIST(cList);
+
+        // getting back the category list
+        // from shared preferences
         cList = MY_RESOURCES.GET_CATEGORY_LIST();
     }
 
     void DisplayCategoryOptionDialog(Category category, int position){
+
+        // creating a dialog for the category options
+        // Check CategoryOptionDialog Java class for more documentation
         final CategoryOptionDialog dialog = new CategoryOptionDialog(category,position);
         dialog.show(getSupportFragmentManager(),"category option dialog");
+
+        // overriding the interface's methods
         dialog.setOnCategoryOptionClickListener(new CategoryOptionDialog.onCategoryOptionClickListener() {
             @Override
             public void onRenameButtonClick(final int position) {
 
+                // if the name exists && the input field is different from the current name
                 if (MY_RESOURCES.CHECK_IF_NAME_EXIST(cList,dialog.inputField.getText().toString())
                         && !cList.get(position).name.equals(dialog.inputField.getText().toString()) ){
 
+                    // creating a confirmation dialog
+                    // check ConfirmDialog for more documentation
                     final ConfirmDialog confirmDialog = new ConfirmDialog(getApplicationContext(),
-                            "Category exists, do you want it to be renamed "+getSuitableName(cList.get(position).name,cList));
+                            "Category exists, do you want it to be renamed "+MY_RESOURCES.GET_SUITABLE_NAME(dialog.inputField.getText().toString(),cList));
 
                     confirmDialog.show(getSupportFragmentManager(),"confirm rename dialog");
 
+                    // overriding the interface's methods
                     confirmDialog.setButtons(new ConfirmDialog.Buttons() {
                         @Override
                         public void onCancelClickListener() {
+
+                            // close and exit
                             confirmDialog.dismiss();
                         }
 
                         @Override
                         public void onConfirmClickListener() {
-                            cList.get(position).name = getSuitableName(cList.get(position).name,cList);
+
+                            // assigning a suitable name for the category
+                            cList.get(position).name = MY_RESOURCES.GET_SUITABLE_NAME(dialog.inputField.getText().toString(),cList);
+
+                            // saving the category list to the shared preferences
                             MY_RESOURCES.SAVE_CATEGORY_LIST(cList);
+
+                            // getting the shared preferences
                             cList = MY_RESOURCES.GET_CATEGORY_LIST();
 
                             // NOT OPTIMIZED ↓↓↓↓↓↓↓↓↓↓
@@ -237,13 +289,22 @@ public class MainActivity extends AppCompatActivity implements Serializable {
                             // NOT OPTIMIZED ↓↓↓↓↓↓↓↓↓↓
                             buildRecyclerView();
 
+                            // exit the confirmation dialog
                             confirmDialog.dismiss();
+
+                            // exit the dialog
                             dialog.dismiss();
                         }
                     });
                 } else {
+
+                    // if the name does not exists
                     cList.get(position).name = dialog.inputField.getText().toString();
+
+                    // saving category list to shared preferences
                     MY_RESOURCES.SAVE_CATEGORY_LIST(cList);
+
+                    // loading the category list again
                     cList = MY_RESOURCES.GET_CATEGORY_LIST();
 
                     // NOT OPTIMIZED ↓↓↓↓↓↓↓↓↓↓
@@ -252,6 +313,7 @@ public class MainActivity extends AppCompatActivity implements Serializable {
                     // NOT OPTIMIZED ↓↓↓↓↓↓↓↓↓↓
                     buildRecyclerView();
 
+                    // exit the dialog
                     dialog.dismiss();
                 }
             }
@@ -259,35 +321,63 @@ public class MainActivity extends AppCompatActivity implements Serializable {
             @Override
             public void onDeleteButtonClick(final int position) {
 
+                // create a confirmation dialog
+                // for the deletion
+                // for more documentation about ConfirmDialog,
+                // check  ConfirmDialog Java class
                 final ConfirmDialog confirmDialog = new ConfirmDialog(getApplicationContext(),"Are you sure you want to delete "+cList.get(position).name+" ?");
                 confirmDialog.show(getSupportFragmentManager(),"confirm delete category");
+
+                // overriding the interface methods
                 confirmDialog.setButtons(new ConfirmDialog.Buttons() {
                     @Override
                     public void onCancelClickListener() {
+
+                        // close and exit
                         confirmDialog.dismiss();
                     }
 
                     @Override
                     public void onConfirmClickListener() {
 
+                        // replacing the deleted category with
+                        // the Default category in each note having
+                        // that category
                         for (Note note : nList) {
                             if (note.category.equals(cList.get(position).UID))
                                 note.category = MyResources.DEFAULT_CATEGORY.UID;
                         }
 
+                        // deleting the category
                         cList.remove(position);
+
+                        // saving the category list to the shared preferences
                         MY_RESOURCES.SAVE_CATEGORY_LIST(cList);
+
+                        // reloadin the category list from shared preferences
                         cList = MY_RESOURCES.GET_CATEGORY_LIST();
 
+                        // saving notes to shared preferences
                         saveNoteToSharedPreferences(nList);
+
+                        // getting notes from the shared preferences
                         nList = loadNoteFromSharedPreferences();
 
+                        // rebuilding the notes recycler view
+                        // NOT OPTIMIZED ↓↓↓↓↓↓↓↓↓↓
                         buildRecyclerView();
+
+                        // rebuilding the categories recycler view
+                        // NOT OPTIMIZED ↓↓↓↓↓↓↓↓↓↓
                         BuildCategoryRecyclerView();
 
+                        // alerting the user that the category is deleted successfully
                         Toast.makeText(getApplicationContext(),"Category deleted, Notes updated",Toast.LENGTH_SHORT).show();
 
+                        // closing the confirmation dialog box
                         confirmDialog.dismiss();
+
+                        // closing the dialog
                         dialog.dismiss();
 
                     }
@@ -299,21 +389,15 @@ public class MainActivity extends AppCompatActivity implements Serializable {
 
             @Override
             public void onCancelButtonClick(int position) {
+
+                // closing the dialog
                 dialog.dismiss();
 
             }
         });
     }
 
-    String getSuitableName(String name, ArrayList<Category> list){
-        // Check for duplicate name
-        // and return the appropriate name
 
-        if (MY_RESOURCES.CHECK_IF_NAME_EXIST(list,name)) return getSuitableName(MY_RESOURCES.NEW_CATEGORY_NAME(name),list);
-
-        return name;
-
-    }
 
     void BuildCategoryRecyclerView(){
         // Build The RecyclerView
@@ -340,8 +424,13 @@ public class MainActivity extends AppCompatActivity implements Serializable {
             public void onClickListener(int position) {
                 // Filter notes by the selected category
 
+                // filtering the note list by category
                 mList = MY_RESOURCES.FILTER_NOTES_BY_CATEGORY(nList,cList.get(position));
+
+                // updating the current category
                 currentCategory = cList.get(position);
+
+                // NOT OPTIMIZED ↓↓↓↓↓↓↓↓↓↓
                 buildRecyclerView();
 
                 // Toast.makeText(getApplicationContext(),"Category Clicked !",Toast.LENGTH_SHORT).show();
@@ -350,8 +439,13 @@ public class MainActivity extends AppCompatActivity implements Serializable {
             @Override
             public void onLongClickListener(int position) {
 
+                // if the user click and hold on a category
+                // apart from the default category and all category
+                // the user will get the option dialog for the category
                 if (cList.get(position) != MyResources.DEFAULT_CATEGORY && cList.get(position) != MyResources.ALL_CATEGORY )
-                DisplayCategoryOptionDialog(cList.get(position),position);
+
+                    // displaying the category options
+                    DisplayCategoryOptionDialog(cList.get(position),position);
             }
         });
 
@@ -549,7 +643,20 @@ public class MainActivity extends AppCompatActivity implements Serializable {
         // Duplicate a note by inserting the same note
         // in the same position
 
-        nList.add(nList.indexOf(mList.get(position)),mList.get(position));
+        // creating a temporary note
+        Note tempNote = mList.get(position);
+
+        // adding the note the list
+        nList.add(0,tempNote);
+
+        // saving changes to the shared preferences
+        MY_RESOURCES.SAVE_NOTES_TO_SHARED_PREFERENCES(nList,MyResources.NOTE_KEY);
+
+        // loading the updated list
+        nList = MY_RESOURCES.LOAD_NOTES_FROM_SHARED_PREFERENCES(MyResources.NOTE_KEY);
+
+        // filtering the list to be displayed
+        mList = MY_RESOURCES.FILTER_NOTES_BY_CATEGORY(nList,currentCategory);
 
         // Need to be more optimized
         buildRecyclerView();
@@ -561,8 +668,16 @@ public class MainActivity extends AppCompatActivity implements Serializable {
     void copyNoteContent(int position){
         // Copy the content of the Note to the Clipboard.
 
+        // creating a new clipboard manager
         ClipboardManager clipboard = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
-        ClipData clip = ClipData.newPlainText("Note Content", mList.get(position).content);
+
+        // store the content of the note in a temporary variable
+        String mContent = mList.get(position).content;
+
+        // getting the content
+        ClipData clip = ClipData.newPlainText("Note Content",mContent );
+
+        // assigning the data to the clipboard
         clipboard.setPrimaryClip(clip);
 
         // Alert the user of the success of the operation
@@ -572,7 +687,17 @@ public class MainActivity extends AppCompatActivity implements Serializable {
     void deleteNote(int position){
         // Remove a note by its position
 
+        // delete the note
         nList.remove(mList.get(position));
+
+        // saving the new list
+        MY_RESOURCES.SAVE_NOTES_TO_SHARED_PREFERENCES(nList,MyResources.NOTE_KEY);
+
+        // updating the local list
+        nList = MY_RESOURCES.LOAD_NOTES_FROM_SHARED_PREFERENCES(MyResources.NOTE_KEY);
+
+        // update
+        mList = MY_RESOURCES.FILTER_NOTES_BY_CATEGORY(nList,currentCategory);
 
         // Need to be more optimized
         buildRecyclerView();
@@ -587,7 +712,6 @@ public class MainActivity extends AppCompatActivity implements Serializable {
 
         Intent i = new Intent(this, NoteActivity.class);
 
-
         i.putExtra("note", new Note(getApplicationContext()));
         i.putExtra("note_index", position);
         i.putExtra("note_list",mList);
@@ -600,8 +724,8 @@ public class MainActivity extends AppCompatActivity implements Serializable {
         // Load a note in the NoteActivity
 
         Intent i = new Intent(this, NoteActivity.class);
-        i.putExtra("note", nList.get(position));
-        i.putExtra("note_index", position);
+        i.putExtra("note", mList.get(position));
+        i.putExtra("note_index", nList.indexOf(mList.get(position)) );
         i.putExtra("note_list",nList);
 
         // Start the activity
@@ -620,7 +744,7 @@ public class MainActivity extends AppCompatActivity implements Serializable {
         // The key of the Data
         // works as an ID
         // Should be unique, otherwise data will be overridden
-        editor.putString("notes",json);
+        editor.putString(MyResources.NOTE_KEY,json);
 
         editor.apply();
     }
@@ -638,7 +762,7 @@ public class MainActivity extends AppCompatActivity implements Serializable {
         // The key of the Data
         // works as an ID
         // Should be unique, otherwise data will be overridden
-        String json = sharedPreferences.getString("notes",null);
+        String json = sharedPreferences.getString(MyResources.NOTE_KEY,null);
 
         Type type = new TypeToken<ArrayList<Note>>() {}.getType();
         noteList = gson.fromJson(json,type);
