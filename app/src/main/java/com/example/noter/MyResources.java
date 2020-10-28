@@ -1,12 +1,15 @@
 package com.example.noter;
 
+import android.content.ClipData;
+import android.content.ClipboardManager;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
-
 import java.io.Serializable;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
@@ -26,6 +29,7 @@ public class MyResources implements Serializable {
     // static keys
     public static String NOTE_KEY = "NOTER_NOTE";
     public static String CATEGORY_KEY = "NOTER_CATEGORY";
+    public static String LOAD_NOTE_KEY = "LOAD_NOTE";
 
     // Default category
     private static String ALL_CATEGORY_NAME = "All";
@@ -45,6 +49,10 @@ public class MyResources implements Serializable {
     // Contains the list of available icons
     private ArrayList<Icon> ICON_LIST = new ArrayList<>();
 
+    // ------------------------------------------------------------------------------------------ //
+    //                                         METHODS                                            //
+    // ------------------------------------------------------------------------------------------ //
+
     public MyResources(Context context){
         // Constructor
 
@@ -53,11 +61,6 @@ public class MyResources implements Serializable {
         // fill the icon list
         FILL_ICON_LIST();
     }
-
-
-    // ------------------------------------------------------------------------------------------ //
-    //                                         METHODS                                            //
-    // ------------------------------------------------------------------------------------------ //
 
     private void FILL_ICON_LIST(){
         // Construct the icon list
@@ -134,6 +137,94 @@ public class MyResources implements Serializable {
         // ---------------------------------------------------------------------------------------- //
 
         ICON_LIST = list;
+    }
+
+    public void COPY_NOTE_CONTENT(int position, ArrayList<Note> mList){
+        // Copy the content of the Note to the Clipboard.
+
+        // creating a new clipboard manager
+        ClipboardManager clipboard = (ClipboardManager) context.getSystemService(Context.CLIPBOARD_SERVICE);
+
+        // store the content of the note in a temporary variable
+        String mContent = mList.get(position).content;
+
+        // getting the content
+        ClipData clip = ClipData.newPlainText("Note Content",mContent );
+
+        // assigning the data to the clipboard
+        clipboard.setPrimaryClip(clip);
+
+        // Alert the user of the success of the operation
+        Toast.makeText(context,context.getString(R.string.copy_content_toast),Toast.LENGTH_LONG).show();
+    }
+
+    public void CREATE_NEW_NOTE(int position){
+        // Create a new note
+        // and pass the user to the NoteActivity
+
+        Intent i = new Intent(context, NoteActivity.class);
+
+        i.putExtra("note_index", position);
+
+        // Start the activity
+        context.startActivity(i);
+    }
+
+    public void SAVE_NOTE_TO_SHARED_PREFERENCES(ArrayList<Note> noteList,String key){
+        // save the note list to the Shared Preference
+        // Uses Gson with Json
+
+        SharedPreferences sharedPreferences = context.getSharedPreferences("shared preferences", Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        Gson gson = new Gson();
+        String json = gson.toJson(noteList);
+
+        // The key of the Data
+        // works as an ID
+        // Should be unique, otherwise data will be overridden
+        editor.putString(key,json);
+
+        editor.apply();
+    }
+
+    public void LOAD_NOTE_IN_NOTE_ACTIVITY(int position,ArrayList<Note> noteList, Note note){
+        // Load a note in the NoteActivity
+
+        // getting the index of the list
+        int j = GET_NOTE_INDEX(noteList,note);
+
+        // creating an intent
+        Intent i = new Intent(context, NoteActivity.class);
+
+        // adding data to the intent
+        i.putExtra(LOAD_NOTE_KEY, j );
+
+        // Start the activity
+        context.startActivity(i);
+    }
+
+    public ArrayList<Note> LOAD_NOTE_FROM_SHARED_PREFERENCES(String key){
+        // Load the note list from the Shared Preference
+        // Uses Gson with Json
+
+        // Temporary list
+        ArrayList<Note> noteList ;
+
+        SharedPreferences sharedPreferences = context.getSharedPreferences("shared preferences", Context.MODE_PRIVATE);
+        Gson gson = new Gson();
+
+        // The key of the Data
+        // works as an ID
+        // Should be unique, otherwise data will be overridden
+        String json = sharedPreferences.getString(key,null);
+
+        Type type = new TypeToken<ArrayList<Note>>() {}.getType();
+        noteList = gson.fromJson(json,type);
+
+        if (noteList == null){
+            return new ArrayList<>();
+        } else
+            return noteList;
     }
 
     public ArrayList<Icon> GET_ICON_LIST(){
@@ -418,5 +509,126 @@ public class MyResources implements Serializable {
         return -1;
     }
 
+    public ArrayList<Note> QUICK_RANDOMIZED_SORTING_BY_MODIFICATION_DATE(ArrayList<Note> list){
+        // Function that uses the randomized quick sort algorithm
+        // to sort a list of notes by
+        // the Note.modificationDate property
+        // Uses Recursive call
+
+        if (list.size() <= 1) return list;
+        ArrayList<Note> high = new ArrayList<>();
+        ArrayList<Note> low = new ArrayList<>();
+        ArrayList<Note> equal = new ArrayList<>();
+        Note e = list.get( (int) (Math.random() *list.size()) );
+
+        for (Note x : list) {
+            if (x.creationDate.getTime() < e.creationDate.getTime()) low.add(x);
+            if (x.creationDate.getTime() > e.creationDate.getTime()) high.add(x);
+            if (x.creationDate.getTime() == e.creationDate.getTime()) equal.add(x);
+        }
+
+        ArrayList<Note> temp = new ArrayList<>();
+        temp.addAll(QUICK_RANDOMIZED_SORTING_BY_MODIFICATION_DATE(low));
+        temp.addAll(equal);
+        temp.addAll(QUICK_RANDOMIZED_SORTING_BY_MODIFICATION_DATE(high));
+
+        return temp;
+    }
+
+    public ArrayList<Category> CREATE_DUMMY_CATEGORY_LIST(){
+        ArrayList<Category> categoryList = new ArrayList<>();
+
+        categoryList.add(new Category("Default",true));
+        categoryList.add(new Category("Studies",true));
+        categoryList.add(new Category("Sports",true));
+        categoryList.add(new Category("Habits",false));
+        categoryList.add(new Category("MF",false));
+
+        return categoryList;
+    }
+
+    public ArrayList<Icon> CREATE_DUMMY_ICON_LIST(int n){
+
+        ArrayList<Icon> iconList = new ArrayList<>();
+
+        for (int i = 0 ; i < n ; i++){
+            iconList.add(this.GET_ICON_LIST().get( (int) (Math.random()*this.GET_ICON_LIST().size()) ));
+        }
+
+        return iconList;
+
+    }
+
+    public ArrayList<Note> QUICK_RANDOMIZED_SORTING_BY_ALPHA(ArrayList<Note> list){
+        // Function that uses the randomized quick sort algorithm
+        // to sort a list of notes by
+        // the Note.title property
+        // Uses Recursive call
+
+        if (list.size() <= 1) return list;
+        ArrayList<Note> high = new ArrayList<>();
+        ArrayList<Note> low = new ArrayList<>();
+        ArrayList<Note> equal = new ArrayList<>();
+        Note e = list.get( (int) (Math.random() *list.size()) );
+        for (Note x : list) {
+            switch (STRING_COMPARISON(x.title,e.title)){
+                case  0: equal.add(x)   ; break;
+                case -1: low.add(x)     ; break;
+                case  1: high.add(x)    ; break;
+            }
+        }
+
+        ArrayList<Note> temp = new ArrayList<>();
+        temp.addAll(QUICK_RANDOMIZED_SORTING_BY_ALPHA(low));
+        temp.addAll(equal);
+        temp.addAll(QUICK_RANDOMIZED_SORTING_BY_ALPHA(high));
+
+        return temp;
+    }
+
+    public int STRING_COMPARISON(String a, String b){
+        // Function used to compare two strings (a) and (b)
+        // Custom made for the Randomized Quick Sorting Function
+        // return -1 if (a) is alphabetically before (b)
+        // return  0 if (a) is alphabetically after  (b)
+        // return  1 if (a) is equal to              (b)
+
+        int size;
+        size = Math.min(a.length(), b.length());
+        for (int i = 0; i < size; i++) {
+            if (a.toLowerCase().charAt(i) < b.toLowerCase().charAt(i)) return -1; // A is before B
+            if (a.toLowerCase().charAt(i) > b.toLowerCase().charAt(i)) return  1; // A is after B
+        }
+        if (a.length() < b.length()) return -1;
+        else if (a.length() > b.length()) return 1;
+
+        return 0;
+    }
+
+    public ArrayList<Note> QUICK_RANDOMIZED_SORTING_BY_CREATION_DATE(ArrayList<Note> list){
+        // Function that uses the randomized quick sort algorithm
+        // to sort a list of notes by
+        // the Note.creationDate property
+        // Uses Recursive call
+
+        if (list.size() <= 1) return list;
+        ArrayList<Note> high = new ArrayList<>();
+        ArrayList<Note> low = new ArrayList<>();
+        ArrayList<Note> equal = new ArrayList<>();
+        Note e = list.get( (int) (Math.random() *list.size()) );
+
+        for (Note x : list) {
+            if (x.creationDate.getTime() < e.creationDate.getTime()) low.add(x);
+            if (x.creationDate.getTime() > e.creationDate.getTime()) high.add(x);
+            if (x.creationDate.getTime() == e.creationDate.getTime()) equal.add(x);
+        }
+
+        ArrayList<Note> temp = new ArrayList<>();
+        temp.addAll(QUICK_RANDOMIZED_SORTING_BY_CREATION_DATE(low));
+        temp.addAll(equal);
+        temp.addAll(QUICK_RANDOMIZED_SORTING_BY_CREATION_DATE(high));
+
+        return temp;
+    }
 
 }

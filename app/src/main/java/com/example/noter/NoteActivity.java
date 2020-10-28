@@ -15,16 +15,9 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.SpinnerAdapter;
-import android.widget.Toast;
 
 import com.google.gson.Gson;
 
-import java.io.BufferedReader;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStreamReader;
 import java.util.ArrayList;
 
 public class NoteActivity extends AppCompatActivity {
@@ -96,11 +89,14 @@ public class NoteActivity extends AppCompatActivity {
 
         MY_RESOURCES = new MyResources(this);
 
+        mList = MY_RESOURCES.LOAD_NOTES_FROM_SHARED_PREFERENCES(MyResources.NOTE_KEY);
+
         // Getting the necessary data from MainActivity
         // and saving them as local (Class) variable
-        note = (Note) i.getSerializableExtra("note");
-
-        mList = MY_RESOURCES.LOAD_NOTES_FROM_SHARED_PREFERENCES(MyResources.NOTE_KEY);
+        if ((int) i.getSerializableExtra(MyResources.LOAD_NOTE_KEY) != -1)
+            note = mList.get((int) i.getSerializableExtra(MyResources.LOAD_NOTE_KEY));
+        else
+            note = new Note(this);
 
         // noteIndex = (int) i.getSerializableExtra("note_index");
         noteIndex = MY_RESOURCES.GET_NOTE_INDEX(mList,note);
@@ -521,90 +517,4 @@ public class NoteActivity extends AppCompatActivity {
         finish();
     }
 
-
-
-
-
-
-
-
-
-
-    // ------------------------------------------------------------------------------------------ //
-    //                                  FUNCTIONS GRAVEYARD                                       //
-    // ------------------------------------------------------------------------------------------ //
-
-    private void useDummyCategoryList(){
-        categoryList = new ArrayList<>();
-        categoryList.add(new Category("Default",true));
-        categoryList.add(new Category("Studies",true));
-        categoryList.add(new Category("Sports",true));
-        categoryList.add(new Category("Habits",false));
-        categoryList.add(new Category("MF",false));
-    }
-
-    public void saveNoteAsTXT (){
-        String text = contentText.getText().toString();
-        FileOutputStream fos = null;
-
-        try {
-            fos = openFileOutput(FILE_NAME,MODE_PRIVATE);
-            fos.write(text.getBytes());
-            Toast.makeText(this,"Saved to "+getFilesDir()+"/"+FILE_NAME,Toast.LENGTH_LONG).show();
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        } finally {
-            if (fos != null){
-                try {
-                    fos.close();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-        }
-    }
-
-    public String retrieveTextFromTXT(String fileName){
-        String mText = "";
-
-        FileInputStream fis = null;
-        try {
-            fis = openFileInput(FILE_NAME);
-            InputStreamReader isr = new InputStreamReader(fis);
-            BufferedReader br = new BufferedReader(isr);
-            StringBuilder sb = new StringBuilder();
-            String text;
-
-            while ((text = br.readLine()) != null){
-                sb.append(text).append("\n");
-            }
-
-            contentText.setText(sb.toString());
-            mText = sb.toString();
-
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        } finally {
-            if (fis != null){
-                try {
-                    fis.close();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-        }
-        return mText;
-    }
-
-    public void createDummyIconList(int n){
-        MyResources resources = new MyResources(getApplicationContext());
-        for (int i = 0 ; i < n ; i++){
-            iconList.add(resources.GET_ICON_LIST().get( (int) (Math.random()*resources.GET_ICON_LIST().size()) ));
-        }
-
-    }
 }
