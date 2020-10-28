@@ -221,6 +221,9 @@ public class MainActivity extends AppCompatActivity implements Serializable {
         // NOT OPTIMIZED ↓↓↓↓↓↓↓↓↓↓
         BuildCategoryRecyclerView();
 
+        Log.d("DEBUG_NOTE_ACTIVITY","number of notes: "+nList.size());
+        Log.d("DEBUG_NOTE_ACTIVITY","number of displayed notes: "+mList.size());
+
     }
 
     void AddCategory(Category newCategory, int position){
@@ -405,8 +408,6 @@ public class MainActivity extends AppCompatActivity implements Serializable {
         });
     }
 
-
-
     void BuildCategoryRecyclerView(){
         // Build The RecyclerView
 
@@ -532,11 +533,13 @@ public class MainActivity extends AppCompatActivity implements Serializable {
         // Sorts a list of Note by Note.title property
         // Sorts Ascending Only
 
-        Collections.sort(mList, new Comparator<Note>() {
+        Collections.sort(nList, new Comparator<Note>() {
             public int compare(Note n1, Note n2) {
                 return n1.title.compareTo(n2.title);
             }
         });
+
+        mList = MY_RESOURCES.FILTER_NOTES_BY_CATEGORY(nList,currentCategory);
 
         // Update The RecyclerView
         buildRecyclerView();
@@ -549,11 +552,13 @@ public class MainActivity extends AppCompatActivity implements Serializable {
         // Sorts a list of Note by Note.creationDate property
         // Sorts Ascending Only
 
-        Collections.sort(mList, new Comparator<Note>() {
+        Collections.sort(nList, new Comparator<Note>() {
             public int compare(Note n1, Note n2) {
                 return n1.creationDate.compareTo(n2.creationDate);
             }
         });
+
+        mList = MY_RESOURCES.FILTER_NOTES_BY_CATEGORY(nList,currentCategory);
 
         // Update The RecyclerView
         buildRecyclerView();
@@ -566,11 +571,13 @@ public class MainActivity extends AppCompatActivity implements Serializable {
         // Sorts a list of Note by Note.lastModificationDate property
         // Sorts Ascending Only
 
-        Collections.sort(mList, new Comparator<Note>() {
+        Collections.sort(nList, new Comparator<Note>() {
             public int compare(Note n1, Note n2) {
                 return n1.lastModifiedDate.compareTo(n2.lastModifiedDate);
             }
         });
+
+        mList = MY_RESOURCES.FILTER_NOTES_BY_CATEGORY(nList,currentCategory);
 
         // Update The RecyclerView
         buildRecyclerView();
@@ -731,9 +738,38 @@ public class MainActivity extends AppCompatActivity implements Serializable {
     void loadNote(int position){
         // Load a note in the NoteActivity
 
+        int j = MY_RESOURCES.GET_NOTE_INDEX(nList,mList.get(position));
+
+        // -----------------------------------------------------------------------------------------
+        // All lines of code are used to debug an issue caused by object.equals
+        // it is now obvious that object.equals do not return a good value when used
+        // on a custom class object.
+
+        // display notes in nList
+        int x = 0;
+        for (Note note : nList) {
+            Log.d("DEBUG_NOTE_ACTIVITY","Note ["+x+"]: "+note.title);
+            x ++;
+        }
+
+        // Sperating the two lists
+        Log.d("DEBUG_NOTE_ACTIVITY","--------------------------------");
+
+        // display notes in mList
+        int y = 0;
+        for (Note note : mList) {
+            Log.d("DEBUG_NOTE_ACTIVITY","Note ["+y+"]: "+note.title);
+            y++;
+        }
+
+        Log.d("DEBUG_NOTE_ACTIVITY","Index of selected note: "+j);
+        // -----------------------------------------------------------------------------------------
+
+
         Intent i = new Intent(this, NoteActivity.class);
-        i.putExtra("note", mList.get(position));
-        i.putExtra("note_index", nList.indexOf(mList.get(position)) );
+
+        i.putExtra("note",  nList.get(j));
+        i.putExtra("note_index", j );
         i.putExtra("note_list",nList);
 
         // Start the activity

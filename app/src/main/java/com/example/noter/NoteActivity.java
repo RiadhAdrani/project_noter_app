@@ -103,7 +103,7 @@ public class NoteActivity extends AppCompatActivity {
         mList = MY_RESOURCES.LOAD_NOTES_FROM_SHARED_PREFERENCES(MyResources.NOTE_KEY);
 
         // noteIndex = (int) i.getSerializableExtra("note_index");
-        noteIndex = mList.indexOf(note);
+        noteIndex = MY_RESOURCES.GET_NOTE_INDEX(mList,note);
 
         // Getting the View for the Note.title
         titleText = findViewById(R.id.note_title);

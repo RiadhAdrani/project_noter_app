@@ -398,5 +398,25 @@ public class MyResources implements Serializable {
         return new Note(context);
     }
 
+    public int GET_NOTE_INDEX(ArrayList<Note> list,Note note){
+
+        if (list.isEmpty()) return -1;
+
+        for (Note n : list) {
+            if (n.title.equals(note.title) &&
+                n.category.equals(note.category) &&
+                n.creationDate.equals(note.creationDate) &&
+                n.lastModifiedDate.equals(note.lastModifiedDate) &&
+                n.content.equals(note.content) &&
+                n.iconUID.equals(note.iconUID) ){
+
+                Log.d("DEBUG_NOTE_ACTIVITY","Note found !");
+                return list.indexOf(n);
+            }
+        }
+
+        return -1;
+    }
+
 
 }
