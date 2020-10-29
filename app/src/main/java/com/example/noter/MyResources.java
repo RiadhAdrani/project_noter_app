@@ -88,7 +88,7 @@ public class MyResources implements Serializable {
         // ---------------------------------------------------------------------------------------- //
 
         // NOTER
-        list.add(new Icon(R.drawable.icon_small,context.getString(R.string.ic_noter),"ic_default"));
+        list.add(new Icon(R.drawable.ic_newnote_0,context.getString(R.string.ic_noter),"ic_default_0"));
 
         // WORKPLACE
         list.add(new Icon(R.drawable.ic_workplace_0,context.getString(R.string.ic_workplace),"ic_workplace_0"));

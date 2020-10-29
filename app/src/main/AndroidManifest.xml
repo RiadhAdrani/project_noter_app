@@ -4,9 +4,9 @@
 
     <application
         android:allowBackup="true"
-        android:icon="@drawable/icon_small"
+        android:icon="@drawable/ic_noter_app_0"
         android:label="@string/app_name"
-        android:roundIcon="@mipmap/ic_launcher_round"
+        android:roundIcon="@drawable/ic_noter_app_0"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
 
