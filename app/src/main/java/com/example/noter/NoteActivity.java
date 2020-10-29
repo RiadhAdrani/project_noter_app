@@ -137,7 +137,7 @@ public class NoteActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 iconList = new MyResources(getApplicationContext()).GET_ICON_LIST();
-                buildIconDialog();
+                BuildIconDialog();
             }
         });
 
@@ -145,7 +145,7 @@ public class NoteActivity extends AppCompatActivity {
         saveButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                saveNote(noteIndex);
+                SaveNoteExit(noteIndex);
             }
         });
 
@@ -153,13 +153,13 @@ public class NoteActivity extends AppCompatActivity {
         cancelButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                cancel();
+                CancelExit();
             }
         });
 
         // useDummyCategoryList();
 
-        loadCategoryLocally();
+        categoryList = MY_RESOURCES.LOAD_CATEGORY_LOCALLY();
 
         // Referencing the spinner
         spinner = findViewById(R.id.note_category_spinner);
@@ -171,7 +171,7 @@ public class NoteActivity extends AppCompatActivity {
         spinner.setAdapter(categoryAdapter);
 
         // Setting initial selected item
-        spinner.setSelection(findCategoryByUID( MY_RESOURCES.GET_CATEGORY(note.category)));
+        spinner.setSelection(MY_RESOURCES.FIND_CATEGORY_BY_UID(categoryList, MY_RESOURCES.GET_CATEGORY(note.category)));
 
 
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -202,7 +202,7 @@ public class NoteActivity extends AppCompatActivity {
                             Log.d("DEBUG_NEW_CATEGORY","cancel new category creation");
 
                             // setting the selected category to the original note category
-                            spinner.setSelection(findCategoryByUID( MY_RESOURCES.GET_CATEGORY(note.category)));
+                            spinner.setSelection(MY_RESOURCES.FIND_CATEGORY_BY_UID(categoryList, MY_RESOURCES.GET_CATEGORY(note.category)));
 
                             // closing the dialog
                             dialog.dismiss();
@@ -217,19 +217,19 @@ public class NoteActivity extends AppCompatActivity {
                             // creating a temporary category object named by the inputField
                             final Category newCategory = new Category(dialog.inputField.getText().toString());
 
-                            if (findCategoryByName(newCategory) == -1){
+                            if (MY_RESOURCES.FIND_CATEGORY_BY_NAME(categoryList,newCategory) == -1){
 
                                 // adding the temporary object to the category list
-                                addCategoryAtPosition(newCategory,NEW_POSITION);
+                                AddCategoryAtPosition(newCategory,NEW_POSITION);
 
                                 // saving the category
-                                saveCategory();
+                                MY_RESOURCES.SAVE_CATEGORIES(categoryList,MyResources.CATEGORY_KEY);
 
                                 // reloading the category list
-                                loadCategoryLocally();
+                                categoryList = MY_RESOURCES.LOAD_CATEGORY_LOCALLY();
 
                                 // updating the spinner and selecting the newly added category
-                                updateCategorySpinner(findCategoryByUID(newCategory));
+                                UpdateCategorySpinner(MY_RESOURCES.FIND_CATEGORY_BY_UID(categoryList,newCategory));
 
                                 // closing the dialog
                                 dialog.dismiss();
@@ -265,16 +265,16 @@ public class NoteActivity extends AppCompatActivity {
                                         newCategory.name += " (copy)";
 
                                         // adding the temporary object to the category list
-                                        addCategoryAtPosition(newCategory,NEW_POSITION);
+                                        AddCategoryAtPosition(newCategory,NEW_POSITION);
 
                                         // saving the category
-                                        saveCategory();
+                                        MY_RESOURCES.SAVE_CATEGORIES(categoryList,MyResources.CATEGORY_KEY);
 
                                         // reloading the category list
-                                        loadCategoryLocally();
+                                        categoryList = MY_RESOURCES.LOAD_CATEGORY_LOCALLY();
 
                                         // updating the spinner and selecting the newly added category
-                                        updateCategorySpinner(findCategoryByUID(newCategory));
+                                        UpdateCategorySpinner(MY_RESOURCES.FIND_CATEGORY_BY_UID(categoryList,newCategory));
 
                                         // close the confirm dialog box
                                         confirmDialog.dismiss();
@@ -318,7 +318,7 @@ public class NoteActivity extends AppCompatActivity {
     }
 
 
-    void updateCategorySpinner(int index){
+    void UpdateCategorySpinner(int index){
         // refresh the spinner after adding a new category
 
         // Filling the category adapter with DATA
@@ -333,34 +333,8 @@ public class NoteActivity extends AppCompatActivity {
         Log.d("DEBUG_NEW_CATEGORY",""+index);
     }
 
-    void loadCategoryLocally(){
-        // Prepare the category list to be used in the activity
 
-        // Load category list from SharedPreferences
-        categoryList = MY_RESOURCES.LOAD_CATEGORIES_FROM_SHARED_PREFERENCES(MyResources.CATEGORY_KEY);
-
-        // Add the Default Category
-        categoryList.add(0,MyResources.DEFAULT_CATEGORY);
-
-        // Add the "ADD CATEGORY"
-        categoryList.add(0,MyResources.ADD_CATEGORY);
-    }
-
-    void saveCategory(){
-        // Prepare the category list to be saved
-        // Saving only the custom made categories
-
-        // Removing the Default category
-        categoryList.remove(findCategoryByUID(MyResources.DEFAULT_CATEGORY));
-
-        // Removing the "Add category" category
-        categoryList.remove(findCategoryByUID(MyResources.ADD_CATEGORY));
-
-        // Save category list from SharedPreferences
-        MY_RESOURCES.SAVE_CATEGORIES_TO_SHARED_PREFERENCES(categoryList,MyResources.CATEGORY_KEY);
-    }
-
-    void addCategoryAtPosition(Category category,int position){
+    void AddCategoryAtPosition(Category category,int position){
         if (position < 0 || position > categoryList.size() || categoryList.size() < 3){
             categoryList.add(category);
         }
@@ -369,49 +343,7 @@ public class NoteActivity extends AppCompatActivity {
         }
     }
 
-    private int findCategoryByUID(Category mCategory){
-        // Return the index of the note category
-        // found in categoryList
-
-        for (Category c : categoryList) {
-            if (c.UID.equals(mCategory.UID)){
-
-                // if the two UID matches
-                // return the index of the current element
-                Log.d("DEBUG_NEW_CATEGORY","Category "+ mCategory.name +" found !");
-
-                return categoryList.indexOf(c);
-            }
-        }
-
-        Log.d("DEBUG_NEW_CATEGORY","Category "+ mCategory.name +" NOT found !");
-
-        return -1;
-    }
-
-    private int findCategoryByName(Category mCategory){
-        // Return the index of the note category
-        // found in categoryList
-
-        for (Category c : categoryList) {
-
-            // if the two names matches
-            // return the index of the current element
-
-            if (c.name.equals(mCategory.name)){
-
-                Log.d("DEBUG_NEW_CATEGORY","Category "+ mCategory.name +" found !");
-
-                return categoryList.indexOf(c);
-            }
-        }
-
-        Log.d("DEBUG_NEW_CATEGORY","Category "+ mCategory.name +" found !");
-
-        return -1;
-    }
-
-    void buildIconDialog(){
+    void BuildIconDialog(){
         // display the icon list pick dialog
 
         final PickIconDialog iconDialog = new PickIconDialog(this);
@@ -419,12 +351,12 @@ public class NoteActivity extends AppCompatActivity {
         iconDialog.setOnCreate(new PickIconDialog.OnCreate() {
             @Override
             public void buildRecyclerView() {
-                buildIconRecyclerView(iconDialog.dialog,iconDialog);
+                BuildIconRecyclerView(iconDialog.dialog,iconDialog);
             }
         });
     }
 
-    void buildIconRecyclerView(View view, final PickIconDialog dialog){
+    void BuildIconRecyclerView(View view, final PickIconDialog dialog){
         // Build The RecyclerView
 
         RecyclerView mRecyclerView;
@@ -463,24 +395,7 @@ public class NoteActivity extends AppCompatActivity {
         mRecyclerView.setAdapter(mAdapter);
     }
 
-    void saveNoteListToSharedPreferences(ArrayList<Note> noteList){
-        // save the note list to the Shared Preference
-        // Uses Gson with Json
-
-        SharedPreferences sharedPreferences = getSharedPreferences("shared preferences", MODE_PRIVATE);
-        SharedPreferences.Editor editor = sharedPreferences.edit();
-        Gson gson = new Gson();
-        String json = gson.toJson(noteList);
-
-        // The key of the Data
-        // works as an ID
-        // Should be unique, otherwise data will be overridden
-        editor.putString("notes",json);
-
-        editor.apply();
-    }
-
-    void saveNote(int position){
+    void SaveNoteExit(int position){
         // Local note saving
 
         if (position != -1){
@@ -504,10 +419,10 @@ public class NoteActivity extends AppCompatActivity {
         }
 
         MY_RESOURCES.SAVE_NOTES_TO_SHARED_PREFERENCES(mList,MyResources.NOTE_KEY);
-        cancel();
+        CancelExit();
     }
 
-    void cancel(){
+    void CancelExit(){
         // Pass the user to MainActivity
 
         // Moving the last used category to the top of the list

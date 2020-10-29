@@ -98,8 +98,12 @@ public class MainActivity extends AppCompatActivity implements Serializable {
 
         // Setting the toolbar for the current activity
         // Could be customized via R.layout.main_activity_layout
-        Toolbar toolbar = findViewById(R.id.category_toolbar);
-        setActionBar(toolbar);
+
+        // Toolbar toolbar = findViewById(R.id.category_toolbar);
+        // setActionBar(toolbar);
+
+        androidx.appcompat.widget.Toolbar toolbar = findViewById(R.id.category_toolbar);
+        setSupportActionBar(toolbar);
 
         // Fetching the Floating Action bar in the layout
         fab = findViewById(R.id.category_fab);
