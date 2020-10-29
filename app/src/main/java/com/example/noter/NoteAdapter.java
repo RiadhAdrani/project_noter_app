@@ -5,6 +5,8 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Filter;
+import android.widget.Filterable;
 import android.widget.ImageView;
 import android.widget.PopupMenu;
 import android.widget.TextView;
@@ -12,9 +14,11 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import java.nio.file.DirectoryStream;
 import java.util.ArrayList;
+import java.util.List;
 
-public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.myViewHolder> {
+public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.myViewHolder> implements Filterable {
 
     // Note adapter is a custom created Adapter RecyclerView
     // Used to display notes dynamically
@@ -22,6 +26,8 @@ public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.myViewHolder> 
     // Reference to the list that will be fed to the adapter
     // to be displayed
     ArrayList<Note> mNoteList;
+
+    ArrayList<Note> mNoteListFull;
 
     // Contains overridable functions
     // mainly onClickListeners
@@ -31,6 +37,16 @@ public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.myViewHolder> 
     // Context of the Activity
     // in which the adapter is used.
     Context mContext;
+
+    public NoteAdapter(ArrayList<Note> noteList,Context context){
+        // NoteAdapter constructor
+
+        mNoteList = noteList;
+        mContext = context;
+        mNoteListFull = new ArrayList<>(mNoteList);
+    }
+
+
 
     public interface OnItemClickListener {
         // Interface containing (Hollow) overridable functions
@@ -111,13 +127,6 @@ public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.myViewHolder> 
 
     }
 
-    public NoteAdapter(ArrayList<Note> noteList,Context context){
-        // NoteAdapter constructor
-
-        mNoteList = noteList;
-        mContext = context;
-    }
-
     @NonNull
     @Override
     public myViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -153,6 +162,42 @@ public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.myViewHolder> 
 
         return mNoteList.size();
     }
+
+    @Override
+    public Filter getFilter() {
+        return exampleFilter;
+    }
+
+    private Filter exampleFilter = new Filter() {
+        @Override
+        protected FilterResults performFiltering(CharSequence constraint) {
+            List<Note> filteredList = new ArrayList<>();
+            if (constraint == null || constraint.length() == 0){
+                filteredList.addAll(mNoteListFull);
+            }else {
+                String filterPattern = constraint.toString().toLowerCase().trim();
+
+                for (Note item : mNoteListFull) {
+                    if (item.title.toLowerCase().contains(filterPattern)
+                     || item.content.toLowerCase().contains(filterPattern)){
+                        filteredList.add(item);
+                    }
+                }
+            }
+
+            FilterResults result = new FilterResults();
+            result.values = filteredList;
+
+            return result;
+        }
+
+        @Override
+        protected void publishResults(CharSequence charSequence, FilterResults result) {
+            mNoteList.clear();
+            mNoteList.addAll((List) result.values);
+            notifyDataSetChanged();
+        }
+    };
 
 
 }

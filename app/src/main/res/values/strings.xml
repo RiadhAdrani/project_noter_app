@@ -15,6 +15,10 @@
     <string name="copy_content">Copy Content</string>
     <string name="delete">Delete</string>
     <string name="sort">Sort</string>
+    <string name="search">Search</string>
+    <string name="search_hint">Search Hint</string>
+    <string name="search_label">Search Label</string>
+    <string name="search_global_description">Search Global Description</string>
     <string name="sort_alpha">Title</string>
     <string name="sort_creation">Creation date</string>
     <string name="sort_modified">Modification date</string>

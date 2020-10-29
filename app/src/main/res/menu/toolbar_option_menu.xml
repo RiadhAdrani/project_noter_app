@@ -1,13 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:theme="@style/ThemeOverlay.AppCompat.Light"
-    >
+    xmlns:yourapp="http://schemas.android.com/tools"
+    android:theme="@style/ThemeOverlay.AppCompat.Light">
+
+    <item android:id="@+id/search"
+        android:title="@string/search"
+        android:icon="@drawable/ic_search_0"
+        app:showAsAction="collapseActionView|ifRoom"
+        app:actionViewClass="androidx.appcompat.widget.SearchView" />
 
     <item android:id="@+id/sort_type"
         android:title="@string/sort_ascending"
-        app:showAsAction="ifRoom"
+        app:showAsAction="never"
         />
 
     <item android:id="@+id/sort_alpha"
