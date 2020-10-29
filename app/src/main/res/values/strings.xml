@@ -18,6 +18,8 @@
     <string name="sort_alpha">Title</string>
     <string name="sort_creation">Creation date</string>
     <string name="sort_modified">Modification date</string>
+    <string name="sort_ascending">Ascending</string>
+    <string name="sort_descending">Descending</string>
 
     <!-- /////////////////////////////////////////////////////////////////////////////////////// -->
     <!--                              TOASTS, MESSAGES , ALERTS                                  -->

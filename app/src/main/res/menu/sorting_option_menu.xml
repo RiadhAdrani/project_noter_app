@@ -5,6 +5,11 @@
     android:theme="@style/ThemeOverlay.AppCompat.Light"
     >
 
+    <item android:id="@+id/sort_type"
+        android:title="@string/sort_ascending"
+        app:showAsAction="ifRoom"
+        />
+
     <item android:id="@+id/sort_alpha"
         android:title="@string/sort_alpha"
         app:showAsAction="never"

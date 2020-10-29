@@ -46,6 +46,11 @@ public class MyResources implements Serializable {
     private static String ADD_CATEGORY_UID = "com.example.noter.add.category";
     public static Category ADD_CATEGORY = new Category(ADD_CATEGORY_NAME, ADD_CATEGORY_UID);
 
+    // Sorting types
+    public static int SORT_ALPHA = 0;
+    public static int SORT_CREATION_DATE = 1;
+    public static int SORT_MODIFICATION_DATE = 2;
+
     // Contains the list of available icons
     private ArrayList<Icon> ICON_LIST = new ArrayList<>();
 

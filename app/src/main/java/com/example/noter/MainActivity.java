@@ -8,7 +8,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.Toast;
-import android.widget.Toolbar;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -67,6 +66,12 @@ public class MainActivity extends AppCompatActivity implements Serializable {
 
     // current category filter
     Category currentCategory;
+
+    // Sort type
+    boolean isAscending = true;
+
+    // Sort by
+    int sortBy = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -515,16 +520,30 @@ public class MainActivity extends AppCompatActivity implements Serializable {
         // in the Option Menu from The Toolbar
 
         switch (item.getItemId()){
-            case R.id.sort_alpha: sortByAlpha(); return true;
-            case R.id.sort_creation : sortByCreation(); return true;
-            case R.id.sort_modified : sortByModified(); return true;
+            case R.id.sort_type: isAscending = !isAscending;
+                                 if (isAscending) item.setTitle(R.string.sort_ascending);
+                                 else item.setTitle(R.string.sort_descending);
+                                 SortBy(sortBy);
+                                 return true;
+            case R.id.sort_alpha: SortByAlpha(isAscending); return true;
+            case R.id.sort_creation : SortByCreation(isAscending); return true;
+            case R.id.sort_modified : SortByModified(isAscending); return true;
             default: return super.onOptionsItemSelected(item);
         }
     }
 
-    void sortByAlpha(){
+    void SortBy(int sort){
+        switch (sort){
+            default:
+            case 0: SortByAlpha(isAscending);break;
+            case 1: SortByCreation(isAscending);break;
+            case 2: SortByModified(isAscending);break;
+        }
+    }
+
+    void SortByAlpha(boolean sortAscending){
         // Sorts a list of Note by Note.title property
-        // Sorts Ascending Only
+        // Sorts Ascending
 
         Collections.sort(nList, new Comparator<Note>() {
             public int compare(Note n1, Note n2) {
@@ -532,7 +551,16 @@ public class MainActivity extends AppCompatActivity implements Serializable {
             }
         });
 
+        // if isAscending is false
+        // reverse the list
+        // for the descending order
+        if (!isAscending) Collections.reverse(nList);
+
+        // filter by the current filter
         mList = MY_RESOURCES.FILTER_NOTES_BY_CATEGORY(nList,currentCategory);
+
+        // set sort by to sort by alpha
+        sortBy = MyResources.SORT_ALPHA;
 
         // Update The RecyclerView
         BuildNoteRecyclerView();
@@ -541,7 +569,7 @@ public class MainActivity extends AppCompatActivity implements Serializable {
         Toast.makeText(this,getString(R.string.sorted_by_title),Toast.LENGTH_SHORT).show();
     }
 
-    void sortByCreation(){
+    void SortByCreation(boolean sortAscending){
         // Sorts a list of Note by Note.creationDate property
         // Sorts Ascending Only
 
@@ -551,7 +579,15 @@ public class MainActivity extends AppCompatActivity implements Serializable {
             }
         });
 
+        // if isAscending is false
+        // reverse the list
+        // for the descending order
+        if (!isAscending) Collections.reverse(nList);
+
         mList = MY_RESOURCES.FILTER_NOTES_BY_CATEGORY(nList,currentCategory);
+
+        // set sort by to sort by creation date
+        sortBy = MyResources.SORT_CREATION_DATE;
 
         // Update The RecyclerView
         BuildNoteRecyclerView();
@@ -560,7 +596,7 @@ public class MainActivity extends AppCompatActivity implements Serializable {
         Toast.makeText(this,getString(R.string.sorted_by_creation),Toast.LENGTH_SHORT).show();
     }
 
-    void sortByModified(){
+    void SortByModified(boolean sortAscending){
         // Sorts a list of Note by Note.lastModificationDate property
         // Sorts Ascending Only
 
@@ -570,7 +606,16 @@ public class MainActivity extends AppCompatActivity implements Serializable {
             }
         });
 
+        // if isAscending is false
+        // reverse the list
+        // for the descending order
+        if (!isAscending) Collections.reverse(nList);
+
+        // filter by the current filter
         mList = MY_RESOURCES.FILTER_NOTES_BY_CATEGORY(nList,currentCategory);
+
+        // set sort by to sort by modification date
+        sortBy = MyResources.SORT_MODIFICATION_DATE;
 
         // Update The RecyclerView
         BuildNoteRecyclerView();
