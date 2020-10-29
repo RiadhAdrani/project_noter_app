@@ -12,7 +12,8 @@
     android:layout_height="50dp"
     android:layout_margin="2dp"
     app:cardBackgroundColor="@color/beau_blue_lighter"
-    app:cardCornerRadius="15dp"
+    app:cardPreventCornerOverlap="true"
+    app:cardCornerRadius="10dp"
     >
 
         <!--

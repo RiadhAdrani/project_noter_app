@@ -1,5 +1,6 @@
 package com.example.noter;
 
+import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,10 +25,13 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.myView
     // could be implemented in an Activity
     OnCategoryClickListener listener;
 
-    public CategoryAdapter(ArrayList<Category> mList){
+    Context context;
+
+    public CategoryAdapter(ArrayList<Category> mList,Context context){
         // Basic constructor
 
         this.mList = mList;
+        this.context = context;
     }
 
     @NonNull
@@ -38,7 +42,7 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.myView
         View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.category_card_layout,parent,false);
 
         // Return the inflated view to be displayed
-        return new CategoryAdapter.myViewHolder(v,listener);
+        return new CategoryAdapter.myViewHolder(v,listener,context);
     }
 
     @Override
@@ -68,7 +72,7 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.myView
         // TextView to display the category name
         public TextView mText;
 
-        public myViewHolder(@NonNull View itemView, final OnCategoryClickListener listener) {
+        public myViewHolder(@NonNull final View itemView, final OnCategoryClickListener listener, final Context context) {
             super(itemView);
 
             mText = itemView.findViewById(R.id.category_name_textView);
@@ -80,6 +84,7 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.myView
                     if (listener != null){
                         listener.onClickListener(getAdapterPosition());
                     }
+
                 }
             });
 

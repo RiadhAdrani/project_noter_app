@@ -29,7 +29,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:layout_marginVertical="8dp"
+            android:layout_marginVertical="4dp"
             android:layout_marginHorizontal="8dp"
             android:paddingVertical="4dp"
             android:background="@color/beau_blue_lighter"
@@ -41,7 +41,7 @@
             <ImageButton
                 android:id="@+id/add_category_button"
                 android:layout_width="50dp"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:layout_gravity="start"
                 android:src="@drawable/ic_add_black_0"
                 android:layout_marginHorizontal="4dp"

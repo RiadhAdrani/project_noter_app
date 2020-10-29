@@ -1,7 +1,5 @@
 package com.example.noter;
 
-import android.app.SearchManager;
-import android.content.Context;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -425,7 +423,7 @@ public class MainActivity extends AppCompatActivity implements Serializable {
         cLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL,false);
 
         // Setting the Adapter of the RecyclerView
-        cAdapter = new CategoryAdapter(cList);
+        cAdapter = new CategoryAdapter(cList,this);
 
         Log.d("DEBUG_CATEGORY_RV","Number of Elements : "+cAdapter.mList.size());
 
