@@ -149,7 +149,7 @@ public class MainActivity extends AppCompatActivity implements Serializable {
                     public void onConfirmClickListener() {
 
                         // create a temporary category
-                        final Category newCategory = new Category(inputDialog.inputField.getText().toString());
+                        final Category newCategory = new Category(inputDialog.inputField.getText().toString().trim());
 
                         // if category does not exist
                         if (MY_RESOURCES.GET_CATEGORY_INDEX_BY_NAME(newCategory,cList) == -1){
@@ -187,7 +187,7 @@ public class MainActivity extends AppCompatActivity implements Serializable {
                                 public void onConfirmClickListener() {
 
                                     // getting a suitable category name
-                                    newCategory.name = MY_RESOURCES.GET_SUITABLE_NAME(newCategory.name,cList);
+                                    newCategory.name = MY_RESOURCES.GET_SUITABLE_NAME(newCategory.name.trim(),cList);
 
                                     // adding the suitable category name
                                     AddCategory(newCategory,NEW_CATEGORY_POSITION);
@@ -257,13 +257,13 @@ public class MainActivity extends AppCompatActivity implements Serializable {
             public void onRenameButtonClick(final int position) {
 
                 // if the name exists && the input field is different from the current name
-                if (MY_RESOURCES.CHECK_IF_NAME_EXIST(cList,dialog.inputField.getText().toString())
-                        && !cList.get(position).name.equals(dialog.inputField.getText().toString()) ){
+                if (MY_RESOURCES.CHECK_IF_NAME_EXIST(cList,dialog.inputField.getText().toString().trim())
+                        && !cList.get(position).name.equals(dialog.inputField.getText().toString().trim()) ){
 
                     // creating a confirmation dialog
                     // check ConfirmDialog for more documentation
                     final ConfirmDialog confirmDialog = new ConfirmDialog(getApplicationContext(),
-                            "Category exists, do you want it to be renamed "+MY_RESOURCES.GET_SUITABLE_NAME(dialog.inputField.getText().toString(),cList));
+                            "Category exists, do you want it to be renamed "+MY_RESOURCES.GET_SUITABLE_NAME(dialog.inputField.getText().toString().trim(),cList));
 
                     confirmDialog.show(getSupportFragmentManager(),"confirm rename dialog");
 
@@ -280,7 +280,7 @@ public class MainActivity extends AppCompatActivity implements Serializable {
                         public void onConfirmClickListener() {
 
                             // assigning a suitable name for the category
-                            cList.get(position).name = MY_RESOURCES.GET_SUITABLE_NAME(dialog.inputField.getText().toString(),cList);
+                            cList.get(position).name = MY_RESOURCES.GET_SUITABLE_NAME(dialog.inputField.getText().toString().trim(),cList);
 
                             // saving the category list to the shared preferences
                             MY_RESOURCES.SAVE_CATEGORY_LIST(cList);
@@ -304,7 +304,7 @@ public class MainActivity extends AppCompatActivity implements Serializable {
                 } else {
 
                     // if the name does not exists
-                    cList.get(position).name = dialog.inputField.getText().toString();
+                    cList.get(position).name = dialog.inputField.getText().toString().trim();
 
                     // saving category list to shared preferences
                     MY_RESOURCES.SAVE_CATEGORY_LIST(cList);
@@ -485,11 +485,6 @@ public class MainActivity extends AppCompatActivity implements Serializable {
                 return false;
             }
         });
-
-        // Associate searchable configuration with the SearchView
-//        SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
-//        SearchView searchView = (SearchView) menu.findItem(R.id.search).getActionView();
-//        searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
 
         return true;
     }
@@ -751,6 +746,13 @@ public class MainActivity extends AppCompatActivity implements Serializable {
 
         // creating a temporary note
         Note tempNote = mList.get(position);
+
+        // adding a copy suffix
+        tempNote.title += getString(R.string.copy);
+
+        // overriding creation and modification dates
+        tempNote.creationDate = new MyDate().GET_CURRENT_DATE();
+        tempNote.lastModifiedDate = new MyDate().GET_CURRENT_DATE();
 
         // adding the note the list
         nList.add(0,tempNote);

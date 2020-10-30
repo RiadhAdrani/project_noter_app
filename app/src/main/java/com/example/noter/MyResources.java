@@ -144,6 +144,9 @@ public class MyResources implements Serializable {
         // DARK SOULS
         list.add(new Icon(R.drawable.ic_bonfire_0,context.getString(R.string.ic_bonfire),"ic_bonfire_0"));
 
+        // NOTER
+        list.add(new Icon(R.drawable.ic_noter_app_0,context.getString(R.string.ic_noter),"ic_noter_0"));
+
         // ---------------------------------------------------------------------------------------- //
         // ---------------------------------------------------------------------------------------- //
 
@@ -163,7 +166,7 @@ public class MyResources implements Serializable {
             // if the two names matches
             // return the index of the current element
 
-            if (c.name.equals(mCategory.name)){
+            if (c.name.trim().equals(mCategory.name.trim())){
 
                 Log.d("DEBUG_NEW_CATEGORY","Category "+ mCategory.name +" found !");
 
@@ -249,7 +252,7 @@ public class MyResources implements Serializable {
         ClipboardManager clipboard = (ClipboardManager) context.getSystemService(Context.CLIPBOARD_SERVICE);
 
         // store the content of the note in a temporary variable
-        String mContent = mList.get(position).content;
+        String mContent = mList.get(position).content.trim();
 
         // getting the content
         ClipData clip = ClipData.newPlainText("Note Content",mContent );
@@ -466,7 +469,7 @@ public class MyResources implements Serializable {
             // if the two names matches
             // return the index of the current element
 
-            if (c.name.equals(mCategory.name)){
+            if (c.name.trim().equals(mCategory.name.trim())){
 
                 Log.d("DEBUG_NEW_CATEGORY","Category "+ mCategory.name +" found !");
 
@@ -520,10 +523,12 @@ public class MyResources implements Serializable {
     // return false if the list is empty
     public boolean CHECK_IF_NAME_EXIST(ArrayList<Category> categoryList, String name){
 
+        name = name.trim();
+
         if (categoryList.isEmpty()) return false;
 
         for (Category category : categoryList) {
-            if (category.name.equals(name)) return true;
+            if (category.name.trim().equals(name)) return true;
         }
 
         return false;
@@ -540,13 +545,15 @@ public class MyResources implements Serializable {
         // Check for duplicate name
         // and return the appropriate name
 
+        name = name.trim();
+
         if (this.CHECK_IF_NAME_EXIST(list,name)) {
             Log.d("DEBUG_CATEGORY_OPTIONS","Category named :"+name+" exists");
             return GET_SUITABLE_NAME(name +" "+context.getString(R.string.copy),list);
         }
 
 
-        return name;
+        return name.trim();
 
     }
 
@@ -612,11 +619,11 @@ public class MyResources implements Serializable {
         // comparing the elements one by one
         // to assure complete resemblance
         for (Note n : list) {
-            if (n.title.equals(note.title) &&
+            if (n.title.trim().equals(note.title.trim()) &&
                 n.category.equals(note.category) &&
                 n.creationDate.equals(note.creationDate) &&
                 n.lastModifiedDate.equals(note.lastModifiedDate) &&
-                n.content.equals(note.content) &&
+                n.content.trim().equals(note.content.trim()) &&
                 n.iconUID.equals(note.iconUID) ){
 
                 Log.d("DEBUG_NOTE_ACTIVITY","Note found !");
@@ -723,7 +730,7 @@ public class MyResources implements Serializable {
         ArrayList<Note> equal = new ArrayList<>();
         Note e = list.get( (int) (Math.random() *list.size()) );
         for (Note x : list) {
-            switch (STRING_COMPARISON(x.title,e.title)){
+            switch (STRING_COMPARISON(x.title.trim(),e.title.trim())){
                 case  0: equal.add(x)   ; break;
                 case -1: low.add(x)     ; break;
                 case  1: high.add(x)    ; break;

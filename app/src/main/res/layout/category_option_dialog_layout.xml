@@ -37,6 +37,7 @@
         android:layout_height="wrap_content"
         android:hint="@string/categoryDefault"
         android:maxLength="50"
+        android:selectAllOnFocus="true"
         app:layout_constraintTop_toBottomOf="@id/category_option_name"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toLeftOf="@id/category_rename_button"/>

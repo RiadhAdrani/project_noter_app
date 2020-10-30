@@ -64,7 +64,7 @@
         <item name="android:textColor">@android:color/black</item>
     </style>
 
-    <style name="darker_grey_standard_12sp_two_lines">
+    <style name="darker_grey_italic_12sp_two_lines">
         <item name="android:textSize">12sp</item>
         <item name="android:textColor">@android:color/darker_gray</item>
         <item name="android:minLines">1</item>

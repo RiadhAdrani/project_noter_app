@@ -77,6 +77,7 @@
                 android:layout_gravity="center_vertical"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:selectAllOnFocus="true"
                 android:layout_weight="1"
                 android:maxLines="2"
                 android:minLines="2"
@@ -86,7 +87,9 @@
                 android:layout_marginHorizontal="16dp"
                 android:layout_marginVertical="8dp"
                 android:paddingHorizontal="2dp"
-                style="@style/black_standard_20sp"/>
+                style="@style/black_standard_20sp"
+                android:autofillHints="@string/contentHint"
+                android:inputType="textCapWords" />
 
             <Spinner
                 android:id="@+id/note_category_spinner"
@@ -128,9 +131,10 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:hint="@string/contentHint"
+        android:inputType="textMultiLine|textCapSentences"
         android:autofillHints="@string/contentHint"
-        android:gravity="top"
-        android:minLines="1"
+        android:gravity="start"
+        android:imeOptions="actionNone"
         android:layout_marginHorizontal="8dp"
         android:layout_marginVertical="8dp"
         style="@style/black_standard_16sp"/>

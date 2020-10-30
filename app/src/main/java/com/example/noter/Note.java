@@ -29,7 +29,7 @@ public class Note implements Serializable {
     // basic constructor;
     public Note(Context context){
         MyResources r = new MyResources(context);
-        this.title = context.getString(R.string.titleDefault);
+        this.title = context.getString(R.string.titleDefault).trim();
         this.content = "";
         this.iconUID = r.GET_ICON_LIST().get(0).uid;
         this.creationDate = new MyDate().GET_CURRENT_DATE();

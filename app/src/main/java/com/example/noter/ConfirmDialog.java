@@ -57,7 +57,7 @@ public class ConfirmDialog extends AppCompatDialogFragment {
         builder.setView(dialog);
 
         TextView confirmText = dialog.findViewById(R.id.confirm_text);
-        confirmText.setText(message);
+        confirmText.setText(message.trim());
 
         Button cancelButton = dialog.findViewById(R.id.cancel_action_button);
         cancelButton.setOnClickListener(new View.OnClickListener() {

@@ -97,7 +97,7 @@
                     android:text="@string/contentHint"
                     android:layout_marginHorizontal="4dp"
                     android:layout_marginBottom="2dp"
-                    style="@style/darker_grey_standard_12sp_two_lines"/>
+                    style="@style/darker_grey_italic_12sp_two_lines"/>
         </LinearLayout>
 
         <!--

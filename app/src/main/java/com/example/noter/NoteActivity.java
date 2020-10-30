@@ -5,7 +5,6 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -15,8 +14,6 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.SpinnerAdapter;
-
-import com.google.gson.Gson;
 
 import java.util.ArrayList;
 
@@ -215,7 +212,7 @@ public class NoteActivity extends AppCompatActivity {
                             Log.d("DEBUG_NEW_CATEGORY","creating a new category and saving changes");
 
                             // creating a temporary category object named by the inputField
-                            final Category newCategory = new Category(dialog.inputField.getText().toString());
+                            final Category newCategory = new Category(dialog.inputField.getText().toString().trim());
 
                             if (MY_RESOURCES.FIND_CATEGORY_BY_NAME(categoryList,newCategory) == -1){
 
@@ -242,7 +239,8 @@ public class NoteActivity extends AppCompatActivity {
 
                                 Log.d("DEBUG_NEW_CATEGORY","Duplicate Detected");
 
-                                final ConfirmDialog confirmDialog = new ConfirmDialog(getApplicationContext(),"Category exist, \"(copy)\" will added at the end.");
+                                final ConfirmDialog confirmDialog = new ConfirmDialog(getApplicationContext(),
+                                        "A category named : \""+newCategory.name+"\" already exists, it will be named \""+MY_RESOURCES.GET_SUITABLE_NAME(newCategory.name,categoryList)+"\". Continue?");
                                 confirmDialog.show(getSupportFragmentManager(),"confirm dialog box");
                                 confirmDialog.setButtons(new ConfirmDialog.Buttons() {
                                     @Override
@@ -262,7 +260,7 @@ public class NoteActivity extends AppCompatActivity {
                                         // and saving changes
 
                                         // adding "(copy)" to the temporary category name
-                                        newCategory.name += " (copy)";
+                                        newCategory.name = MY_RESOURCES.GET_SUITABLE_NAME(newCategory.name.trim(),categoryList).trim();
 
                                         // adding the temporary object to the category list
                                         AddCategoryAtPosition(newCategory,NEW_POSITION);
@@ -401,8 +399,8 @@ public class NoteActivity extends AppCompatActivity {
         if (position != -1){
             // if it is an old note
 
-            mList.get(position).title = titleText.getText().toString();
-            mList.get(position).content = contentText.getText().toString();
+            mList.get(position).title = titleText.getText().toString().trim();
+            mList.get(position).content = contentText.getText().toString().trim();
             mList.get(position).iconUID = note.iconUID;
             mList.get(position).category = note.category;
             mList.get(position).lastModifiedDate = new MyDate().GET_CURRENT_DATE();
@@ -411,8 +409,8 @@ public class NoteActivity extends AppCompatActivity {
 
         else {
             Note mNote = new Note(getApplicationContext());
-            mNote.title = titleText.getText().toString();
-            mNote.content = contentText.getText().toString();
+            mNote.title = titleText.getText().toString().trim();
+            mNote.content = contentText.getText().toString().trim();
             mNote.iconUID = note.iconUID;
             mNote.category = note.category;
             mList.add(0,mNote);
