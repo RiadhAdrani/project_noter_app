@@ -3,7 +3,7 @@
     <!-- Base application theme. -->
     <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
         <item name="colorPrimary">@color/green_persian</item>
-        <item name="colorPrimaryDark">@color/green_charcoal</item>
+        <item name="colorPrimaryDark">@color/beau_blue_darker</item>
         <item name="colorAccent">@color/orange_yellow_crayola</item>
     </style>
 
@@ -27,7 +27,7 @@
         <item name="colorSecondary">@color/green_charcoal</item>
         <item name="colorOnSecondary">@color/green_persian</item>
         <item name="colorOnSurface">@color/orange_yellow_crayola</item>
-        <item name="fabCustomSize">65dp</item>
+        <item name="fabCustomSize">55dp</item>
     </style>
 
     <!-- /////////////////////////////////////////////////////////////////////////////////////// -->
@@ -82,5 +82,46 @@
         <item name="android:textColor">@android:color/black</item>
         <item name="singleLine">true</item>
     </style>
+
+    <!-- /////////////////////////////////////////////////////////////////////////////////////// -->
+    <!--                                BUTTON AND CLICKABLE STYLES                              -->
+    <!-- /////////////////////////////////////////////////////////////////////////////////////// -->
+
+    <style name="ripple_beau_blue_lighter_to_darker_0dp">
+        <item name="android:background">@drawable/ripple_beau_blue_lighter_to_dark_0dp</item>
+    </style>
+
+    <style name="ripple_beau_blue_lighter_to_darker_5dp">
+        <item name="android:background">@drawable/ripple_beau_blue_lighter_to_dark_5dp</item>
+    </style>
+
+    <style name="ripple_beau_blue_lighter_to_darker_15dp">
+        <item name="android:background">@drawable/ripple_beau_blue_lighter_to_dark_15dp</item>
+    </style>
+
+    <style name="ripple_beau_blue_light_to_darker_15dp">
+        <item name="android:background">@drawable/ripple_beau_blue_light_to_dark_15dp</item>
+    </style>
+
+    <style name="button_default_style">
+        <item name="android:background">@drawable/button_ripple_default</item>
+    </style>
+
+    <style name="button_dark_style">
+        <item name="android:background">@drawable/button_ripple_dark</item>
+    </style>
+
+    <style name="button_light_style">
+        <item name="android:background">@drawable/button_ripple_light</item>
+    </style>
+
+    <style name="icon_default_style">
+        <item name="android:background">@drawable/icon_ripple_default</item>
+    </style>
+
+    <style name="category_card_default_style">
+        <item name="android:background">@drawable/category_ripple_default</item>
+    </style>
+
 
 </resources>

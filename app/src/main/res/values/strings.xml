@@ -38,6 +38,7 @@
     <string name="sorted_by_creation">Sorted by Creation Date</string>
     <string name="sorted_by_modification">Sorted by Last Modification</string>
     <string name="confirm_default">Confirm action ?</string>
+    <string name="fab_content">FAB</string>
     <string name="duplicate_category_alert">This category already exists, do you want to continue?</string>
 
     <!-- /////////////////////////////////////////////////////////////////////////////////////// -->

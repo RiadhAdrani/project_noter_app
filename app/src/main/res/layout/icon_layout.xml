@@ -5,15 +5,14 @@
         for the icon pick layout
         -->
 
-<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:layout_width="50dp"
     android:layout_height="50dp"
     android:layout_margin="2dp"
-    app:cardBackgroundColor="@color/beau_blue_lighter"
-    app:cardPreventCornerOverlap="true"
-    app:cardCornerRadius="10dp"
+    android:elevation="8dp"
+    android:background="@drawable/icon_ripple_default"
     >
 
         <!--
@@ -30,4 +29,4 @@
         />
 
 
-</androidx.cardview.widget.CardView>
+</LinearLayout>

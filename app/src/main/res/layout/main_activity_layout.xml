@@ -46,8 +46,8 @@
                 android:src="@drawable/ic_add_black_0"
                 android:layout_marginHorizontal="4dp"
                 android:paddingVertical="4dp"
-                android:background="@color/beau_blue_light"
-                android:contentDescription="@string/categoryDefault" />
+                android:contentDescription="@string/categoryDefault"
+                style="@style/button_default_style"/>
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/category_recyclerView"
@@ -92,6 +92,6 @@
             android:layout_marginEnd="56dp"
             app:srcCompat="@drawable/plus_icon_big"
             style="@style/mainActivityFloatingActionButton"
-            />
+            android:contentDescription="@string/fab_content" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
