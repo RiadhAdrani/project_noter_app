@@ -105,9 +105,6 @@ public class MainActivity extends AppCompatActivity implements Serializable {
         // Setting the toolbar for the current activity
         // Could be customized via R.layout.main_activity_layout
 
-        // Toolbar toolbar = findViewById(R.id.category_toolbar);
-        // setActionBar(toolbar);
-
         androidx.appcompat.widget.Toolbar toolbar = findViewById(R.id.category_toolbar);
         setSupportActionBar(toolbar);
 
@@ -154,14 +151,30 @@ public class MainActivity extends AppCompatActivity implements Serializable {
                         // if category does not exist
                         if (MY_RESOURCES.GET_CATEGORY_INDEX_BY_NAME(newCategory,cList) == -1){
 
-                            // add new category as it is
-                            AddCategory(newCategory,NEW_CATEGORY_POSITION);
+                            // if category input name is too short or empty
+                            if (newCategory.name.trim().isEmpty() || newCategory.name.trim().length() < MyResources.CATEGORY_MINIMUM_NAME_LENGTH){
 
-                            // cAdapter.notifyItemInserted(NEW_CATEGORY_POSITION);
+                                // display alert message to the user
+                                Toast.makeText(getApplicationContext(),getString(R.string.category_short_alert),Toast.LENGTH_SHORT).show();
 
-                            // NOT OPTIMIZED ↓↓↓↓↓↓↓↓↓↓
-                            BuildCategoryRecyclerView();
-                            // ↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑
+                                // don't dismiss dialog
+                            }
+
+                            // category name is valid
+                            else {
+                                // add new category as it is
+                                AddCategory(newCategory,NEW_CATEGORY_POSITION);
+
+                                // cAdapter.notifyItemInserted(NEW_CATEGORY_POSITION);
+
+                                // NOT OPTIMIZED ↓↓↓↓↓↓↓↓↓↓
+                                BuildCategoryRecyclerView();
+                                // ↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑
+
+                                // dismiss dialog
+                                inputDialog.dismiss();
+                            }
+
                         }
                         else {
                             // else
@@ -210,7 +223,7 @@ public class MainActivity extends AppCompatActivity implements Serializable {
 
                         // dismissing the simple input dialog
                         // for both cases
-                        inputDialog.dismiss();
+                        // inputDialog.dismiss();
                     }
                 });
 
@@ -256,36 +269,71 @@ public class MainActivity extends AppCompatActivity implements Serializable {
             @Override
             public void onRenameButtonClick(final int position) {
 
-                // if the name exists && the input field is different from the current name
-                if (MY_RESOURCES.CHECK_IF_NAME_EXIST(cList,dialog.inputField.getText().toString().trim())
-                        && !cList.get(position).name.equals(dialog.inputField.getText().toString().trim()) ){
+                // if category input name is too short or empty
+                if (dialog.inputField.getText().toString().isEmpty() || dialog.inputField.getText().toString().length() < MyResources.CATEGORY_MINIMUM_NAME_LENGTH){
 
-                    // creating a confirmation dialog
-                    // check ConfirmDialog for more documentation
-                    final ConfirmDialog confirmDialog = new ConfirmDialog(getApplicationContext(),
-                            "Category exists, do you want it to be renamed "+MY_RESOURCES.GET_SUITABLE_NAME(dialog.inputField.getText().toString().trim(),cList));
+                    // display alert message to the user
+                    Toast.makeText(getApplicationContext(),getString(R.string.category_short_alert),Toast.LENGTH_SHORT).show();
 
-                    confirmDialog.show(getSupportFragmentManager(),"confirm rename dialog");
+                    // don't dismiss dialog
+                }
 
-                    // overriding the interface's methods
-                    confirmDialog.setButtons(new ConfirmDialog.Buttons() {
-                        @Override
-                        public void onCancelClickListener() {
+                // category name is valid
+                else {
+                        // if the name exists && the input field is different from the current name
+                        if (MY_RESOURCES.CHECK_IF_NAME_EXIST(cList,dialog.inputField.getText().toString().trim())
+                                && !cList.get(position).name.equals(dialog.inputField.getText().toString().trim()) ){
 
-                            // close and exit
-                            confirmDialog.dismiss();
-                        }
+                            // creating a confirmation dialog
+                            // check ConfirmDialog for more documentation
+                            final ConfirmDialog confirmDialog = new ConfirmDialog(getApplicationContext(),
+                                    "Category exists, do you want it to be renamed "+MY_RESOURCES.GET_SUITABLE_NAME(dialog.inputField.getText().toString().trim(),cList));
 
-                        @Override
-                        public void onConfirmClickListener() {
+                            confirmDialog.show(getSupportFragmentManager(),"confirm rename dialog");
 
-                            // assigning a suitable name for the category
-                            cList.get(position).name = MY_RESOURCES.GET_SUITABLE_NAME(dialog.inputField.getText().toString().trim(),cList);
+                            // overriding the interface's methods
+                            confirmDialog.setButtons(new ConfirmDialog.Buttons() {
+                                @Override
+                                public void onCancelClickListener() {
 
-                            // saving the category list to the shared preferences
+                                    // close and exit
+                                    confirmDialog.dismiss();
+                                }
+
+                                @Override
+                                public void onConfirmClickListener() {
+
+                                    // assigning a suitable name for the category
+                                    cList.get(position).name = MY_RESOURCES.GET_SUITABLE_NAME(dialog.inputField.getText().toString().trim(),cList);
+
+                                    // saving the category list to the shared preferences
+                                    MY_RESOURCES.SAVE_CATEGORY_LIST(cList);
+
+                                    // getting the shared preferences
+                                    cList = MY_RESOURCES.GET_CATEGORY_LIST();
+
+                                    // NOT OPTIMIZED ↓↓↓↓↓↓↓↓↓↓
+                                    BuildCategoryRecyclerView();
+
+                                    // NOT OPTIMIZED ↓↓↓↓↓↓↓↓↓↓
+                                    BuildNoteRecyclerView();
+
+                                    // exit the confirmation dialog
+                                    confirmDialog.dismiss();
+
+                                    // exit the dialog
+                                    dialog.dismiss();
+                                }
+                            });
+                        } else {
+
+                            // if the name does not exists
+                            cList.get(position).name = dialog.inputField.getText().toString().trim();
+
+                            // saving category list to shared preferences
                             MY_RESOURCES.SAVE_CATEGORY_LIST(cList);
 
-                            // getting the shared preferences
+                            // loading the category list again
                             cList = MY_RESOURCES.GET_CATEGORY_LIST();
 
                             // NOT OPTIMIZED ↓↓↓↓↓↓↓↓↓↓
@@ -294,33 +342,12 @@ public class MainActivity extends AppCompatActivity implements Serializable {
                             // NOT OPTIMIZED ↓↓↓↓↓↓↓↓↓↓
                             BuildNoteRecyclerView();
 
-                            // exit the confirmation dialog
-                            confirmDialog.dismiss();
-
                             // exit the dialog
                             dialog.dismiss();
                         }
-                    });
-                } else {
-
-                    // if the name does not exists
-                    cList.get(position).name = dialog.inputField.getText().toString().trim();
-
-                    // saving category list to shared preferences
-                    MY_RESOURCES.SAVE_CATEGORY_LIST(cList);
-
-                    // loading the category list again
-                    cList = MY_RESOURCES.GET_CATEGORY_LIST();
-
-                    // NOT OPTIMIZED ↓↓↓↓↓↓↓↓↓↓
-                    BuildCategoryRecyclerView();
-
-                    // NOT OPTIMIZED ↓↓↓↓↓↓↓↓↓↓
-                    BuildNoteRecyclerView();
-
-                    // exit the dialog
-                    dialog.dismiss();
                 }
+
+
             }
 
             @Override

@@ -14,6 +14,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.SpinnerAdapter;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 
@@ -216,20 +217,35 @@ public class NoteActivity extends AppCompatActivity {
 
                             if (MY_RESOURCES.FIND_CATEGORY_BY_NAME(categoryList,newCategory) == -1){
 
-                                // adding the temporary object to the category list
-                                AddCategoryAtPosition(newCategory,NEW_POSITION);
+                                // if category input name is too short or empty
+                                if (newCategory.name.trim().isEmpty() || newCategory.name.trim().length() < MyResources.CATEGORY_MINIMUM_NAME_LENGTH){
 
-                                // saving the category
-                                MY_RESOURCES.SAVE_CATEGORIES(categoryList,MyResources.CATEGORY_KEY);
+                                    // display alert message to the user
+                                    Toast.makeText(getApplicationContext(),getString(R.string.category_short_alert),Toast.LENGTH_SHORT).show();
 
-                                // reloading the category list
-                                categoryList = MY_RESOURCES.LOAD_CATEGORY_LOCALLY();
+                                    // don't dismiss dialog
 
-                                // updating the spinner and selecting the newly added category
-                                UpdateCategorySpinner(MY_RESOURCES.FIND_CATEGORY_BY_UID(categoryList,newCategory));
+                                }
 
-                                // closing the dialog
-                                dialog.dismiss();
+                                // category name is valid
+                                else {
+
+                                    // adding the temporary object to the category list
+                                    AddCategoryAtPosition(newCategory,NEW_POSITION);
+
+                                    // saving the category
+                                    MY_RESOURCES.SAVE_CATEGORIES(categoryList,MyResources.CATEGORY_KEY);
+
+                                    // reloading the category list
+                                    categoryList = MY_RESOURCES.LOAD_CATEGORY_LOCALLY();
+
+                                    // updating the spinner and selecting the newly added category
+                                    UpdateCategorySpinner(MY_RESOURCES.FIND_CATEGORY_BY_UID(categoryList,newCategory));
+
+                                    // closing the dialog
+                                    dialog.dismiss();
+
+                                }
 
                             } else {
                                 // if the category exist,
@@ -396,28 +412,39 @@ public class NoteActivity extends AppCompatActivity {
     void SaveNoteExit(int position){
         // Local note saving
 
-        if (position != -1){
-            // if it is an old note
+        // if the note name is empty
+        if (titleText.getText().toString().trim().isEmpty() || titleText.getText().toString().trim().length() < MyResources.NOTE_MINIMUM_NAME_LENGTH){
 
-            mList.get(position).title = titleText.getText().toString().trim();
-            mList.get(position).content = contentText.getText().toString().trim();
-            mList.get(position).iconUID = note.iconUID;
-            mList.get(position).category = note.category;
-            mList.get(position).lastModifiedDate = new MyDate().GET_CURRENT_DATE();
-
+            // display alert message to the user
+            Toast.makeText(getApplicationContext(),getString(R.string.note_name_short_alert),Toast.LENGTH_SHORT).show();
         }
 
         else {
-            Note mNote = new Note(getApplicationContext());
-            mNote.title = titleText.getText().toString().trim();
-            mNote.content = contentText.getText().toString().trim();
-            mNote.iconUID = note.iconUID;
-            mNote.category = note.category;
-            mList.add(0,mNote);
+
+            if (position != -1){
+                // if it is an old note
+
+                mList.get(position).title = titleText.getText().toString().trim();
+                mList.get(position).content = contentText.getText().toString().trim();
+                mList.get(position).iconUID = note.iconUID;
+                mList.get(position).category = note.category;
+                mList.get(position).lastModifiedDate = new MyDate().GET_CURRENT_DATE();
+
+            }
+
+            else {
+                Note mNote = new Note(getApplicationContext());
+                mNote.title = titleText.getText().toString().trim();
+                mNote.content = contentText.getText().toString().trim();
+                mNote.iconUID = note.iconUID;
+                mNote.category = note.category;
+                mList.add(0,mNote);
+            }
+
+            MY_RESOURCES.SAVE_NOTES_TO_SHARED_PREFERENCES(mList,MyResources.NOTE_KEY);
+            CancelExit();
         }
 
-        MY_RESOURCES.SAVE_NOTES_TO_SHARED_PREFERENCES(mList,MyResources.NOTE_KEY);
-        CancelExit();
     }
 
     void CancelExit(){

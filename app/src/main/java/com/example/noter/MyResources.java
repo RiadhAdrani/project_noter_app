@@ -32,19 +32,23 @@ public class MyResources implements Serializable {
     public static String LOAD_NOTE_KEY = "LOAD_NOTE";
 
     // Default category
-    private static String ALL_CATEGORY_NAME = "All";
-    private static String ALL_CATEGORY_UID = "com.example.noter.all.category";
+    private static final String ALL_CATEGORY_NAME = "All";
+    private static final String ALL_CATEGORY_UID = "com.example.noter.all.category";
     public static Category ALL_CATEGORY = new Category(ALL_CATEGORY_NAME, ALL_CATEGORY_UID);
 
     // Default category
-    private static String DEFAULT_CATEGORY_NAME = "Default";
-    private static String DEFAULT_CATEGORY_UID = "com.example.noter.default.category";
+    private static final String DEFAULT_CATEGORY_NAME = "Default";
+    private static final String DEFAULT_CATEGORY_UID = "com.example.noter.default.category";
     public static Category DEFAULT_CATEGORY = new Category(DEFAULT_CATEGORY_NAME, DEFAULT_CATEGORY_UID);
 
     // Add new category
-    private static String ADD_CATEGORY_NAME = "+ CATEGORY";
-    private static String ADD_CATEGORY_UID = "com.example.noter.add.category";
+    private static final String ADD_CATEGORY_NAME = "+ CATEGORY";
+    private static final String ADD_CATEGORY_UID = "com.example.noter.add.category";
     public static Category ADD_CATEGORY = new Category(ADD_CATEGORY_NAME, ADD_CATEGORY_UID);
+
+    // static int
+    public static final int CATEGORY_MINIMUM_NAME_LENGTH = 3;
+    public static final int NOTE_MINIMUM_NAME_LENGTH = 2;
 
     // Sorting types
     public static int SORT_ALPHA = 0;

@@ -40,6 +40,8 @@
     <string name="confirm_default">Confirm action ?</string>
     <string name="fab_content">FAB</string>
     <string name="duplicate_category_alert">This category already exists, do you want to continue?</string>
+    <string name="category_short_alert">Category name is empty or too short!</string>
+    <string name="note_name_short_alert">Note name is empty or too short!</string>
 
     <!-- /////////////////////////////////////////////////////////////////////////////////////// -->
     <!--                                   PLACEHOLDERS                                          -->
