@@ -177,6 +177,7 @@ public class MainActivity extends AppCompatActivity implements Serializable {
 
                         }
                         else {
+
                             // else
                             // a category with the same name exist
                             // trying to find a solution
@@ -213,6 +214,10 @@ public class MainActivity extends AppCompatActivity implements Serializable {
 
                                     // close and exit
                                     dialog.dismiss();
+
+                                    // close input dialog
+                                    inputDialog.dismiss();
+
                                 }
                             });
                         }
@@ -220,10 +225,6 @@ public class MainActivity extends AppCompatActivity implements Serializable {
                         // NOT OPTIMIZED ↓↓↓↓↓↓↓↓↓↓
                         // BuildCategoryRecyclerView();
                         // ↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑
-
-                        // dismissing the simple input dialog
-                        // for both cases
-                        // inputDialog.dismiss();
                     }
                 });
 

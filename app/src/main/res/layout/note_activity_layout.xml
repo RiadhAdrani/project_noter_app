@@ -37,7 +37,7 @@
             android:layout_height="match_parent"
             android:layout_gravity="center"
             android:layout_marginEnd="4dp"
-            style="@style/ripple_beau_blue_lighter_to_darker_5dp"
+            android:background="@drawable/ripple_beau_blue_lighter_to_dark_5dp"
             >
             <ImageView
                 android:id="@+id/note_icon"
@@ -49,6 +49,7 @@
                 android:contentDescription="@string/add_icon"
                 android:padding="8dp"
                 android:src="@drawable/ic_computer_0"
+                android:background="@drawable/ripple_beau_blue_lighter_to_dark_5dp"
                 />
         </LinearLayout>
 

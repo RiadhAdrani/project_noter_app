@@ -43,6 +43,7 @@
     <string name="category_short_alert">Category name is empty or too short!</string>
     <string name="note_name_short_alert">Note name is empty or too short!</string>
     <string name="delete_note_alert">Confirm deleting note :</string>
+    <string name="duplicate_note_title_alert">A note with the same name exists, are you sure you want to continue?</string>
 
     <!-- /////////////////////////////////////////////////////////////////////////////////////// -->
     <!--                                   PLACEHOLDERS                                          -->

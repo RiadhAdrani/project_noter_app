@@ -215,7 +215,7 @@ public class NoteActivity extends AppCompatActivity {
                             // creating a temporary category object named by the inputField
                             final Category newCategory = new Category(dialog.inputField.getText().toString().trim());
 
-                            if (MY_RESOURCES.FIND_CATEGORY_BY_NAME(categoryList,newCategory) == -1){
+                            if (MY_RESOURCES.FIND_CATEGORY_BY_NAME(categoryList,newCategory) == -1 && !newCategory.name.trim().toLowerCase().equals("all") ){
 
                                 // if category input name is too short or empty
                                 if (newCategory.name.trim().isEmpty() || newCategory.name.trim().length() < MyResources.CATEGORY_MINIMUM_NAME_LENGTH){
@@ -254,6 +254,8 @@ public class NoteActivity extends AppCompatActivity {
                                 // or the user can cancel
 
                                 Log.d("DEBUG_NEW_CATEGORY","Duplicate Detected");
+
+                                if (newCategory.name.trim().toLowerCase().equals("all")) newCategory.name += " "+ getString(R.string.copy);
 
                                 final ConfirmDialog confirmDialog = new ConfirmDialog(getApplicationContext(),
                                         "A category named : \""+newCategory.name+"\" already exists, it will be named \""+MY_RESOURCES.GET_SUITABLE_NAME(newCategory.name,categoryList)+"\". Continue?");
@@ -409,7 +411,7 @@ public class NoteActivity extends AppCompatActivity {
         mRecyclerView.setAdapter(mAdapter);
     }
 
-    void SaveNoteExit(int position){
+    void SaveNoteExit(final int position){
         // Local note saving
 
         // if the note name is empty
@@ -419,30 +421,81 @@ public class NoteActivity extends AppCompatActivity {
             Toast.makeText(getApplicationContext(),getString(R.string.note_name_short_alert),Toast.LENGTH_SHORT).show();
         }
 
+        // name is valid
+        // not too short nor empty
         else {
 
+            ArrayList<Note> tempList = new ArrayList<Note>(mList);
+
             if (position != -1){
-                // if it is an old note
+                tempList.remove(position);
+            }
 
-                mList.get(position).title = titleText.getText().toString().trim();
-                mList.get(position).content = contentText.getText().toString().trim();
-                mList.get(position).iconUID = note.iconUID;
-                mList.get(position).category = note.category;
-                mList.get(position).lastModifiedDate = new MyDate().GET_CURRENT_DATE();
+            if (MY_RESOURCES.CHECK_IF_NOTE_TITLE_EXIST(tempList,titleText.getText().toString().trim())){
+                final ConfirmDialog confirmDialog = new ConfirmDialog(getApplicationContext(),getString(R.string.duplicate_note_title_alert));
+                confirmDialog.show(getSupportFragmentManager(),"duplicate note title");
+                confirmDialog.setButtons(new ConfirmDialog.Buttons() {
+                    @Override
+                    public void onCancelClickListener() {
+                        confirmDialog.dismiss();
+                    }
+
+                    @Override
+                    public void onConfirmClickListener() {
+
+                        if (position != -1){
+                            // if it is an old note
+
+                            mList.get(position).title = titleText.getText().toString().trim();
+                            mList.get(position).content = contentText.getText().toString().trim();
+                            mList.get(position).iconUID = note.iconUID;
+                            mList.get(position).category = note.category;
+                            mList.get(position).lastModifiedDate = new MyDate().GET_CURRENT_DATE();
+
+                        }
+
+                        else {
+                            Note mNote = new Note(getApplicationContext());
+                            mNote.title = titleText.getText().toString().trim();
+                            mNote.content = contentText.getText().toString().trim();
+                            mNote.iconUID = note.iconUID;
+                            mNote.category = note.category;
+                            mList.add(0,mNote);
+                        }
+
+                        MY_RESOURCES.SAVE_NOTES_TO_SHARED_PREFERENCES(mList,MyResources.NOTE_KEY);
+                        CancelExit();
+
+                    }
+                });
+            } else {
+
+                if (position != -1){
+                    // if it is an old note
+
+                    mList.get(position).title = titleText.getText().toString().trim();
+                    mList.get(position).content = contentText.getText().toString().trim();
+                    mList.get(position).iconUID = note.iconUID;
+                    mList.get(position).category = note.category;
+                    mList.get(position).lastModifiedDate = new MyDate().GET_CURRENT_DATE();
+
+                }
+
+                else {
+                    Note mNote = new Note(getApplicationContext());
+                    mNote.title = titleText.getText().toString().trim();
+                    mNote.content = contentText.getText().toString().trim();
+                    mNote.iconUID = note.iconUID;
+                    mNote.category = note.category;
+                    mList.add(0,mNote);
+                }
+
+                MY_RESOURCES.SAVE_NOTES_TO_SHARED_PREFERENCES(mList,MyResources.NOTE_KEY);
+                CancelExit();
 
             }
 
-            else {
-                Note mNote = new Note(getApplicationContext());
-                mNote.title = titleText.getText().toString().trim();
-                mNote.content = contentText.getText().toString().trim();
-                mNote.iconUID = note.iconUID;
-                mNote.category = note.category;
-                mList.add(0,mNote);
-            }
 
-            MY_RESOURCES.SAVE_NOTES_TO_SHARED_PREFERENCES(mList,MyResources.NOTE_KEY);
-            CancelExit();
         }
 
     }

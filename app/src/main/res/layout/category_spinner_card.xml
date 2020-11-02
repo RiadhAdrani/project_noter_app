@@ -3,7 +3,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="horizontal"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    >
     
     <TextView
         android:id="@+id/category_spinner_text"
@@ -16,8 +17,7 @@
         android:paddingStart="16dp"
         android:paddingEnd="2dp"
         android:textColor="@android:color/black"
-        style="@style/ripple_beau_blue_lighter_to_darker_0dp"
-        android:background="@color/beau_blue_lighter"
+        android:background="@drawable/ripple_beau_blue_lighter_to_dark_0dp"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toTopOf="parent"

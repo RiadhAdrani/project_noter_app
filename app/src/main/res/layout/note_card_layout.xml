@@ -5,15 +5,13 @@
         for the MainActivity Recycler View
         -->
 
-<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="110dp"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    app:cardCornerRadius="15dp"
-    app:cardBackgroundColor="@color/beau_blue_lighter"
     android:layout_marginHorizontal="4dp"
     android:layout_marginVertical="4dp"
-    style="@style/cardStyle">
+    android:elevation="4dp"
+    style="@style/ripple_beau_blue_lighter_to_darker_5dp">
 
     <!--
     LinearLayout to align everything together
@@ -110,14 +108,13 @@
             android:padding="8dp"
             android:layout_height="match_parent"
             android:src="@drawable/three_dot_vert"
-            style="@style/ripple_beau_blue_lighter_to_darker_0dp"
+            style="@style/ripple_beau_blue_lighter_to_darker_5dp"
             android:scaleType="fitCenter"
             android:contentDescription="@string/options"
-            android:layout_marginHorizontal="8dp"
 
             />
 
         
     </LinearLayout>
 
-</androidx.cardview.widget.CardView>
+</LinearLayout>
