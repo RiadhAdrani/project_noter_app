@@ -62,7 +62,7 @@ public class MyResources implements Serializable {
     //                                         METHODS                                            //
     // ------------------------------------------------------------------------------------------ //
 
-    // FUNCTION 00
+    // FUNCTION -1
     // Basic constructor for MyResource
     public MyResources(Context context){
         // Constructor
@@ -75,86 +75,34 @@ public class MyResources implements Serializable {
 
     // ------------------------------------------------------------------------------------------//
 
+    // FUNCTION 30
+    // checking if a note with title "name" exist in "list"
+    public boolean CHECK_IF_NOTE_TITLE_EXIST(ArrayList<Note> list,String title){
+        for (Note note : list) {
+            if (title.equals(note.title)) return true;
+        }
+        return false;
+    }
+
+    // ------------------------------------------------------------------------------------------//
+
     // FUNCTION 29
-    // fill ICON_LIST with all the icons
-    private void FILL_ICON_LIST(){
-        // Construct the icon list
+    // checking if "name" exist in "list"
+    // and trying to solve the duplicate names by adding
+    // a string (copy)
+    public String GET_SUITABLE_NOTE_NAME(String name, ArrayList<Note> list){
+        // Check for duplicate name
+        // and return the appropriate name
 
-        // temp Icon list
-        ArrayList<Icon> list = new ArrayList<>();
+        name = name.trim();
 
-        // ICON CATEGORIES
-        // ADD YOURS AT THE CUSTOM PART
-        // DO NOT MODIFY ANY LINE IN THE STATIC PART
+        if (this.CHECK_IF_NOTE_TITLE_EXIST(list,name)) {
 
-        // ---------------------------------------------------------------------------------------- //
-        //                                          STATIC                                          //
-        // ---------------------------------------------------------------------------------------- //
+            return GET_SUITABLE_NOTE_NAME(name +" "+context.getString(R.string.copy),list);
+        }
 
-        // NOTER
-        list.add(new Icon(R.drawable.ic_newnote_0,context.getString(R.string.ic_noter),"ic_default_0"));
+        return name.trim();
 
-        // WORKPLACE
-        list.add(new Icon(R.drawable.ic_workplace_0,context.getString(R.string.ic_workplace),"ic_workplace_0"));
-        list.add(new Icon(R.drawable.ic_workplace_1,context.getString(R.string.ic_workplace),"ic_workplace_1"));
-
-        // OPTIONS
-        list.add(new Icon(R.drawable.ic_options_0,context.getString(R.string.ic_options_0),"ic_options_0"));
-
-        // SCREWDRIVER
-        list.add(new Icon(R.drawable.ic_screwdriver_0,context.getString(R.string.ic_screwdriver),"ic_screwdriver_0"));
-
-        // COMPUTER
-        list.add(new Icon(R.drawable.ic_computer_0,context.getString(R.string.ic_computer),"ic_computer_0"));
-
-        // CENTRAL UNIT
-        list.add(new Icon(R.drawable.ic_cu_0,context.getString(R.string.ic_cu),"ic_centralUnit_0"));
-
-        // MONITOR
-        list.add(new Icon(R.drawable.ic_monitor_0,context.getString(R.string.ic_monitor),"ic_monitor_0"));
-
-        // TELEPHONE
-        list.add(new Icon(R.drawable.ic_telephone_0,context.getString(R.string.ic_telephone),"ic_telephone_0"));
-        list.add(new Icon(R.drawable.ic_telephone_1,context.getString(R.string.ic_telephone),"ic_telephone_1"));
-
-        // SMART PHONES
-        list.add(new Icon(R.drawable.ic_smartphone_0,context.getString(R.string.ic_smartphone),"ic_smartPhone_0"));
-        list.add(new Icon(R.drawable.ic_smartphone_1,context.getString(R.string.ic_smartphone),"ic_smartPhone_1"));
-
-        // FOLDER
-        list.add(new Icon(R.drawable.ic_folder_0,context.getString(R.string.ic_folder),"ic_folder_0"));
-        list.add(new Icon(R.drawable.ic_folder_1,context.getString(R.string.ic_folder),"ic_folder_1"));
-
-        // FOLDER
-        list.add(new Icon(R.drawable.ic_file_0,context.getString(R.string.ic_file),"ic_file_0"));
-        list.add(new Icon(R.drawable.ic_file_1,context.getString(R.string.ic_file),"ic_file_1"));
-
-        // LOCKER
-        list.add(new Icon(R.drawable.ic_locker_0,context.getString(R.string.ic_locker),"ic_locker_0"));
-        list.add(new Icon(R.drawable.ic_locker_1,context.getString(R.string.ic_locker),"ic_locker_1"));
-
-        // KEY
-        list.add(new Icon(R.drawable.ic_key_0,context.getString(R.string.ic_key),"ic_key_0"));
-        list.add(new Icon(R.drawable.ic_key_1,context.getString(R.string.ic_key),"ic_key_1"));
-
-        // COFFEE
-        list.add(new Icon(R.drawable.ic_coffee_0,context.getString(R.string.ic_coffee),"ic_coffee_0"));
-        list.add(new Icon(R.drawable.ic_coffee_1,context.getString(R.string.ic_coffee),"ic_coffee_1"));
-
-        // ---------------------------------------------------------------------------------------- //
-        //                                          CUSTOM                                          //
-        // ---------------------------------------------------------------------------------------- //
-
-        // DARK SOULS
-        list.add(new Icon(R.drawable.ic_bonfire_0,context.getString(R.string.ic_bonfire),"ic_bonfire_0"));
-
-        // NOTER
-        list.add(new Icon(R.drawable.ic_noter_app_0,context.getString(R.string.ic_noter),"ic_noter_0"));
-
-        // ---------------------------------------------------------------------------------------- //
-        // ---------------------------------------------------------------------------------------- //
-
-        ICON_LIST = list;
     }
 
     // ------------------------------------------------------------------------------------------//
@@ -801,5 +749,89 @@ public class MyResources implements Serializable {
     }
 
     // ------------------------------------------------------------------------------------------//
+
+    // ------------------------------------------------------------------------------------------//
+
+    // FUNCTION 00
+    // fill ICON_LIST with all the icons
+    private void FILL_ICON_LIST(){
+        // Construct the icon list
+
+        // temp Icon list
+        ArrayList<Icon> list = new ArrayList<>();
+
+        // ICON CATEGORIES
+        // ADD YOURS AT THE CUSTOM PART
+        // DO NOT MODIFY ANY LINE IN THE STATIC PART
+
+        // ---------------------------------------------------------------------------------------- //
+        //                                          STATIC                                          //
+        // ---------------------------------------------------------------------------------------- //
+
+        // NOTER
+        list.add(new Icon(R.drawable.ic_newnote_0,context.getString(R.string.ic_noter),"ic_default_0"));
+
+        // WORKPLACE
+        list.add(new Icon(R.drawable.ic_workplace_0,context.getString(R.string.ic_workplace),"ic_workplace_0"));
+        list.add(new Icon(R.drawable.ic_workplace_1,context.getString(R.string.ic_workplace),"ic_workplace_1"));
+
+        // OPTIONS
+        list.add(new Icon(R.drawable.ic_options_0,context.getString(R.string.ic_options_0),"ic_options_0"));
+
+        // SCREWDRIVER
+        list.add(new Icon(R.drawable.ic_screwdriver_0,context.getString(R.string.ic_screwdriver),"ic_screwdriver_0"));
+
+        // COMPUTER
+        list.add(new Icon(R.drawable.ic_computer_0,context.getString(R.string.ic_computer),"ic_computer_0"));
+
+        // CENTRAL UNIT
+        list.add(new Icon(R.drawable.ic_cu_0,context.getString(R.string.ic_cu),"ic_centralUnit_0"));
+
+        // MONITOR
+        list.add(new Icon(R.drawable.ic_monitor_0,context.getString(R.string.ic_monitor),"ic_monitor_0"));
+
+        // TELEPHONE
+        list.add(new Icon(R.drawable.ic_telephone_0,context.getString(R.string.ic_telephone),"ic_telephone_0"));
+        list.add(new Icon(R.drawable.ic_telephone_1,context.getString(R.string.ic_telephone),"ic_telephone_1"));
+
+        // SMART PHONES
+        list.add(new Icon(R.drawable.ic_smartphone_0,context.getString(R.string.ic_smartphone),"ic_smartPhone_0"));
+        list.add(new Icon(R.drawable.ic_smartphone_1,context.getString(R.string.ic_smartphone),"ic_smartPhone_1"));
+
+        // FOLDER
+        list.add(new Icon(R.drawable.ic_folder_0,context.getString(R.string.ic_folder),"ic_folder_0"));
+        list.add(new Icon(R.drawable.ic_folder_1,context.getString(R.string.ic_folder),"ic_folder_1"));
+
+        // FOLDER
+        list.add(new Icon(R.drawable.ic_file_0,context.getString(R.string.ic_file),"ic_file_0"));
+        list.add(new Icon(R.drawable.ic_file_1,context.getString(R.string.ic_file),"ic_file_1"));
+
+        // LOCKER
+        list.add(new Icon(R.drawable.ic_locker_0,context.getString(R.string.ic_locker),"ic_locker_0"));
+        list.add(new Icon(R.drawable.ic_locker_1,context.getString(R.string.ic_locker),"ic_locker_1"));
+
+        // KEY
+        list.add(new Icon(R.drawable.ic_key_0,context.getString(R.string.ic_key),"ic_key_0"));
+        list.add(new Icon(R.drawable.ic_key_1,context.getString(R.string.ic_key),"ic_key_1"));
+
+        // COFFEE
+        list.add(new Icon(R.drawable.ic_coffee_0,context.getString(R.string.ic_coffee),"ic_coffee_0"));
+        list.add(new Icon(R.drawable.ic_coffee_1,context.getString(R.string.ic_coffee),"ic_coffee_1"));
+
+        // ---------------------------------------------------------------------------------------- //
+        //                                          CUSTOM                                          //
+        // ---------------------------------------------------------------------------------------- //
+
+        // DARK SOULS
+        list.add(new Icon(R.drawable.ic_bonfire_0,context.getString(R.string.ic_bonfire),"ic_bonfire_0"));
+
+        // NOTER
+        list.add(new Icon(R.drawable.ic_noter_app_0,context.getString(R.string.ic_noter),"ic_noter_0"));
+
+        // ---------------------------------------------------------------------------------------- //
+        // ---------------------------------------------------------------------------------------- //
+
+        ICON_LIST = list;
+    }
 
 }

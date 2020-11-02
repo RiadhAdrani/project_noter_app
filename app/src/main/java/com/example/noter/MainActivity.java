@@ -771,15 +771,14 @@ public class MainActivity extends AppCompatActivity implements Serializable {
         // Duplicate a note by inserting the same note
         // in the same position
 
-        // creating a temporary note
-        Note tempNote = mList.get(position);
+        // creating the duplicate note
+        Note tempNote = new Note(getApplicationContext());
 
-        // adding a copy suffix
-        tempNote.title += getString(R.string.copy);
-
-        // overriding creation and modification dates
-        tempNote.creationDate = new MyDate().GET_CURRENT_DATE();
-        tempNote.lastModifiedDate = new MyDate().GET_CURRENT_DATE();
+        // overriding data
+        tempNote.title = MY_RESOURCES.GET_SUITABLE_NOTE_NAME(mList.get(position).title,nList);
+        tempNote.iconUID = mList.get(position).iconUID;
+        tempNote.content = mList.get(position).content;
+        tempNote.category = mList.get(position).category;
 
         // adding the note the list
         nList.add(0,tempNote);
