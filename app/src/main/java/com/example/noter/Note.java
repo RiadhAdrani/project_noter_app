@@ -24,6 +24,7 @@ public class Note implements Serializable {
     // Unique ID used to load the correspondent icon from MyResources
     public String iconUID;
 
+    // category of the note
     public String category;
 
     // basic constructor;

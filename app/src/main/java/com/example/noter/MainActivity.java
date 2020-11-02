@@ -715,11 +715,6 @@ public class MainActivity extends AppCompatActivity implements Serializable {
                 // Check my resource for more documentation
                 DuplicateNote(position);
 
-                // Need to be more optimized
-                BuildNoteRecyclerView();
-
-                // mAdapter.notifyDataSetChanged();
-                // mAdapter.notifyItemInserted(position);
             }
 
             @Override
@@ -750,20 +745,46 @@ public class MainActivity extends AppCompatActivity implements Serializable {
         mRecyclerView.setAdapter(mAdapter);
     }
 
-    void DeleteNote(int position){
+    void DeleteNote(final int position){
         // Remove a note by its position
 
-        // delete the note
-        nList.remove(mList.get(position));
+        // create a confirmation dialog
+        final ConfirmDialog confirmDialog = new ConfirmDialog(getApplicationContext(),getString(R.string.delete_note_alert)
+                + " \"" + mList.get(position).title + "\"");
 
-        // saving the new list
-        MY_RESOURCES.SAVE_NOTES_TO_SHARED_PREFERENCES(nList,MyResources.NOTE_KEY);
+        // display the confirmDialog
+        confirmDialog.show(getSupportFragmentManager(),"confirm delete note");
 
-        // updating the local list
-        nList = MY_RESOURCES.LOAD_NOTES_FROM_SHARED_PREFERENCES(MyResources.NOTE_KEY);
+        // overriding the button actions
+        confirmDialog.setButtons(new ConfirmDialog.Buttons() {
+            @Override
+            public void onCancelClickListener() {
+                confirmDialog.dismiss();
+            }
 
-        // update
-        mList = MY_RESOURCES.FILTER_NOTES_BY_CATEGORY(nList,currentCategory);
+            @Override
+            public void onConfirmClickListener() {
+
+                Log.d("DEBUG_DELETE",""+position);
+
+                // delete the note
+                nList.remove(MY_RESOURCES.GET_NOTE_INDEX(mList,mList.get(position)));
+
+                // saving the new list
+                MY_RESOURCES.SAVE_NOTES_TO_SHARED_PREFERENCES(nList,MyResources.NOTE_KEY);
+
+                // updating the local list
+                nList = MY_RESOURCES.LOAD_NOTES_FROM_SHARED_PREFERENCES(MyResources.NOTE_KEY);
+
+                // update
+                mList = MY_RESOURCES.FILTER_NOTES_BY_CATEGORY(nList,currentCategory);
+
+                BuildNoteRecyclerView();
+
+                // dismiss
+                confirmDialog.dismiss();
+            }
+        });
 
     }
 
@@ -791,6 +812,9 @@ public class MainActivity extends AppCompatActivity implements Serializable {
 
         // filtering the list to be displayed
         mList = MY_RESOURCES.FILTER_NOTES_BY_CATEGORY(nList,currentCategory);
+
+        // Need to be more optimized
+        BuildNoteRecyclerView();
 
     }
 

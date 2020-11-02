@@ -75,7 +75,7 @@ public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.myViewHolder> 
         public ImageView mOptions;
         public PopupMenu mPopup;
 
-        public myViewHolder(@NonNull View itemView, final OnItemClickListener listener, final Context mContext) {
+        public myViewHolder(@NonNull View itemView, final OnItemClickListener listener, final Context mContext, final NoteAdapter adapter) {
             super(itemView);
 
             mImageView = itemView.findViewById(R.id.card_icon);
@@ -133,7 +133,7 @@ public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.myViewHolder> 
         // Inflate and load the layout of the element
 
         View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.note_card_layout,parent,false);
-        return new myViewHolder(v, mListener,mContext);
+        return new myViewHolder(v, mListener,mContext,this);
     }
 
     @Override
@@ -168,7 +168,7 @@ public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.myViewHolder> 
         return exampleFilter;
     }
 
-    private Filter exampleFilter = new Filter() {
+    private final Filter exampleFilter = new Filter() {
         @Override
         protected FilterResults performFiltering(CharSequence constraint) {
             List<Note> filteredList = new ArrayList<>();
