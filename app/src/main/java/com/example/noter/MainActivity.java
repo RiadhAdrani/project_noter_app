@@ -69,7 +69,7 @@ public class MainActivity extends AppCompatActivity implements Serializable {
     Category currentCategory;
 
     // Sort type
-    boolean isAscending = true;
+    Boolean isAscending = true;
 
     // Sort by
     int sortBy = 0;
@@ -89,12 +89,11 @@ public class MainActivity extends AppCompatActivity implements Serializable {
         // Import the current Category filter from sharedPreferences
         // If the category does not exist (any more, or has been deleted)
         // assign the current category to the default one.
-        if (currentCategory == null){
-            currentCategory = MyResources.ALL_CATEGORY;
-        }
 
         // Loading Categories from SharePreferences
         cList = MY_RESOURCES.GET_CATEGORY_LIST();
+
+        RefreshCurrentCategory();
 
         // Loading notes from SharedPreferences
         nList = MY_RESOURCES.LOAD_NOTES_FROM_SHARED_PREFERENCES(MyResources.NOTE_KEY);
@@ -115,7 +114,7 @@ public class MainActivity extends AppCompatActivity implements Serializable {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                MY_RESOURCES.LOAD_NOTE_IN_NOTE_ACTIVITY(-1,nList,new Note(getApplicationContext()));
+                MY_RESOURCES.LOAD_NOTE_IN_NOTE_ACTIVITY(nList,new Note(getApplicationContext()));
             }
         });
 
@@ -240,6 +239,18 @@ public class MainActivity extends AppCompatActivity implements Serializable {
         Log.d("DEBUG_NOTE_ACTIVITY","number of notes: "+nList.size());
         Log.d("DEBUG_NOTE_ACTIVITY","number of displayed notes: "+mList.size());
 
+    }
+
+    void RefreshCurrentCategory(){
+        currentCategory = MY_RESOURCES.LOAD_SINGLE_CATEGORY_FROM_SHARED_PREFERENCES(MyResources.CURRENT_CATEGORY_KEY);
+
+        if (currentCategory.UID.equals(MyResources.ALL_CATEGORY.UID)) currentCategory = MyResources.ALL_CATEGORY;
+        else currentCategory = MY_RESOURCES.GET_CATEGORY(currentCategory.UID);
+    }
+
+    void RefreshSorting(){
+        isAscending = MY_RESOURCES.LOAD_BOOLEAN_FROM_SHARED_PREFERENCES(MyResources.CURRENT_SORTING_TYPE_KEY);
+        sortBy = MY_RESOURCES.LOAD_INTEGER_FROM_SHARED_PREFERENCES(MyResources.CURRENT_SORTING_KEY);
     }
 
     void AddCategory(Category newCategory, int position){
@@ -523,6 +534,8 @@ public class MainActivity extends AppCompatActivity implements Serializable {
 
         super.onStart();
         nList = MY_RESOURCES.LOAD_NOTES_FROM_SHARED_PREFERENCES(MyResources.NOTE_KEY);
+        RefreshCurrentCategory();
+        RefreshSorting();
     }
 
     @Override
@@ -531,6 +544,10 @@ public class MainActivity extends AppCompatActivity implements Serializable {
 
         super.onPause();
         MY_RESOURCES.SAVE_NOTES_TO_SHARED_PREFERENCES(nList,MyResources.NOTE_KEY);
+        MY_RESOURCES.SAVE_SINGLE_CATEGORY_TO_SHARED_PREFERENCES(currentCategory,MyResources.CURRENT_CATEGORY_KEY);
+
+        MY_RESOURCES.SAVE_BOOLEAN_TO_SHARED_PREFERENCES(isAscending,MyResources.CURRENT_SORTING_TYPE_KEY);
+        MY_RESOURCES.SAVE_INTEGER_TO_SHARED_PREFERENCES(sortBy, MyResources.CURRENT_SORTING_KEY);
     }
 
     @Override
@@ -539,7 +556,10 @@ public class MainActivity extends AppCompatActivity implements Serializable {
 
         super.onStop();
         MY_RESOURCES.SAVE_NOTES_TO_SHARED_PREFERENCES(nList,MyResources.NOTE_KEY);
+        MY_RESOURCES.SAVE_SINGLE_CATEGORY_TO_SHARED_PREFERENCES(currentCategory,MyResources.CURRENT_CATEGORY_KEY);
 
+        MY_RESOURCES.SAVE_BOOLEAN_TO_SHARED_PREFERENCES(isAscending,MyResources.CURRENT_SORTING_TYPE_KEY);
+        MY_RESOURCES.SAVE_INTEGER_TO_SHARED_PREFERENCES(sortBy, MyResources.CURRENT_SORTING_KEY);
     }
 
     @Override
@@ -548,6 +568,8 @@ public class MainActivity extends AppCompatActivity implements Serializable {
 
         super.onRestart();
         nList = MY_RESOURCES.LOAD_NOTES_FROM_SHARED_PREFERENCES(MyResources.NOTE_KEY);
+        RefreshCurrentCategory();
+        RefreshSorting();
         BuildNoteRecyclerView();
     }
 
@@ -557,6 +579,8 @@ public class MainActivity extends AppCompatActivity implements Serializable {
 
         super.onResume();
         nList = MY_RESOURCES.LOAD_NOTES_FROM_SHARED_PREFERENCES(MyResources.NOTE_KEY);
+        RefreshCurrentCategory();
+        RefreshSorting();
         BuildNoteRecyclerView();
     }
 
@@ -696,7 +720,7 @@ public class MainActivity extends AppCompatActivity implements Serializable {
             public void onItemClick(int position) {
                 // display the drop down menu
 
-                MY_RESOURCES.LOAD_NOTE_IN_NOTE_ACTIVITY(position,nList,mList.get(position));
+                MY_RESOURCES.LOAD_NOTE_IN_NOTE_ACTIVITY(nList,mList.get(position));
             }
 
             @Override

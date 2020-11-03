@@ -7,7 +7,7 @@
     android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:android="http://schemas.android.com/apk/res/android"
-    style="@style/ripple_beau_blue_lighter_to_darker_15dp"
+    style="@style/ripple_beau_blue_lighter_to_darker_0dp"
     >
 
     <TextView

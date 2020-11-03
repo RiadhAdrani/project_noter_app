@@ -26,10 +26,14 @@ public class MyResources implements Serializable {
     //                                         STATICS                                            //
     // ------------------------------------------------------------------------------------------ //
 
-    // static keys
+    // static keys for SharedPreferences
+    // and transferring data from an Activity to another.
     public static String NOTE_KEY = "NOTER_NOTE";
     public static String CATEGORY_KEY = "NOTER_CATEGORY";
     public static String LOAD_NOTE_KEY = "LOAD_NOTE";
+    public static String CURRENT_CATEGORY_KEY = "CURRENT_CATEGORY";
+    public static String CURRENT_SORTING_KEY = "CURRENT_SORTING";
+    public static String CURRENT_SORTING_TYPE_KEY = "CURRENT_SORTING_TYPE";
 
     // Default category
     private static final String ALL_CATEGORY_NAME = "All";
@@ -71,6 +75,198 @@ public class MyResources implements Serializable {
 
         // fill the icon list
         FILL_ICON_LIST();
+    }
+
+    // ------------------------------------------------------------------------------------------//
+
+    // FUNCTION 34
+    // Load an integer from the Shared Preference
+    // Uses Gson with Json
+    public String LOAD_STRING_FROM_SHARED_PREFERENCES(String TAG){
+
+        String string = ALL_CATEGORY_NAME;
+
+        SharedPreferences sharedPreferences = context.getSharedPreferences("shared preferences", Context.MODE_PRIVATE);
+        Gson gson = new Gson();
+
+        // The key of the Data
+        // works as an ID
+        // Should be unique, otherwise data will be overridden
+        String json = sharedPreferences.getString(TAG,null);
+
+        Type type = new TypeToken<String>() {}.getType();
+        string = gson.fromJson(json,type);
+
+        return string;
+    }
+
+    // ------------------------------------------------------------------------------------------//
+
+    // FUNCTION 33
+    // Save an integer to sharedPreferences with the key TAG
+    public void SAVE_STRING_TO_SHARED_PREFERENCES(String string, String TAG){
+
+        // save the categories to the Shared Preference
+        // Uses Gson with Json
+
+        SharedPreferences sharedPreferences = context.getSharedPreferences("shared preferences", Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        Gson gson = new Gson();
+        String json = gson.toJson(string);
+
+        // TAG
+        // The key of the Data
+        // works as an ID
+        // Should be unique, otherwise data will be overridden
+        editor.putString(TAG,json);
+
+        editor.apply();
+    }
+
+    // ------------------------------------------------------------------------------------------//
+
+    // FUNCTION 34
+    // Load an integer from the Shared Preference
+    // Uses Gson with Json
+    public Integer LOAD_INTEGER_FROM_SHARED_PREFERENCES(String TAG){
+
+        Integer integer = 0;
+
+        SharedPreferences sharedPreferences = context.getSharedPreferences("shared preferences", Context.MODE_PRIVATE);
+        Gson gson = new Gson();
+
+        // The key of the Data
+        // works as an ID
+        // Should be unique, otherwise data will be overridden
+        String json = sharedPreferences.getString(TAG,null);
+
+        Type type = new TypeToken<Integer>() {}.getType();
+        integer = gson.fromJson(json,type);
+
+        if (integer == null) return 0;
+
+        return integer;
+    }
+
+    // ------------------------------------------------------------------------------------------//
+
+    // FUNCTION 33
+    // Save an integer to sharedPreferences with the key TAG
+    public void SAVE_INTEGER_TO_SHARED_PREFERENCES(Integer integer, String TAG){
+
+        // save the categories to the Shared Preference
+        // Uses Gson with Json
+
+        SharedPreferences sharedPreferences = context.getSharedPreferences("shared preferences", Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        Gson gson = new Gson();
+        String json = gson.toJson(integer);
+
+        // TAG
+        // The key of the Data
+        // works as an ID
+        // Should be unique, otherwise data will be overridden
+        editor.putString(TAG,json);
+
+        editor.apply();
+    }
+
+    // ------------------------------------------------------------------------------------------//
+
+    // FUNCTION 34
+    // Load a boolean from the Shared Preference
+    // Uses Gson with Json
+    public Boolean LOAD_BOOLEAN_FROM_SHARED_PREFERENCES(String TAG){
+
+        Boolean bool = true;
+
+        SharedPreferences sharedPreferences = context.getSharedPreferences("shared preferences", Context.MODE_PRIVATE);
+        Gson gson = new Gson();
+
+        // The key of the Data
+        // works as an ID
+        // Should be unique, otherwise data will be overridden
+        String json = sharedPreferences.getString(TAG,null);
+
+        Type type = new TypeToken<Boolean>() {}.getType();
+        bool = gson.fromJson(json,type);
+
+        if (bool == null) return true;
+
+        return bool;
+    }
+
+    // ------------------------------------------------------------------------------------------//
+
+    // FUNCTION 33
+    // Save a boolean to sharedPreferences with the key TAG
+    public void SAVE_BOOLEAN_TO_SHARED_PREFERENCES(Boolean bool, String TAG){
+
+        // save the categories to the Shared Preference
+        // Uses Gson with Json
+
+        SharedPreferences sharedPreferences = context.getSharedPreferences("shared preferences", Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        Gson gson = new Gson();
+        String json = gson.toJson(bool);
+
+        // TAG
+        // The key of the Data
+        // works as an ID
+        // Should be unique, otherwise data will be overridden
+        editor.putString(TAG,json);
+
+        editor.apply();
+    }
+
+    // ------------------------------------------------------------------------------------------//
+
+    // FUNCTION 32
+    // Load the a single category from the Shared Preference
+    // Uses Gson with Json
+    public Category LOAD_SINGLE_CATEGORY_FROM_SHARED_PREFERENCES(String TAG){
+
+        // Temporary list
+        Category category ;
+
+        SharedPreferences sharedPreferences = context.getSharedPreferences("shared preferences", Context.MODE_PRIVATE);
+        Gson gson = new Gson();
+
+        // The key of the Data
+        // works as an ID
+        // Should be unique, otherwise data will be overridden
+        String json = sharedPreferences.getString(TAG,null);
+
+        Type type = new TypeToken<Category>() {}.getType();
+        category = gson.fromJson(json,type);
+
+        if (category == null){
+            return ALL_CATEGORY;
+        } else
+            return category;
+    }
+
+    // ------------------------------------------------------------------------------------------//
+
+    // FUNCTION 31
+    // Save a single category to sharedPreferences with the key TAG
+    public void SAVE_SINGLE_CATEGORY_TO_SHARED_PREFERENCES(Category category, String TAG){
+
+        // save the categories to the Shared Preference
+        // Uses Gson with Json
+
+        SharedPreferences sharedPreferences = context.getSharedPreferences("shared preferences", Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        Gson gson = new Gson();
+        String json = gson.toJson(category);
+
+        // TAG
+        // The key of the Data
+        // works as an ID
+        // Should be unique, otherwise data will be overridden
+        editor.putString(TAG,json);
+
+        editor.apply();
     }
 
     // ------------------------------------------------------------------------------------------//
@@ -220,7 +416,7 @@ public class MyResources implements Serializable {
 
     // FUNCTION 23
     // Load NoteActivity with the note "note"
-    public void LOAD_NOTE_IN_NOTE_ACTIVITY(int position,ArrayList<Note> noteList, Note note){
+    public void LOAD_NOTE_IN_NOTE_ACTIVITY(ArrayList<Note> noteList, Note note){
         // Load a note in the NoteActivity
 
         // getting the index of the list
