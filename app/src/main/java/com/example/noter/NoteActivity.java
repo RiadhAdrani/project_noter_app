@@ -6,6 +6,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
@@ -14,16 +16,13 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.SpinnerAdapter;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
 
 public class NoteActivity extends AppCompatActivity {
     // Activity used to display a Note object
-
-    // [UNUSED]
-    // The name of the .txt file
-    private String FILE_NAME = "file_name";
 
     // Loaded Note
     private Note note;
@@ -49,12 +48,6 @@ public class NoteActivity extends AppCompatActivity {
 
     // View of the editable Note.iconUID
     private ImageView noteIcon;
-
-    // Cancel Button used to discard changes and return to MainActivity
-    private Button cancelButton;
-
-    // Cancel Button used to save changes and return to MainActivity
-    private Button saveButton;
 
     // ArrayList containing Categories
     private ArrayList<Category> categoryList;
@@ -105,11 +98,11 @@ public class NoteActivity extends AppCompatActivity {
         // Getting the View for the Note.content
         contentText = findViewById(R.id.note_text);
 
-        // Getting the Button for cancelButton
-        cancelButton = findViewById(R.id.cancel_button);
-
-        // Getting the Button for saveButton
-        saveButton = findViewById(R.id.save_button);
+        // Cancel Button used to discard changes and return to MainActivity
+        Button cancelButton = findViewById(R.id.cancel_button);
+        
+        // Cancel Button used to save changes and return to MainActivity
+        Button saveButton = findViewById(R.id.save_button);
 
         // Getting the View for the Note.iconUID
         noteIcon = findViewById(R.id.note_icon);
@@ -119,6 +112,31 @@ public class NoteActivity extends AppCompatActivity {
 
         // Displaying Note.content
         contentText.setText(note.content);
+
+        final TextView countTextView = findViewById(R.id.count_text);
+        int temp = getResources().getInteger(R.integer.note_content_max_length) - contentText.toString().length();
+        countTextView.setText(temp + "/" + getResources().getInteger(R.integer.note_content_max_length));
+
+        contentText.addTextChangedListener(new TextWatcher()
+        {
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count)
+            {
+            }
+
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int aft)
+            {
+            }
+
+            @Override
+            public void afterTextChanged(Editable s)
+            {
+                // this will show characters remaining
+                int temp = getResources().getInteger(R.integer.note_content_max_length) - s.toString().length();
+                countTextView.setText( temp + "/" + getResources().getInteger(R.integer.note_content_max_length));
+            }
+        });
 
         // [USELESS]
         // if the note is newly made,

@@ -132,12 +132,22 @@
         android:layout_height="match_parent"
         android:hint="@string/contentHint"
         android:inputType="textMultiLine|textCapSentences"
-        android:autofillHints="@string/contentHint"
         android:gravity="start"
-        android:imeOptions="actionNone"
+        android:imeOptions="actionDone"
         android:layout_marginHorizontal="8dp"
         android:layout_marginVertical="8dp"
+        android:maxLength="@integer/note_content_max_length"
         style="@style/black_standard_16sp"/>
+
+        <TextView
+            android:id="@+id/count_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            style="@style/darker_grey_italic_12sp_two_lines"
+            android:text="@string/contentHint"
+            android:paddingHorizontal="8dp"
+            android:layout_gravity="bottom|right"
+             />
 
     </androidx.cardview.widget.CardView>
 
