@@ -56,6 +56,7 @@ public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.myViewHolder> 
         void onDuplicateClick(int position);
         void onCopyContentClick(int position);
         void onDeleteClick(int position);
+        void onLongClickListener(int position);
     }
 
     public void setOnItemClickListener(OnItemClickListener listener){
@@ -108,6 +109,17 @@ public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.myViewHolder> 
                             listener.onItemClick(position);
                         }
                     }
+                }
+            });
+
+            itemView.setOnLongClickListener(new View.OnLongClickListener() {
+                @Override
+                public boolean onLongClick(View view) {
+
+                    // Allow for multiple notes selection
+                    listener.onLongClickListener(getAdapterPosition());
+
+                    return true;
                 }
             });
 

@@ -761,6 +761,11 @@ public class MainActivity extends AppCompatActivity implements Serializable {
                 // mAdapter.notifyDataSetChanged();
                 // mAdapter.notifyItemInserted(position);
             }
+
+            @Override
+            public void onLongClickListener(int position) {
+
+            }
         });
 
         // Setting the Layout Manager

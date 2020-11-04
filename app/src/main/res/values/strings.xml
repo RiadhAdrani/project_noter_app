@@ -24,6 +24,8 @@
     <string name="sort_modified">Modification date</string>
     <string name="sort_ascending">Ascending</string>
     <string name="sort_descending">Descending</string>
+    <string name="content">Text</string>
+    <string name="check_list">Check List</string>
 
     <!-- /////////////////////////////////////////////////////////////////////////////////////// -->
     <!--                              TOASTS, MESSAGES , ALERTS                                  -->
@@ -48,6 +50,7 @@
     <!-- /////////////////////////////////////////////////////////////////////////////////////// -->
     <!--                                   PLACEHOLDERS                                          -->
     <!-- /////////////////////////////////////////////////////////////////////////////////////// -->
+
     <string name="titleHint">Note Name</string>
     <string name="titleDefault">New Note</string>
     <string name="categoryDefault">Default Category</string>
@@ -76,6 +79,5 @@
     <string name="ic_key">Key</string>
     <string name="ic_coffee">Coffee</string>
     <string name="ic_bonfire">Bonfire</string>
-
 
 </resources>

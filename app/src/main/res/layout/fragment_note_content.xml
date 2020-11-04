@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <EditText
+        android:id="@+id/f_note_text"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:hint="@string/contentHint"
+        android:inputType="textMultiLine|textCapSentences"
+        android:gravity="start"
+        android:imeOptions="actionDone"
+        android:maxLength="@integer/note_content_max_length"
+        style="@style/black_standard_16sp"/>
+
+    <TextView
+        android:id="@+id/f_count_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        style="@style/darker_grey_italic_12sp_two_lines"
+        android:text="@string/contentHint"
+        android:padding="4dp"
+        android:layout_gravity="bottom|right"
+        />
+
+</LinearLayout>

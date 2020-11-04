@@ -1,13 +1,13 @@
 package com.example.noter;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.viewpager.widget.ViewPager;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
@@ -18,6 +18,8 @@ import android.widget.Spinner;
 import android.widget.SpinnerAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.google.android.material.tabs.TabLayout;
 
 import java.util.ArrayList;
 
@@ -43,9 +45,6 @@ public class NoteActivity extends AppCompatActivity {
     // View of the editable Note.title
     private EditText titleText;
 
-    // View of the editable Note.content
-    private EditText contentText;
-
     // View of the editable Note.iconUID
     private ImageView noteIcon;
 
@@ -65,6 +64,12 @@ public class NoteActivity extends AppCompatActivity {
 
     final static int NEW_POSITION = 2;
 
+    // Tab view
+    TabLayout tab;
+
+    // create a new fragment for the content
+    ContentFragment contentFragment;
+    ContentFragment dummyFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -95,8 +100,55 @@ public class NoteActivity extends AppCompatActivity {
         // Getting the View for the Note.title
         titleText = findViewById(R.id.note_title);
 
-        // Getting the View for the Note.content
-        contentText = findViewById(R.id.note_text);
+        // ----------------------------------------------------------------------------------------
+        //                                  HANDLING TAB LAYOUT
+        // ----------------------------------------------------------------------------------------
+
+        // initializing the new tab bar
+        tab = new TabLayout(this);
+        tab = findViewById(R.id.note_activity_tab);
+
+        // initializing viewPager
+        final ViewPager viewPager = findViewById(R.id.note_activity_pager);
+
+        // initializing FragmentAdapter
+        final NoteFragmentPager fragmentAdapter = new NoteFragmentPager(getSupportFragmentManager(),2);
+
+        // initializing Fragments
+        contentFragment = ContentFragment.newInstance(note.content);
+        dummyFragment = ContentFragment.newInstance(note.title);
+
+        // overriding fragment selection by position/index
+        fragmentAdapter.FragmentSelect(new NoteFragmentPager.FragmentSelect() {
+            @Override
+            public Fragment Selector(int position) {
+                switch (position){
+
+                    // TODO: add other fragment Activities
+                    case 0: return contentFragment;
+                    case 1: return dummyFragment;
+
+                }
+                return null;
+            }
+
+            @Override
+            public CharSequence TitleSetter(int position) {
+                switch (position){
+                    // TODO: add other tabs title
+                    // TODO: could add icons
+                    case 0: return getString(R.string.content);
+                    case 1: return getString(R.string.check_list);
+                }
+                return null;
+            }
+        });
+
+        viewPager.setAdapter(fragmentAdapter);
+        tab.setupWithViewPager(viewPager);
+
+        // ----------------------------------------------------------------------------------------
+        // ----------------------------------------------------------------------------------------
 
         // Cancel Button used to discard changes and return to MainActivity
         Button cancelButton = findViewById(R.id.cancel_button);
@@ -109,39 +161,6 @@ public class NoteActivity extends AppCompatActivity {
 
         // Displaying Note.title
         titleText.setText(note.title);
-
-        // Displaying Note.content
-        contentText.setText(note.content);
-
-        final TextView countTextView = findViewById(R.id.count_text);
-        int temp = getResources().getInteger(R.integer.note_content_max_length) - contentText.toString().length();
-        countTextView.setText(temp + "/" + getResources().getInteger(R.integer.note_content_max_length));
-
-        contentText.addTextChangedListener(new TextWatcher()
-        {
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count)
-            {
-            }
-
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int aft)
-            {
-            }
-
-            @Override
-            public void afterTextChanged(Editable s)
-            {
-                // this will show characters remaining
-                int temp = getResources().getInteger(R.integer.note_content_max_length) - s.toString().length();
-                countTextView.setText( temp + "/" + getResources().getInteger(R.integer.note_content_max_length));
-            }
-        });
-
-        // [USELESS]
-        // if the note is newly made,
-        // assign the default icon to the note
-        // if (noteIndex == -1) noteIcon.setImageResource(R.drawable.icon_small);
 
         // Displaying Note.iconUID
         noteIcon.setImageResource(note.getIcon(getApplicationContext()).id);
@@ -429,6 +448,8 @@ public class NoteActivity extends AppCompatActivity {
         mRecyclerView.setAdapter(mAdapter);
     }
 
+
+
     void SaveNoteExit(final int position){
         // Local note saving
 
@@ -443,7 +464,7 @@ public class NoteActivity extends AppCompatActivity {
         // not too short nor empty
         else {
 
-            ArrayList<Note> tempList = new ArrayList<Note>(mList);
+            ArrayList<Note> tempList = new ArrayList<>(mList);
 
             if (position != -1){
                 tempList.remove(position);
@@ -465,7 +486,13 @@ public class NoteActivity extends AppCompatActivity {
                             // if it is an old note
 
                             mList.get(position).title = titleText.getText().toString().trim();
-                            mList.get(position).content = contentText.getText().toString().trim();
+
+                            // TODO: change to fragment
+                            //mList.get(position).content = contentText.getText().toString().trim();
+
+                            // ???
+                            mList.get(position).content = contentFragment.getContent();
+
                             mList.get(position).iconUID = note.iconUID;
                             mList.get(position).category = note.category;
                             mList.get(position).lastModifiedDate = new MyDate().GET_CURRENT_DATE();
@@ -475,7 +502,13 @@ public class NoteActivity extends AppCompatActivity {
                         else {
                             Note mNote = new Note(getApplicationContext());
                             mNote.title = titleText.getText().toString().trim();
-                            mNote.content = contentText.getText().toString().trim();
+
+                            // TODO: change to fragment
+                            // mNote.content = contentText.getText().toString().trim();
+
+                            // ???
+                            mList.get(position).content = contentFragment.getContent();
+
                             mNote.iconUID = note.iconUID;
                             mNote.category = note.category;
                             mList.add(0,mNote);
@@ -492,7 +525,13 @@ public class NoteActivity extends AppCompatActivity {
                     // if it is an old note
 
                     mList.get(position).title = titleText.getText().toString().trim();
-                    mList.get(position).content = contentText.getText().toString().trim();
+
+                    // TODO: change to fragment
+                    // mList.get(position).content = contentText.getText().toString().trim();
+
+                    // ???
+                    mList.get(position).content = contentFragment.getContent();
+
                     mList.get(position).iconUID = note.iconUID;
                     mList.get(position).category = note.category;
                     mList.get(position).lastModifiedDate = new MyDate().GET_CURRENT_DATE();
@@ -502,7 +541,13 @@ public class NoteActivity extends AppCompatActivity {
                 else {
                     Note mNote = new Note(getApplicationContext());
                     mNote.title = titleText.getText().toString().trim();
-                    mNote.content = contentText.getText().toString().trim();
+
+                    // TODO: change to fragment
+                    // mNote.content = contentText.getText().toString().trim();
+
+                    // ???
+                    mList.get(position).content = contentFragment.getContent();
+
                     mNote.iconUID = note.iconUID;
                     mNote.category = note.category;
                     mList.add(0,mNote);
