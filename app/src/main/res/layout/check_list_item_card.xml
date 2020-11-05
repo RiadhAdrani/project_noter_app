@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="horizontal"
+    android:layout_width="match_parent"
+    android:layout_height="70dp"
+    >
+
+    <CheckBox
+        android:id="@+id/CLIC_checkBox"
+        android:scaleX="1.375"
+        android:scaleY="1.375"
+        android:gravity="center"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"/>
+
+    <TextView
+        android:id="@+id/CLIC_item_text"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:text="@string/checkListItemHint"
+        android:paddingHorizontal="4dp"
+        android:gravity="center_vertical"
+        style="@style/black_standard_16sp"
+        android:maxLength="50"
+        android:maxLines="2"
+        android:minLines="1"
+        />
+
+    <ImageView
+        android:id="@+id/CLIC_item_delete"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:scaleX="1.5"
+        android:scaleY="1.5"
+        android:paddingHorizontal="8dp"
+        android:src="@drawable/ic_trash_can_0"/>
+
+</LinearLayout>

@@ -118,7 +118,7 @@ public class NoteActivity extends AppCompatActivity {
         contentFragment = ContentFragment.newInstance(note.content);
 
         // TODO: change parameters for this fragment
-        checkListFragment = CheckListFragment.newInstance("");
+        checkListFragment = CheckListFragment.newInstance("",getApplicationContext());
 
         // overriding fragment selection by position/index
         fragmentAdapter.FragmentSelect(new NoteFragmentPager.FragmentSelect() {

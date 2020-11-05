@@ -42,7 +42,7 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.myView
         View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.category_card_layout,parent,false);
 
         // Return the inflated view to be displayed
-        return new CategoryAdapter.myViewHolder(v,listener,context);
+        return new CategoryAdapter.myViewHolder(v,listener);
     }
 
     @Override
@@ -72,7 +72,7 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.myView
         // TextView to display the category name
         public TextView mText;
 
-        public myViewHolder(@NonNull final View itemView, final OnCategoryClickListener listener, final Context context) {
+        public myViewHolder(@NonNull final View itemView, final OnCategoryClickListener listener) {
             super(itemView);
 
             mText = itemView.findViewById(R.id.category_name_textView);

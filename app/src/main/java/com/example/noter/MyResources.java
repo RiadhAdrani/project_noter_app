@@ -13,6 +13,7 @@ import com.google.gson.reflect.TypeToken;
 import java.io.Serializable;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.UUID;
 
 public class MyResources implements Serializable {
     // Class used to handle static resources
@@ -76,6 +77,23 @@ public class MyResources implements Serializable {
         // fill the icon list
         FILL_ICON_LIST();
     }
+
+    // ------------------------------------------------------------------------------------------//
+
+    // FUNCTION 35
+    // Create and return a dummy list of CheckListItems
+
+    public ArrayList<CheckListItem> GENERATE_DUMMY_CHECK_LIST_ITEMS(int size){
+
+        ArrayList<CheckListItem> list = new ArrayList<>();
+
+        for (int i = 0; i< size; i++){
+            list.add(new CheckListItem(UUID.randomUUID().toString()));
+        }
+
+        return list;
+    }
+
 
     // ------------------------------------------------------------------------------------------//
 
