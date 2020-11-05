@@ -58,6 +58,7 @@
     <string name="contentHint">What\'s new today\? </string>
     <string name="inputHint">Your input here</string>
     <string name="copy"> (copy)</string>
+    <string name="checkListItemHint">To do …</string>
 
     <!-- /////////////////////////////////////////////////////////////////////////////////////// -->
     <!--                                     ICONS NAME                                          -->

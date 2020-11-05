@@ -7,47 +7,25 @@ import androidx.fragment.app.Fragment;
 
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.TextView;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link ContentFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
 public class ContentFragment extends Fragment {
-
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
 
     private static final String CONTENT = "param1";
 
     // TODO: Rename and change types of parameters
     public String fContent;
 
-    private GetData getData;
-
-    public void onGetData(GetData getData){
-        this.getData = getData;
-    }
-
     EditText contentView;
 
+    // Required empty public constructor
     public ContentFragment() {
-        // Required empty public constructor
-    }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1
-     * @return A new instance of fragment ContentFragment.
-     */
-    // TODO: Rename and change types and number of parameters
+    }
 
     // handling parameters
     public static ContentFragment newInstance(String param1) {
@@ -69,9 +47,6 @@ public class ContentFragment extends Fragment {
         if (getArguments() != null) {
             fContent = getArguments().getString(CONTENT);
         }
-
-        if (getView() == null) Log.d("DEBUG_FRAGMENT","View is null");
-        else Log.d("DEBUG_FRAGMENT","All good");
 
     }
 
@@ -118,10 +93,6 @@ public class ContentFragment extends Fragment {
 
     public String getContent(){
         return contentView.getText().toString().trim();
-    }
-
-    interface GetData{
-        String GetString();
     }
 
 }

@@ -69,7 +69,7 @@ public class NoteActivity extends AppCompatActivity {
 
     // create a new fragment for the content
     ContentFragment contentFragment;
-    ContentFragment dummyFragment;
+    CheckListFragment checkListFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -116,7 +116,9 @@ public class NoteActivity extends AppCompatActivity {
 
         // initializing Fragments
         contentFragment = ContentFragment.newInstance(note.content);
-        dummyFragment = ContentFragment.newInstance(note.title);
+
+        // TODO: change parameters for this fragment
+        checkListFragment = CheckListFragment.newInstance("");
 
         // overriding fragment selection by position/index
         fragmentAdapter.FragmentSelect(new NoteFragmentPager.FragmentSelect() {
@@ -126,7 +128,7 @@ public class NoteActivity extends AppCompatActivity {
 
                     // TODO: add other fragment Activities
                     case 0: return contentFragment;
-                    case 1: return dummyFragment;
+                    case 1: return checkListFragment;
 
                 }
                 return null;

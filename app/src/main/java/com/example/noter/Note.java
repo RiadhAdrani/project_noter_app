@@ -3,6 +3,7 @@ package com.example.noter;
 import android.content.Context;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Date;
 
 public class Note implements Serializable {
@@ -27,6 +28,9 @@ public class Note implements Serializable {
     // category of the note
     public String category;
 
+    // checkList
+    public ArrayList<CheckListItem> checkList;
+
     // basic constructor;
     public Note(Context context){
         MyResources r = new MyResources(context);
@@ -36,6 +40,7 @@ public class Note implements Serializable {
         this.creationDate = new MyDate().GET_CURRENT_DATE();
         this.lastModifiedDate = new MyDate().GET_CURRENT_DATE();
         this.category = r.GET_CATEGORY_BY_UID(MyResources.DEFAULT_CATEGORY.UID);
+        this.checkList = new ArrayList<>();
     }
 
     Icon getIcon(Context context){
@@ -43,5 +48,23 @@ public class Note implements Serializable {
 
         MyResources r = new MyResources(context);
         return r.GET_ICON(this.iconUID);
+    }
+
+    // return the number of undone items in the checklist
+    public int getUndoneCount(){
+        int x = 0;
+        for (CheckListItem item : checkList) {
+            if (!item.isDone) x++;
+        }
+        return x;
+    }
+
+    // return the number of done items in the checklist
+    public int getDoneCount(){
+        int x = 0;
+        for (CheckListItem item : checkList) {
+            if (item.isDone) x++;
+        }
+        return x;
     }
 }
