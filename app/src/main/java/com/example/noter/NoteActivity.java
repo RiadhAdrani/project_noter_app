@@ -117,8 +117,14 @@ public class NoteActivity extends AppCompatActivity {
         // initializing Fragments
         contentFragment = ContentFragment.newInstance(note.content);
 
-        // TODO: change parameters for this fragment
-        checkListFragment = CheckListFragment.newInstance("",getApplicationContext());
+        // CheckListFragment implementation
+        checkListFragment = CheckListFragment.newInstance(note.checkList,getApplicationContext());
+        checkListFragment.setCheckListFragmentMethods(new CheckListFragment.CheckListFragmentMethods() {
+            @Override
+            public void onCheckListItemAdded() {
+                note.checkList = checkListFragment.getCheckListItems();
+            }
+        });
 
         // overriding fragment selection by position/index
         fragmentAdapter.FragmentSelect(new NoteFragmentPager.FragmentSelect() {
@@ -452,6 +458,8 @@ public class NoteActivity extends AppCompatActivity {
 
 
 
+    // TODO: refactor saving, so bad
+
     void SaveNoteExit(final int position){
         // Local note saving
 
@@ -489,15 +497,15 @@ public class NoteActivity extends AppCompatActivity {
 
                             mList.get(position).title = titleText.getText().toString().trim();
 
-                            // TODO: change to fragment
-                            //mList.get(position).content = contentText.getText().toString().trim();
-
                             // ???
                             mList.get(position).content = contentFragment.getContent();
 
                             mList.get(position).iconUID = note.iconUID;
                             mList.get(position).category = note.category;
                             mList.get(position).lastModifiedDate = new MyDate().GET_CURRENT_DATE();
+
+                            // saving checkList
+                            mList.get(position).checkList = note.checkList;
 
                         }
 
@@ -513,6 +521,10 @@ public class NoteActivity extends AppCompatActivity {
 
                             mNote.iconUID = note.iconUID;
                             mNote.category = note.category;
+
+                            // saving checkList
+                            mList.get(position).checkList = note.checkList;
+
                             mList.add(0,mNote);
                         }
 
@@ -536,6 +548,10 @@ public class NoteActivity extends AppCompatActivity {
 
                     mList.get(position).iconUID = note.iconUID;
                     mList.get(position).category = note.category;
+
+                    // saving checkList
+                    mList.get(position).checkList = note.checkList;
+
                     mList.get(position).lastModifiedDate = new MyDate().GET_CURRENT_DATE();
 
                 }
@@ -552,6 +568,10 @@ public class NoteActivity extends AppCompatActivity {
 
                     mNote.iconUID = note.iconUID;
                     mNote.category = note.category;
+
+                    // saving checkList
+                    mList.get(position).checkList = note.checkList;
+
                     mList.add(0,mNote);
                 }
 
