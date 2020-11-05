@@ -1,9 +1,11 @@
 package com.example.noter;
 
+import android.graphics.Paint;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -20,6 +22,9 @@ public class CheckListAdapter extends RecyclerView.Adapter<CheckListAdapter.myVi
 
     // contains the check List
     ArrayList<CheckListItem> cList;
+
+    // listener for the item clicks
+    OnItemClick listener;
 
     // public constructor
     public CheckListAdapter(ArrayList<CheckListItem> list){
@@ -57,21 +62,58 @@ public class CheckListAdapter extends RecyclerView.Adapter<CheckListAdapter.myVi
     }
 
     @Override
-    public void onBindViewHolder(@NonNull CheckListAdapter.myViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull final CheckListAdapter.myViewHolder holder, final int position) {
         // Assign information to the existing View elements
         // to be displayed
 
-        CheckListItem currentItem = cList.get(position);
+        final CheckListItem currentItem = cList.get(position);
 
         // filling the holder with information from the current item
 
+        // setting the status of the checkBox
         holder.statusBox.setChecked(currentItem.isDone);
 
+        holder.statusBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+
+                // if (listener != null) listener.onItemChecked(position);
+
+                currentItem.isDone = holder.statusBox.isChecked();
+
+                if (currentItem.isDone) holder.description.setPaintFlags(holder.description.getPaintFlags()| Paint.STRIKE_THRU_TEXT_FLAG);
+                else holder.description.setPaintFlags( holder.description.getPaintFlags() & (~ Paint.STRIKE_THRU_TEXT_FLAG));
+
+            }
+        });
+
+        // setting the text of the current check list item
         holder.description.setText(currentItem.text.trim());
+
+        // overriding the action of the delete button
+        holder.deleteItem.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                // checking if the listener is not null/empty
+                // and executing the overridden method
+                if (listener != null) listener.onDeleteClick(position);
+            }
+        });
+
     }
 
     @Override
     public int getItemCount() {
         return cList.size();
+    }
+
+    public interface OnItemClick{
+        void onDeleteClick(int position);
+        void onItemChecked(int position);
+    }
+
+    public void setOnItemClick(OnItemClick listener){
+        this.listener = listener;
     }
 }

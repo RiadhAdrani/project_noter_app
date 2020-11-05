@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
@@ -81,6 +82,25 @@ public class CheckListFragment extends Fragment{
         RecyclerView rv = getView().findViewById(R.id.fragment_checklist_recycler);
 
         final CheckListAdapter checkListAdapter = new CheckListAdapter(list);
+        checkListAdapter.setOnItemClick(new CheckListAdapter.OnItemClick() {
+            @Override
+            public void onDeleteClick(int position) {
+
+                // TODO: create a confirmation dialog for the item deletion
+
+                // remove the item from the list
+                list.remove(position);
+
+                // refresh the recyclerView
+                checkListAdapter.notifyItemRemoved(position);
+                checkListAdapter.notifyItemRangeChanged(position,list.size());
+            }
+
+            @Override
+            public void onItemChecked(int position) {
+
+            }
+        });
 
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(context);
 
@@ -105,13 +125,26 @@ public class CheckListFragment extends Fragment{
                 // create a new CheckListItem fom the input text
                 CheckListItem newItem = new CheckListItem(addText.getText().toString().trim());
 
-                // insert the new item into the list
-                list.add(0,newItem);
+                // check if the description is invalid : too short or empty
+                if (newItem.text.isEmpty() || newItem.text.length() < 3){
 
-                if (methods != null) methods.onCheckListItemAdded();
+                    // display a toast alert
+                    Toast.makeText(getContext(),getString(R.string.check_list_item_short_alert),Toast.LENGTH_SHORT).show();
+                }
+                // description is valid
+                else {
+                    // insert the new item into the list
+                    list.add(0,newItem);
 
-                // refresh the recyclerView
-                checkListAdapter.notifyItemInserted(0);
+                    if (methods != null) methods.onCheckListItemAdded();
+
+                    // refresh the recyclerView
+                    checkListAdapter.notifyItemInserted(0);
+
+                    addText.setText("");
+                }
+
+
             }
         });
 
