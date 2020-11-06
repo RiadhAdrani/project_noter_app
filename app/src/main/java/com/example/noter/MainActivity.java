@@ -95,6 +95,8 @@ public class MainActivity extends AppCompatActivity implements Serializable {
 
         RefreshCurrentCategory();
 
+        BuildCategoryRecyclerView();
+
         // Loading notes from SharedPreferences
         nList = MY_RESOURCES.LOAD_NOTES_FROM_SHARED_PREFERENCES(MyResources.NOTE_KEY);
 
@@ -165,6 +167,9 @@ public class MainActivity extends AppCompatActivity implements Serializable {
                                 AddCategory(newCategory,NEW_CATEGORY_POSITION);
 
                                 // cAdapter.notifyItemInserted(NEW_CATEGORY_POSITION);
+
+                                // cAdapter.notifyItemInserted(NEW_CATEGORY_POSITION);
+                                // cAdapter.notifyItemRangeChanged(NEW_CATEGORY_POSITION,cList.size()-1);
 
                                 // NOT OPTIMIZED ↓↓↓↓↓↓↓↓↓↓
                                 BuildCategoryRecyclerView();

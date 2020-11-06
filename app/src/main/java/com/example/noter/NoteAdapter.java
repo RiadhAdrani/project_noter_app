@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 import android.widget.Filter;
 import android.widget.Filterable;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.PopupMenu;
 import android.widget.TextView;
 
@@ -75,16 +76,24 @@ public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.myViewHolder> 
         public TextView mContentPreview;
         public ImageView mOptions;
         public PopupMenu mPopup;
+        public LinearLayout mCardInfo;
+        public ImageView mCheckListIcon;
+        public TextView mCheckListCount;
 
         public myViewHolder(@NonNull View itemView, final OnItemClickListener listener, final Context mContext, final NoteAdapter adapter) {
             super(itemView);
 
+            // initializing views
             mImageView = itemView.findViewById(R.id.card_icon);
             mTitle = itemView.findViewById(R.id.card_title);
             mCategory = itemView.findViewById(R.id.card_category);
             mContentPreview = itemView.findViewById(R.id.card_preview);
             mOptions = itemView.findViewById(R.id.card_options);
+            mCheckListIcon = itemView.findViewById(R.id.card_check_list_icon);
+            mCheckListCount = itemView.findViewById(R.id.card_check_list_count);
+            mCardInfo = itemView.findViewById(R.id.card_addition_preview);
 
+            // create a popup menu
             mPopup = new PopupMenu(mContext,mOptions);
             mPopup.inflate(R.menu.card_option_menu);
             mPopup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
@@ -159,12 +168,38 @@ public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.myViewHolder> 
         holder.mImageView.setImageResource(new MyResources(mContext).GET_ICON(currentNote.iconUID).id);
         holder.mTitle.setText(currentNote.title);
 
+        // if for some reason the note does not have any category UID assigned to it,
+        // set the UID to the DEFAULT_CATEGORY_UID
         if (currentNote.category == null){
             currentNote.category = MyResources.DEFAULT_CATEGORY.UID;
         }
 
         holder.mCategory.setText(myResources.GET_CATEGORY(currentNote.category).name);
         holder.mContentPreview.setText(currentNote.content);
+
+        // if there is no additional information to show
+        // set section visibility to GONE
+        if (currentNote.checkList.isEmpty()){
+            holder.mCardInfo.setVisibility(View.GONE);
+        }
+        // else there is information to display
+        else {
+
+            // checkList information
+            // if empty hide, else display
+            if (currentNote.checkList.isEmpty()){
+                holder.mCheckListIcon.setVisibility(View.INVISIBLE);
+                holder.mCheckListCount.setVisibility(View.INVISIBLE);
+            }
+            else {
+                String checkListCountText = currentNote.getDoneCount()+"/"+currentNote.checkList.size();
+                holder.mCheckListCount.setText(checkListCountText);
+            }
+
+        }
+
+
+
     }
 
     @Override

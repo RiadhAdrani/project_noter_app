@@ -81,14 +81,22 @@ public class CheckListAdapter extends RecyclerView.Adapter<CheckListAdapter.myVi
 
                 currentItem.isDone = holder.statusBox.isChecked();
 
-                if (currentItem.isDone) holder.description.setPaintFlags(holder.description.getPaintFlags()| Paint.STRIKE_THRU_TEXT_FLAG);
-                else holder.description.setPaintFlags( holder.description.getPaintFlags() & (~ Paint.STRIKE_THRU_TEXT_FLAG));
+                if (currentItem.isDone) {
+                    holder.description.setPaintFlags(holder.description.getPaintFlags()| Paint.STRIKE_THRU_TEXT_FLAG);
+                }
+                else {
+                    holder.description.setPaintFlags( holder.description.getPaintFlags() & (~ Paint.STRIKE_THRU_TEXT_FLAG));
+                }
 
             }
         });
 
         // setting the text of the current check list item
         holder.description.setText(currentItem.text.trim());
+
+        // if item is checked, paint a strike through line, else clear paint style
+        if (currentItem.isDone) holder.description.setPaintFlags(holder.description.getPaintFlags()| Paint.STRIKE_THRU_TEXT_FLAG);
+        else holder.description.setPaintFlags( holder.description.getPaintFlags() & (~ Paint.STRIKE_THRU_TEXT_FLAG));
 
         // overriding the action of the delete button
         holder.deleteItem.setOnClickListener(new View.OnClickListener() {

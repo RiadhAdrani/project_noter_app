@@ -60,6 +60,7 @@
     <string name="inputHint">Your input here</string>
     <string name="copy"> (copy)</string>
     <string name="checkListItemHint">To do …</string>
+    <string name="checkListCountHolder">0/0</string>
 
     <!-- /////////////////////////////////////////////////////////////////////////////////////// -->
     <!--                                     ICONS NAME                                          -->
