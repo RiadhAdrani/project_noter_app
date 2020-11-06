@@ -460,10 +460,10 @@ public class NoteActivity extends AppCompatActivity {
 
     // TODO: refactor saving, so bad
 
-    void SaveNoteExit(final int position){
+    void SaveNoteExitOld(final int position){
         // Local note saving
 
-        // if the note name is empty
+        // if the note name is empty or too short
         if (titleText.getText().toString().trim().isEmpty() || titleText.getText().toString().trim().length() < MyResources.NOTE_MINIMUM_NAME_LENGTH){
 
             // display alert message to the user
@@ -480,6 +480,7 @@ public class NoteActivity extends AppCompatActivity {
                 tempList.remove(position);
             }
 
+            // check if the note name exists already
             if (MY_RESOURCES.CHECK_IF_NOTE_TITLE_EXIST(tempList,titleText.getText().toString().trim())){
                 final ConfirmDialog confirmDialog = new ConfirmDialog(getApplicationContext(),getString(R.string.duplicate_note_title_alert));
                 confirmDialog.show(getSupportFragmentManager(),"duplicate note title");
@@ -513,10 +514,6 @@ public class NoteActivity extends AppCompatActivity {
                             Note mNote = new Note(getApplicationContext());
                             mNote.title = titleText.getText().toString().trim();
 
-                            // TODO: change to fragment
-                            // mNote.content = contentText.getText().toString().trim();
-
-                            // ???
                             mList.get(position).content = contentFragment.getContent();
 
                             mNote.iconUID = note.iconUID;
@@ -540,9 +537,6 @@ public class NoteActivity extends AppCompatActivity {
 
                     mList.get(position).title = titleText.getText().toString().trim();
 
-                    // TODO: change to fragment
-                    // mList.get(position).content = contentText.getText().toString().trim();
-
                     // ???
                     mList.get(position).content = contentFragment.getContent();
 
@@ -560,8 +554,6 @@ public class NoteActivity extends AppCompatActivity {
                     Note mNote = new Note(getApplicationContext());
                     mNote.title = titleText.getText().toString().trim();
 
-                    // TODO: change to fragment
-                    // mNote.content = contentText.getText().toString().trim();
 
                     // ???
                     mList.get(position).content = contentFragment.getContent();
@@ -570,7 +562,7 @@ public class NoteActivity extends AppCompatActivity {
                     mNote.category = note.category;
 
                     // saving checkList
-                    mList.get(position).checkList = note.checkList;
+                    mNote.checkList = note.checkList;
 
                     mList.add(0,mNote);
                 }
@@ -593,6 +585,103 @@ public class NoteActivity extends AppCompatActivity {
         Intent i = new Intent(this, MainActivity.class);
         startActivity(i);
         finish();
+    }
+
+    void Save(int index){
+        if (index == -1){
+
+            // creating new note
+            Note mNote = new Note(getApplicationContext());
+
+            // title
+            mNote.title = titleText.getText().toString().trim();
+
+            // text
+            mNote.content = contentFragment.getContent();
+
+            // icon
+            mNote.iconUID = note.iconUID;
+
+            // category
+            mNote.category = note.category;
+
+            // checklist
+            mNote.checkList = checkListFragment.getCheckListItems() != null ? checkListFragment.getCheckListItems() : new ArrayList<CheckListItem>();
+
+            // adding the note
+            mList.add(0,mNote);
+        }
+        else {
+
+            // title
+            mList.get(index).title = titleText.getText().toString().trim();
+
+            // text
+            mList.get(index).content = contentFragment.getContent().trim();
+
+            // icon
+            mList.get(index).iconUID = note.iconUID;
+
+            // category
+            mList.get(index).category = note.category;
+
+            // checklist
+            mList.get(index).checkList = checkListFragment.getCheckListItems() != null ? checkListFragment.getCheckListItems() : new ArrayList<CheckListItem>();
+        }
+    }
+
+    void SaveNoteExit(final int position){
+        // Local note saving
+
+        // if the note name is empty or too short
+        if (titleText.getText().toString().trim().isEmpty() || titleText.getText().toString().trim().length() < MyResources.NOTE_MINIMUM_NAME_LENGTH){
+
+            // display alert message to the user
+            Toast.makeText(getApplicationContext(),getString(R.string.note_name_short_alert),Toast.LENGTH_SHORT).show();
+        }
+
+        // name is valid
+        // not too short nor empty
+        else {
+
+            ArrayList<Note> tempList = new ArrayList<>(mList);
+
+            if (position != -1){
+                tempList.remove(position);
+            }
+
+            // check if the note name exists already
+            if (MY_RESOURCES.CHECK_IF_NOTE_TITLE_EXIST(tempList,titleText.getText().toString().trim())){
+                final ConfirmDialog confirmDialog = new ConfirmDialog(getApplicationContext(),getString(R.string.duplicate_note_title_alert));
+                confirmDialog.show(getSupportFragmentManager(),"duplicate note title");
+                confirmDialog.setButtons(new ConfirmDialog.Buttons() {
+                    @Override
+                    public void onCancelClickListener() {
+                        confirmDialog.dismiss();
+                    }
+
+                    @Override
+                    public void onConfirmClickListener() {
+
+                        Save(position);
+
+                        MY_RESOURCES.SAVE_NOTES_TO_SHARED_PREFERENCES(mList,MyResources.NOTE_KEY);
+                        CancelExit();
+
+                    }
+                });
+            } else {
+
+                Save(position);
+
+                MY_RESOURCES.SAVE_NOTES_TO_SHARED_PREFERENCES(mList,MyResources.NOTE_KEY);
+                CancelExit();
+
+            }
+
+
+        }
+
     }
 
 }
