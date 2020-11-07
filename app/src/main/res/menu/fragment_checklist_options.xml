@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item android:id="@+id/fragment_display"
+        android:title="@string/check_list_display_option"
+        app:showAsAction="never"
+        >
+
+        <menu>
+            <item android:id="@+id/fragment_d_all"
+                android:title="@string/check_list_display_all"
+                app:showAsAction="never"
+                />
+            <item android:id="@+id/fragment_d_done"
+                android:title="@string/check_list_display_done"
+                app:showAsAction="never"
+                />
+            <item android:id="@+id/fragment_d_undone"
+                android:title="@string/check_list_display_Undone"
+                app:showAsAction="never"
+                />
+        </menu>
+
+    </item>
+
+    <item android:id="@+id/fragment_sort"
+        android:title="@string/check_list_sort_option"
+        app:showAsAction="never"
+        >
+
+        <menu>
+            <item android:id="@+id/fragment_s_type"
+                android:title="@string/sort_ascending"
+                app:showAsAction="never"
+                />
+            <item android:id="@+id/fragment_s_alpha"
+                android:title="@string/check_list_sort_alpha"
+                app:showAsAction="never"
+                />
+            <item android:id="@+id/fragment_s_creation"
+                android:title="@string/check_list_sort_creation_date"
+                app:showAsAction="never"
+                />
+            <item android:id="@+id/fragment_s_finished"
+                android:title="@string/check_list_sort_done_date"
+                app:showAsAction="never"
+                />
+        </menu>
+
+    </item>
+
+</menu>

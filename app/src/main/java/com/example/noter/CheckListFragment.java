@@ -2,8 +2,6 @@ package com.example.noter;
 
 import android.content.Context;
 import android.os.Bundle;
-import android.os.Parcel;
-import android.os.Parcelable;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,11 +16,11 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
+import java.util.Objects;
 
 
 public class CheckListFragment extends Fragment{
 
-    // TODO: change and add parameters
     private static final String PARAM1 = "param1";
 
     private final Context context;
@@ -79,21 +77,34 @@ public class CheckListFragment extends Fragment{
 
         // MyResources myResources = new MyResources(context);
 
-        RecyclerView rv = getView().findViewById(R.id.fragment_checklist_recycler);
+        RecyclerView rv = Objects.requireNonNull(getView()).findViewById(R.id.fragment_checklist_recycler);
 
         final CheckListAdapter checkListAdapter = new CheckListAdapter(list);
         checkListAdapter.setOnItemClick(new CheckListAdapter.OnItemClick() {
             @Override
-            public void onDeleteClick(int position) {
+            public void onDeleteClick(final int position) {
 
-                // TODO: create a confirmation dialog for the item deletion
+                final ConfirmDialog dialog = new ConfirmDialog(getContext(),getString(R.string.delete_check_list_alert));
+                dialog.show(getChildFragmentManager(),"delete item");
+                dialog.setButtons(new ConfirmDialog.Buttons() {
+                    @Override
+                    public void onCancelClickListener() {
+                        dialog.dismiss();
+                    }
 
-                // remove the item from the list
-                list.remove(position);
+                    @Override
+                    public void onConfirmClickListener() {
+                        // remove the item from the list
+                        list.remove(position);
 
-                // refresh the recyclerView
-                checkListAdapter.notifyItemRemoved(position);
-                checkListAdapter.notifyItemRangeChanged(position,list.size());
+                        // refresh the recyclerView
+                        checkListAdapter.notifyItemRemoved(position);
+                        checkListAdapter.notifyItemRangeChanged(position,list.size());
+
+                        dialog.dismiss();
+                    }
+                });
+
             }
 
             @Override
@@ -107,12 +118,12 @@ public class CheckListFragment extends Fragment{
         rv.setLayoutManager(linearLayoutManager);
         rv.setAdapter(checkListAdapter);
 
-        // TODO: display, add, remove and edit checkList
-
         // initializing views
         final EditText addText = getView().findViewById(R.id.fragment_checklist_add_text);
         ImageButton addButton = getView().findViewById(R.id.fragment_checklist_add_button);
-        ImageButton sortTab = getView().findViewById(R.id.fragment_checklist_sort);
+
+        // unused
+        // final ImageButton sortTab = getView().findViewById(R.id.fragment_checklist_sort);
 
         // overriding with specific action
 
@@ -154,11 +165,6 @@ public class CheckListFragment extends Fragment{
     // from noteActivity
     public ArrayList<CheckListItem> getCheckListItems(){
         return list;
-    }
-
-    // sort list & refresh the recyclerView
-    private void RefreshRecyclerView(){
-
     }
 
     interface CheckListFragmentMethods{

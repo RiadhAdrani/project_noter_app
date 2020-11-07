@@ -26,6 +26,14 @@
     <string name="sort_descending">Descending</string>
     <string name="content">Text</string>
     <string name="check_list">Check List</string>
+    <string name="check_list_display_option">Show</string>
+    <string name="check_list_display_all">All</string>
+    <string name="check_list_display_done">Done</string>
+    <string name="check_list_display_Undone">Undone</string>
+    <string name="check_list_sort_option">Sort</string>
+    <string name="check_list_sort_alpha">Alpha</string>
+    <string name="check_list_sort_creation_date">Creation</string>
+    <string name="check_list_sort_done_date">Completion</string>
 
     <!-- /////////////////////////////////////////////////////////////////////////////////////// -->
     <!--                              TOASTS, MESSAGES , ALERTS                                  -->
@@ -45,6 +53,7 @@
     <string name="category_short_alert">Category name is empty or too short!</string>
     <string name="note_name_short_alert">Note name is empty or too short!</string>
     <string name="delete_note_alert">Confirm deleting note :</string>
+    <string name="delete_check_list_alert">Confirm deleting this item? </string>
     <string name="duplicate_note_title_alert">A note with the same name exists, are you sure you want to continue?</string>
     <string name="check_list_item_short_alert">Item description is empty or too short !</string>
 

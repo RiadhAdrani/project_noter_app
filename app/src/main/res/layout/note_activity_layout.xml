@@ -92,7 +92,7 @@
                 android:layout_marginHorizontal="16dp"
                 android:layout_marginVertical="8dp"
                 android:paddingHorizontal="2dp"
-                style="@style/black_standard_20sp"
+                style="@style/black_standard_16sp"
                 android:autofillHints="@string/contentHint"
                 android:inputType="textCapWords" />
 
