@@ -7,10 +7,12 @@ import androidx.fragment.app.Fragment;
 
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.text.method.ScrollingMovementMethod;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.Scroller;
 import android.widget.TextView;
 
 public class ContentFragment extends Fragment {
@@ -56,6 +58,11 @@ public class ContentFragment extends Fragment {
 
         contentView = getView().findViewById(R.id.f_note_text);
         contentView.setText(fContent);
+
+        // add a scroller for the EditText view
+        contentView.setScroller(new Scroller(getContext()));
+        contentView.setVerticalScrollBarEnabled(true);
+        contentView.setMovementMethod(new ScrollingMovementMethod());
 
         final TextView contentCounter = getView().findViewById(R.id.f_count_text);
         int temp = getResources().getInteger(R.integer.note_content_max_length) - contentView.length();
