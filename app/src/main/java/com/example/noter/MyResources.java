@@ -29,7 +29,7 @@ public class MyResources implements Serializable {
 
     // static keys for SharedPreferences
     // and transferring data from an Activity to another.
-    public static String NOTE_KEY = "NOTER_NOTE";
+    public static String NOTE_LIST_KEY = "NOTER_NOTE";
     public static String CATEGORY_KEY = "NOTER_CATEGORY";
     public static String LOAD_NOTE_KEY = "LOAD_NOTE";
     public static String CURRENT_CATEGORY_KEY = "CURRENT_CATEGORY";

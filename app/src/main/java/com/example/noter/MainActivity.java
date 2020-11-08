@@ -98,7 +98,7 @@ public class MainActivity extends AppCompatActivity implements Serializable {
         BuildCategoryRecyclerView();
 
         // Loading notes from SharedPreferences
-        nList = MY_RESOURCES.LOAD_NOTES_FROM_SHARED_PREFERENCES(MyResources.NOTE_KEY);
+        nList = MY_RESOURCES.LOAD_NOTES_FROM_SHARED_PREFERENCES(MyResources.NOTE_LIST_KEY);
 
         // Applying existing category filter
         mList = MY_RESOURCES.FILTER_NOTES_BY_CATEGORY(nList,currentCategory);
@@ -412,10 +412,10 @@ public class MainActivity extends AppCompatActivity implements Serializable {
                         cList = MY_RESOURCES.GET_CATEGORY_LIST();
 
                         // saving notes to shared preferences
-                        MY_RESOURCES.SAVE_NOTES_TO_SHARED_PREFERENCES(nList,MyResources.NOTE_KEY);
+                        MY_RESOURCES.SAVE_NOTES_TO_SHARED_PREFERENCES(nList,MyResources.NOTE_LIST_KEY);
 
                         // getting notes from the shared preferences
-                        nList = MY_RESOURCES.LOAD_NOTES_FROM_SHARED_PREFERENCES(MyResources.NOTE_KEY);
+                        nList = MY_RESOURCES.LOAD_NOTES_FROM_SHARED_PREFERENCES(MyResources.NOTE_LIST_KEY);
 
                         // filter category
                         mList = MY_RESOURCES.FILTER_NOTES_BY_CATEGORY(nList,currentCategory);
@@ -538,7 +538,7 @@ public class MainActivity extends AppCompatActivity implements Serializable {
         // Some Updates to be called when the activity Starts
 
         super.onStart();
-        nList = MY_RESOURCES.LOAD_NOTES_FROM_SHARED_PREFERENCES(MyResources.NOTE_KEY);
+        nList = MY_RESOURCES.LOAD_NOTES_FROM_SHARED_PREFERENCES(MyResources.NOTE_LIST_KEY);
         RefreshCurrentCategory();
         RefreshSorting();
     }
@@ -548,7 +548,7 @@ public class MainActivity extends AppCompatActivity implements Serializable {
         // Some Automatic saving
 
         super.onPause();
-        MY_RESOURCES.SAVE_NOTES_TO_SHARED_PREFERENCES(nList,MyResources.NOTE_KEY);
+        MY_RESOURCES.SAVE_NOTES_TO_SHARED_PREFERENCES(nList,MyResources.NOTE_LIST_KEY);
         MY_RESOURCES.SAVE_SINGLE_CATEGORY_TO_SHARED_PREFERENCES(currentCategory,MyResources.CURRENT_CATEGORY_KEY);
 
         MY_RESOURCES.SAVE_BOOLEAN_TO_SHARED_PREFERENCES(isAscending,MyResources.CURRENT_SORTING_TYPE_KEY);
@@ -560,7 +560,7 @@ public class MainActivity extends AppCompatActivity implements Serializable {
         // Some Automatic saving
 
         super.onStop();
-        MY_RESOURCES.SAVE_NOTES_TO_SHARED_PREFERENCES(nList,MyResources.NOTE_KEY);
+        MY_RESOURCES.SAVE_NOTES_TO_SHARED_PREFERENCES(nList,MyResources.NOTE_LIST_KEY);
         MY_RESOURCES.SAVE_SINGLE_CATEGORY_TO_SHARED_PREFERENCES(currentCategory,MyResources.CURRENT_CATEGORY_KEY);
 
         MY_RESOURCES.SAVE_BOOLEAN_TO_SHARED_PREFERENCES(isAscending,MyResources.CURRENT_SORTING_TYPE_KEY);
@@ -572,7 +572,7 @@ public class MainActivity extends AppCompatActivity implements Serializable {
         // Some Updates to be called when the activity Starts
 
         super.onRestart();
-        nList = MY_RESOURCES.LOAD_NOTES_FROM_SHARED_PREFERENCES(MyResources.NOTE_KEY);
+        nList = MY_RESOURCES.LOAD_NOTES_FROM_SHARED_PREFERENCES(MyResources.NOTE_LIST_KEY);
         RefreshCurrentCategory();
         RefreshSorting();
         BuildNoteRecyclerView();
@@ -583,7 +583,7 @@ public class MainActivity extends AppCompatActivity implements Serializable {
         // Some Updates to be called when the activity Starts
 
         super.onResume();
-        nList = MY_RESOURCES.LOAD_NOTES_FROM_SHARED_PREFERENCES(MyResources.NOTE_KEY);
+        nList = MY_RESOURCES.LOAD_NOTES_FROM_SHARED_PREFERENCES(MyResources.NOTE_LIST_KEY);
         RefreshCurrentCategory();
         RefreshSorting();
         BuildNoteRecyclerView();
@@ -806,10 +806,10 @@ public class MainActivity extends AppCompatActivity implements Serializable {
                 nList.remove(MY_RESOURCES.GET_NOTE_INDEX(mList,mList.get(position)));
 
                 // saving the new list
-                MY_RESOURCES.SAVE_NOTES_TO_SHARED_PREFERENCES(nList,MyResources.NOTE_KEY);
+                MY_RESOURCES.SAVE_NOTES_TO_SHARED_PREFERENCES(nList,MyResources.NOTE_LIST_KEY);
 
                 // updating the local list
-                nList = MY_RESOURCES.LOAD_NOTES_FROM_SHARED_PREFERENCES(MyResources.NOTE_KEY);
+                nList = MY_RESOURCES.LOAD_NOTES_FROM_SHARED_PREFERENCES(MyResources.NOTE_LIST_KEY);
 
                 // update
                 mList = MY_RESOURCES.FILTER_NOTES_BY_CATEGORY(nList,currentCategory);
@@ -840,10 +840,10 @@ public class MainActivity extends AppCompatActivity implements Serializable {
         nList.add(0,tempNote);
 
         // saving changes to the shared preferences
-        MY_RESOURCES.SAVE_NOTES_TO_SHARED_PREFERENCES(nList,MyResources.NOTE_KEY);
+        MY_RESOURCES.SAVE_NOTES_TO_SHARED_PREFERENCES(nList,MyResources.NOTE_LIST_KEY);
 
         // loading the updated list
-        nList = MY_RESOURCES.LOAD_NOTES_FROM_SHARED_PREFERENCES(MyResources.NOTE_KEY);
+        nList = MY_RESOURCES.LOAD_NOTES_FROM_SHARED_PREFERENCES(MyResources.NOTE_LIST_KEY);
 
         // filtering the list to be displayed
         mList = MY_RESOURCES.FILTER_NOTES_BY_CATEGORY(nList,currentCategory);

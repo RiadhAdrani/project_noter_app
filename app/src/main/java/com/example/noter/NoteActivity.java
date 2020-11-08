@@ -9,6 +9,9 @@ import androidx.viewpager.widget.ViewPager;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
@@ -32,7 +35,7 @@ public class NoteActivity extends AppCompatActivity {
     // The index of the note in the category
     private int noteIndex = -1;
 
-    // The list of note in the category
+    // The list of all the notes
     private ArrayList<Note> mList = new ArrayList<>();
 
     // The list of icons
@@ -64,10 +67,13 @@ public class NoteActivity extends AppCompatActivity {
 
     final static int NEW_POSITION = 2;
 
+
+    androidx.appcompat.widget.Toolbar toolbar;
+
     // Tab view
     TabLayout tab;
 
-    // create a new fragment for the content
+    // fragments needed
     ContentFragment contentFragment;
     CheckListFragment checkListFragment;
 
@@ -81,11 +87,16 @@ public class NoteActivity extends AppCompatActivity {
         // could cause crashes if not set correctly
         setContentView(R.layout.note_activity_layout);
 
-        Intent i = getIntent();
+        // initializing the toolbar
+        toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         MY_RESOURCES = new MyResources(this);
 
-        mList = MY_RESOURCES.LOAD_NOTES_FROM_SHARED_PREFERENCES(MyResources.NOTE_KEY);
+        mList = MY_RESOURCES.LOAD_NOTES_FROM_SHARED_PREFERENCES(MyResources.NOTE_LIST_KEY);
+
+        Intent i = getIntent();
 
         // Getting the necessary data from MainActivity
         // and saving them as local (Class) variable
@@ -185,18 +196,20 @@ public class NoteActivity extends AppCompatActivity {
         });
 
         // Setting onClickListener for the save button
+        // Deprecated
         saveButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                SaveNoteExit(noteIndex);
+                // SaveNoteExit(noteIndex);
             }
         });
 
         // Setting onClickListener for the cancel button
+        // Deprecated
         cancelButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                CancelExit();
+                // CancelExit();
             }
         });
 
@@ -365,6 +378,44 @@ public class NoteActivity extends AppCompatActivity {
 
             }
         });
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+
+        // Create a submenu for sorting purpose
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.toolbar_note_activity,menu);
+
+        MenuItem saveButton = menu.findItem(R.id.save_note);
+        saveButton.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem menuItem) {
+
+                SaveNoteExit(noteIndex);
+
+                return true;
+            }
+        });
+
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+
+    }
+
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
 
     }
 
@@ -374,10 +425,18 @@ public class NoteActivity extends AppCompatActivity {
 
         super.onPause();
 
-        // Liberate resources
-        // finish();
+        // Save(noteIndex);
+        // MY_RESOURCES.SAVE_NOTES_TO_SHARED_PREFERENCES(mList,MyResources.NOTE_LIST_KEY);
+
     }
 
+    @Override
+    protected void onStop() {
+        // Actions to be made when the activity is on pause
+
+        super.onStop();
+
+    }
 
     void UpdateCategorySpinner(int index){
         // refresh the spinner after adding a new category
@@ -456,10 +515,6 @@ public class NoteActivity extends AppCompatActivity {
         mRecyclerView.setAdapter(mAdapter);
     }
 
-
-
-    // TODO: refactor saving, so bad
-
     void SaveNoteExitOld(final int position){
         // Local note saving
 
@@ -525,7 +580,7 @@ public class NoteActivity extends AppCompatActivity {
                             mList.add(0,mNote);
                         }
 
-                        MY_RESOURCES.SAVE_NOTES_TO_SHARED_PREFERENCES(mList,MyResources.NOTE_KEY);
+                        MY_RESOURCES.SAVE_NOTES_TO_SHARED_PREFERENCES(mList,MyResources.NOTE_LIST_KEY);
                         CancelExit();
 
                     }
@@ -567,7 +622,7 @@ public class NoteActivity extends AppCompatActivity {
                     mList.add(0,mNote);
                 }
 
-                MY_RESOURCES.SAVE_NOTES_TO_SHARED_PREFERENCES(mList,MyResources.NOTE_KEY);
+                MY_RESOURCES.SAVE_NOTES_TO_SHARED_PREFERENCES(mList,MyResources.NOTE_LIST_KEY);
                 CancelExit();
 
             }
@@ -628,6 +683,11 @@ public class NoteActivity extends AppCompatActivity {
             // checklist
             mList.get(index).checkList = checkListFragment.getCheckListItems() != null ? checkListFragment.getCheckListItems() : new ArrayList<CheckListItem>();
         }
+
+        // Debugging
+        Log.d("DEBUG_SAVING","Index of Note :"+noteIndex);
+        Log.d("DEBUG_SAVING","Total Number of notes :"+mList.size());
+
     }
 
     void SaveNoteExit(final int position){
@@ -665,7 +725,7 @@ public class NoteActivity extends AppCompatActivity {
 
                         Save(position);
 
-                        MY_RESOURCES.SAVE_NOTES_TO_SHARED_PREFERENCES(mList,MyResources.NOTE_KEY);
+                        MY_RESOURCES.SAVE_NOTES_TO_SHARED_PREFERENCES(mList,MyResources.NOTE_LIST_KEY);
                         CancelExit();
 
                     }
@@ -674,7 +734,7 @@ public class NoteActivity extends AppCompatActivity {
 
                 Save(position);
 
-                MY_RESOURCES.SAVE_NOTES_TO_SHARED_PREFERENCES(mList,MyResources.NOTE_KEY);
+                MY_RESOURCES.SAVE_NOTES_TO_SHARED_PREFERENCES(mList,MyResources.NOTE_LIST_KEY);
                 CancelExit();
 
             }
