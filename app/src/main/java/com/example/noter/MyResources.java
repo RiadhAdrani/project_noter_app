@@ -13,7 +13,6 @@ import com.google.gson.reflect.TypeToken;
 import java.io.Serializable;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
-import java.util.UUID;
 
 public class MyResources implements Serializable {
     // Class used to handle static resources
@@ -67,7 +66,6 @@ public class MyResources implements Serializable {
     //                                         METHODS                                            //
     // ------------------------------------------------------------------------------------------ //
 
-    // FUNCTION -1
     // Basic constructor for MyResource
     public MyResources(Context context){
         // Constructor
@@ -80,75 +78,11 @@ public class MyResources implements Serializable {
 
     // ------------------------------------------------------------------------------------------//
 
-    // FUNCTION 35
-    // Create and return a dummy list of CheckListItems
-
-    public ArrayList<CheckListItem> GENERATE_DUMMY_CHECK_LIST_ITEMS(int size){
-
-        ArrayList<CheckListItem> list = new ArrayList<>();
-
-        for (int i = 0; i< size; i++){
-            list.add(new CheckListItem(UUID.randomUUID().toString()));
-        }
-
-        return list;
-    }
-
-
-    // ------------------------------------------------------------------------------------------//
-
-    // FUNCTION 34
-    // Load an integer from the Shared Preference
-    // Uses Gson with Json
-    public String LOAD_STRING_FROM_SHARED_PREFERENCES(String TAG){
-
-        String string = ALL_CATEGORY_NAME;
-
-        SharedPreferences sharedPreferences = context.getSharedPreferences("shared preferences", Context.MODE_PRIVATE);
-        Gson gson = new Gson();
-
-        // The key of the Data
-        // works as an ID
-        // Should be unique, otherwise data will be overridden
-        String json = sharedPreferences.getString(TAG,null);
-
-        Type type = new TypeToken<String>() {}.getType();
-        string = gson.fromJson(json,type);
-
-        return string;
-    }
-
-    // ------------------------------------------------------------------------------------------//
-
-    // FUNCTION 33
-    // Save an integer to sharedPreferences with the key TAG
-    public void SAVE_STRING_TO_SHARED_PREFERENCES(String string, String TAG){
-
-        // save the categories to the Shared Preference
-        // Uses Gson with Json
-
-        SharedPreferences sharedPreferences = context.getSharedPreferences("shared preferences", Context.MODE_PRIVATE);
-        SharedPreferences.Editor editor = sharedPreferences.edit();
-        Gson gson = new Gson();
-        String json = gson.toJson(string);
-
-        // TAG
-        // The key of the Data
-        // works as an ID
-        // Should be unique, otherwise data will be overridden
-        editor.putString(TAG,json);
-
-        editor.apply();
-    }
-
-    // ------------------------------------------------------------------------------------------//
-
-    // FUNCTION 34
     // Load an integer from the Shared Preference
     // Uses Gson with Json
     public Integer LOAD_INTEGER_FROM_SHARED_PREFERENCES(String TAG){
 
-        Integer integer = 0;
+        Integer integer;
 
         SharedPreferences sharedPreferences = context.getSharedPreferences("shared preferences", Context.MODE_PRIVATE);
         Gson gson = new Gson();
@@ -168,7 +102,6 @@ public class MyResources implements Serializable {
 
     // ------------------------------------------------------------------------------------------//
 
-    // FUNCTION 33
     // Save an integer to sharedPreferences with the key TAG
     public void SAVE_INTEGER_TO_SHARED_PREFERENCES(Integer integer, String TAG){
 
@@ -191,12 +124,11 @@ public class MyResources implements Serializable {
 
     // ------------------------------------------------------------------------------------------//
 
-    // FUNCTION 34
     // Load a boolean from the Shared Preference
     // Uses Gson with Json
     public Boolean LOAD_BOOLEAN_FROM_SHARED_PREFERENCES(String TAG){
 
-        Boolean bool = true;
+        Boolean bool;
 
         SharedPreferences sharedPreferences = context.getSharedPreferences("shared preferences", Context.MODE_PRIVATE);
         Gson gson = new Gson();
@@ -216,7 +148,6 @@ public class MyResources implements Serializable {
 
     // ------------------------------------------------------------------------------------------//
 
-    // FUNCTION 33
     // Save a boolean to sharedPreferences with the key TAG
     public void SAVE_BOOLEAN_TO_SHARED_PREFERENCES(Boolean bool, String TAG){
 
@@ -239,7 +170,6 @@ public class MyResources implements Serializable {
 
     // ------------------------------------------------------------------------------------------//
 
-    // FUNCTION 32
     // Load the a single category from the Shared Preference
     // Uses Gson with Json
     public Category LOAD_SINGLE_CATEGORY_FROM_SHARED_PREFERENCES(String TAG){
@@ -266,7 +196,6 @@ public class MyResources implements Serializable {
 
     // ------------------------------------------------------------------------------------------//
 
-    // FUNCTION 31
     // Save a single category to sharedPreferences with the key TAG
     public void SAVE_SINGLE_CATEGORY_TO_SHARED_PREFERENCES(Category category, String TAG){
 
@@ -289,7 +218,6 @@ public class MyResources implements Serializable {
 
     // ------------------------------------------------------------------------------------------//
 
-    // FUNCTION 30
     // checking if a note with title "name" exist in "list"
     public boolean CHECK_IF_NOTE_TITLE_EXIST(ArrayList<Note> list,String title){
         for (Note note : list) {
@@ -300,7 +228,6 @@ public class MyResources implements Serializable {
 
     // ------------------------------------------------------------------------------------------//
 
-    // FUNCTION 29
     // checking if "name" exist in "list"
     // and trying to solve the duplicate names by adding
     // a string (copy)
@@ -321,7 +248,6 @@ public class MyResources implements Serializable {
 
     // ------------------------------------------------------------------------------------------//
 
-    // FUNCTION 28
     // return the index of a "mCategory" in "categoryList" by its name
     public int FIND_CATEGORY_BY_NAME(ArrayList<Category> categoryList,Category mCategory){
         // Return the index of the note category
@@ -347,7 +273,6 @@ public class MyResources implements Serializable {
 
     // ------------------------------------------------------------------------------------------//
 
-    // FUNCTION 27
     // Save "categoryList" to SharedPreferences after removing DEFAULT_CATEGORY and ADD_CATEGORY
     public void SAVE_CATEGORIES(ArrayList<Category> categoryList,String key){
         // Prepare the category list to be saved
@@ -365,7 +290,6 @@ public class MyResources implements Serializable {
 
     // ------------------------------------------------------------------------------------------//
 
-    // FUNCTION 26
     // return the index of a "mCategory" in "categoryList" by its UID
     public int FIND_CATEGORY_BY_UID(ArrayList<Category> categoryList,Category mCategory){
         // Return the index of the note category
@@ -389,7 +313,6 @@ public class MyResources implements Serializable {
 
     // ------------------------------------------------------------------------------------------//
 
-    // FUNCTION 25
     // Return "categoryList" from SharedPreferences after adding DEFAULT_CATEGORY and ADD_CATEGORY
     public ArrayList<Category> LOAD_CATEGORY_LOCALLY(){
         // Prepare the category list to be used in the activity
@@ -408,7 +331,6 @@ public class MyResources implements Serializable {
 
     // ------------------------------------------------------------------------------------------//
 
-    // FUNCTION 24
     // Copy the content of the note given by it's "position" in "mList"
     // to the clipboard
     public void COPY_NOTE_CONTENT(int position, ArrayList<Note> mList){
@@ -432,7 +354,6 @@ public class MyResources implements Serializable {
 
     // ------------------------------------------------------------------------------------------//
 
-    // FUNCTION 23
     // Load NoteActivity with the note "note"
     public void LOAD_NOTE_IN_NOTE_ACTIVITY(ArrayList<Note> noteList, Note note){
         // Load a note in the NoteActivity
@@ -453,7 +374,6 @@ public class MyResources implements Serializable {
 
     // ------------------------------------------------------------------------------------------//
 
-    // FUNCTION 22
     // return the list of the icons
     public ArrayList<Icon> GET_ICON_LIST(){
         // return the icon list
@@ -463,7 +383,6 @@ public class MyResources implements Serializable {
 
     // ------------------------------------------------------------------------------------------//
 
-    // FUNCTION 21
     // return an icon by its uid
     public Icon GET_ICON(String uid){
         // return an icon
@@ -477,7 +396,6 @@ public class MyResources implements Serializable {
 
     // ------------------------------------------------------------------------------------------//
 
-    // FUNCTION 20
     // Save category list to sharedPreferences with the key TAG
     public void SAVE_CATEGORIES_TO_SHARED_PREFERENCES(ArrayList<Category> list, String TAG){
 
@@ -500,7 +418,6 @@ public class MyResources implements Serializable {
 
     // ------------------------------------------------------------------------------------------//
 
-    // FUNCTION 19
     // Return category list from sharedPreferences using the key TAG
     public ArrayList<Category> LOAD_CATEGORIES_FROM_SHARED_PREFERENCES(String TAG){
         // Load the note list from the Shared Preference
@@ -528,7 +445,6 @@ public class MyResources implements Serializable {
 
     // ------------------------------------------------------------------------------------------//
 
-    // FUNCTION 18
     // Return the UID of a Category from SharedPreferences by its UID, passed as parameter
     public String GET_CATEGORY_BY_UID(String uid){
         for (Category category : LOAD_CATEGORIES_FROM_SHARED_PREFERENCES(CATEGORY_KEY)) {
@@ -544,7 +460,6 @@ public class MyResources implements Serializable {
 
     // ------------------------------------------------------------------------------------------//
 
-    // FUNCTION 17
     // Return a category from SharedPreferences by its UID, passed as parameter
     public Category GET_CATEGORY(String uid){
         for (Category category : LOAD_CATEGORIES_FROM_SHARED_PREFERENCES(CATEGORY_KEY)) {
@@ -560,7 +475,6 @@ public class MyResources implements Serializable {
 
     // ------------------------------------------------------------------------------------------//
 
-    // FUNCTION 16
     // Return "categoryList" from SharedPreferences after adding DEFAULT_CATEGORY and ALL_CATEGORY
     public ArrayList<Category> GET_CATEGORY_LIST(){
         // Prepare the category list to be used in the activity
@@ -581,7 +495,6 @@ public class MyResources implements Serializable {
 
     // ------------------------------------------------------------------------------------------//
 
-    // FUNCTION 15
     // Save "categoryList" to SharedPreferences after removing DEFAULT_CATEGORY and ALL_CATEGORY
     public void SAVE_CATEGORY_LIST(ArrayList<Category> categoryList){
         // Prepare the category list to be saved
@@ -599,7 +512,6 @@ public class MyResources implements Serializable {
 
     // ------------------------------------------------------------------------------------------//
 
-    // FUNCTION 14
     // Return the index of the note category
     // found in categoryList by checking
     // just the UID
@@ -623,7 +535,6 @@ public class MyResources implements Serializable {
 
     // ------------------------------------------------------------------------------------------//
 
-    // FUNCTION 13
     // Return the index of the note category
     // found in categoryList by checking
     // just the name
@@ -650,7 +561,6 @@ public class MyResources implements Serializable {
 
     // ------------------------------------------------------------------------------------------//
 
-    // FUNCTION 12
     // Filter a given note list
     // return a list containing notes with category equal to "category"
     // the passed category
@@ -682,7 +592,6 @@ public class MyResources implements Serializable {
 
     // ------------------------------------------------------------------------------------------//
 
-    // FUNCTION 11
     // Check if "name" exist in "categoryList"
     // return true if it exist
     // return false if not
@@ -703,7 +612,6 @@ public class MyResources implements Serializable {
 
     // ------------------------------------------------------------------------------------------//
 
-    // FUNCTION 10
     // checking if "name" exist in "list"
     // and trying to solve the duplicate names by adding
     // a string (copy)
@@ -725,7 +633,6 @@ public class MyResources implements Serializable {
 
     // ------------------------------------------------------------------------------------------//
 
-    // FUNCTION 09
     // save the categories to the Shared Preference
     // Uses Gson with Json
     public void SAVE_NOTES_TO_SHARED_PREFERENCES(ArrayList<Note> list, String TAG){
@@ -746,7 +653,6 @@ public class MyResources implements Serializable {
 
     // ------------------------------------------------------------------------------------------//
 
-    // FUNCTION 08
     // Load the note list from the Shared Preference
     // Uses Gson with Json
     public ArrayList<Note> LOAD_NOTES_FROM_SHARED_PREFERENCES(String TAG){
@@ -773,7 +679,6 @@ public class MyResources implements Serializable {
 
     // ------------------------------------------------------------------------------------------//
 
-    // FUNCTION 07
     // return the index of "note" in the ArrayList "list"
     // return -1 if "note" does not exist in "list"
     // Replaces (Class) Note.equals()
@@ -803,164 +708,6 @@ public class MyResources implements Serializable {
         return -1;
     }
 
-    // ------------------------------------------------------------------------------------------//
-
-    // FUNCTION 06
-    // Return an ArrayList containing "list" passed as a parameter sorted by modification date
-    // in the ascending order
-    // Use the randomized quick sort algorithm
-    // Use Recursive call
-    public ArrayList<Note> QUICK_RANDOMIZED_SORTING_BY_MODIFICATION_DATE(ArrayList<Note> list){
-
-        // if list is a one-element list
-        // return it as it is
-        // condition to stop the recursive call
-        if (list.size() <= 1) return list;
-
-        ArrayList<Note> high = new ArrayList<>();
-        ArrayList<Note> low = new ArrayList<>();
-        ArrayList<Note> equal = new ArrayList<>();
-
-        // selecting a random element
-        Note e = list.get( (int) (Math.random() *list.size()) );
-
-        // comparing the elements in the list
-        // with the randomly selected one
-        // and adding them to the appropriate list
-        for (Note x : list) {
-            if (x.creationDate.getTime() < e.creationDate.getTime()) low.add(x);
-            if (x.creationDate.getTime() > e.creationDate.getTime()) high.add(x);
-            if (x.creationDate.getTime() == e.creationDate.getTime()) equal.add(x);
-        }
-
-        ArrayList<Note> temp = new ArrayList<>();
-
-        // recursive call for the small list
-        temp.addAll(QUICK_RANDOMIZED_SORTING_BY_MODIFICATION_DATE(low));
-
-        temp.addAll(equal);
-
-        // recursive call for the small list
-        temp.addAll(QUICK_RANDOMIZED_SORTING_BY_MODIFICATION_DATE(high));
-
-        return temp;
-    }
-
-    // ------------------------------------------------------------------------------------------//
-
-    // FUNCTION 05
-    // Return a list of category object
-    // Used for testing purpose
-    public ArrayList<Category> CREATE_DUMMY_CATEGORY_LIST(){
-        ArrayList<Category> categoryList = new ArrayList<>();
-
-        categoryList.add(new Category("Default",true));
-        categoryList.add(new Category("Studies",true));
-        categoryList.add(new Category("Sports",true));
-        categoryList.add(new Category("Habits",false));
-        categoryList.add(new Category("MF",false));
-
-        return categoryList;
-    }
-
-    // ------------------------------------------------------------------------------------------//
-
-    // FUNCTION 04
-    // Return a list of icon object
-    // Used for testing purpose
-    public ArrayList<Icon> CREATE_DUMMY_ICON_LIST(int n){
-
-        ArrayList<Icon> iconList = new ArrayList<>();
-
-        for (int i = 0 ; i < n ; i++){
-            iconList.add(this.GET_ICON_LIST().get( (int) (Math.random()*this.GET_ICON_LIST().size()) ));
-        }
-
-        return iconList;
-
-    }
-
-    // ------------------------------------------------------------------------------------------//
-
-    // FUNCTION 03
-    // Return an ArrayList containing "list" passed as a parameter sorted by title
-    // in the ascending order
-    // Use the randomized quick sort algorithm
-    // Use Recursive call
-    public ArrayList<Note> QUICK_RANDOMIZED_SORTING_BY_ALPHA(ArrayList<Note> list){
-
-
-        if (list.size() <= 1) return list;
-        ArrayList<Note> high = new ArrayList<>();
-        ArrayList<Note> low = new ArrayList<>();
-        ArrayList<Note> equal = new ArrayList<>();
-        Note e = list.get( (int) (Math.random() *list.size()) );
-        for (Note x : list) {
-            switch (STRING_COMPARISON(x.title.trim(),e.title.trim())){
-                case  0: equal.add(x)   ; break;
-                case -1: low.add(x)     ; break;
-                case  1: high.add(x)    ; break;
-            }
-        }
-
-        ArrayList<Note> temp = new ArrayList<>();
-        temp.addAll(QUICK_RANDOMIZED_SORTING_BY_ALPHA(low));
-        temp.addAll(equal);
-        temp.addAll(QUICK_RANDOMIZED_SORTING_BY_ALPHA(high));
-
-        return temp;
-    }
-
-    // ------------------------------------------------------------------------------------------//
-
-    // FUNCTION 02
-    // Function used to compare two strings (a) and (b)
-    // Return an integer depending on the two strings passed as argument
-    // return -1 if (a) is alphabetically before (b)
-    // return  0 if (a) is alphabetically after  (b)
-    // return  1 if (a) is equal to              (b)
-    public int STRING_COMPARISON(String a, String b){
-
-        int size;
-        size = Math.min(a.length(), b.length());
-        for (int i = 0; i < size; i++) {
-            if (a.toLowerCase().charAt(i) < b.toLowerCase().charAt(i)) return -1; // A is before B
-            if (a.toLowerCase().charAt(i) > b.toLowerCase().charAt(i)) return  1; // A is after B
-        }
-        if (a.length() < b.length()) return -1;
-        else if (a.length() > b.length()) return 1;
-
-        return 0;
-    }
-
-    // ------------------------------------------------------------------------------------------//
-
-    // FUNCTION 01
-    // Return an ArrayList containing "list" passed as a parameter sorted by creation date
-    // in the ascending order
-    // Use the randomized quick sort algorithm
-    // Use Recursive call
-    public ArrayList<Note> QUICK_RANDOMIZED_SORTING_BY_CREATION_DATE(ArrayList<Note> list){
-
-        if (list.size() <= 1) return list;
-        ArrayList<Note> high = new ArrayList<>();
-        ArrayList<Note> low = new ArrayList<>();
-        ArrayList<Note> equal = new ArrayList<>();
-        Note e = list.get( (int) (Math.random() *list.size()) );
-
-        for (Note x : list) {
-            if (x.creationDate.getTime() < e.creationDate.getTime()) low.add(x);
-            if (x.creationDate.getTime() > e.creationDate.getTime()) high.add(x);
-            if (x.creationDate.getTime() == e.creationDate.getTime()) equal.add(x);
-        }
-
-        ArrayList<Note> temp = new ArrayList<>();
-        temp.addAll(QUICK_RANDOMIZED_SORTING_BY_CREATION_DATE(low));
-        temp.addAll(equal);
-        temp.addAll(QUICK_RANDOMIZED_SORTING_BY_CREATION_DATE(high));
-
-        return temp;
-    }
 
     // ------------------------------------------------------------------------------------------//
 

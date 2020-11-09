@@ -13,6 +13,8 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatDialogFragment;
 
+import java.util.Objects;
+
 public class ConfirmDialog extends AppCompatDialogFragment {
 
     // View of the dialog
@@ -29,7 +31,6 @@ public class ConfirmDialog extends AppCompatDialogFragment {
 
 
     public ConfirmDialog(Context context, String message){
-        this.dialog = dialog;
         this.mContext = context;
         this.message = message;
     }
@@ -52,8 +53,7 @@ public class ConfirmDialog extends AppCompatDialogFragment {
         // Function called to build the dialog box
 
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-        LayoutInflater inflater = getActivity().getLayoutInflater();
-        dialog = inflater.inflate(R.layout.confirm_dialog_layout,null);
+        dialog = Objects.requireNonNull(getActivity()).getLayoutInflater().inflate(R.layout.confirm_dialog_layout,null);
         builder.setView(dialog);
 
         TextView confirmText = dialog.findViewById(R.id.confirm_text);

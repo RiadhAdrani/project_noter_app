@@ -19,12 +19,12 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.SpinnerAdapter;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.material.tabs.TabLayout;
 
 import java.util.ArrayList;
+import java.util.Objects;
 
 public class NoteActivity extends AppCompatActivity {
     // Activity used to display a Note object
@@ -36,10 +36,7 @@ public class NoteActivity extends AppCompatActivity {
     private int noteIndex = -1;
 
     // The list of all the notes
-    private ArrayList<Note> mList = new ArrayList<>();
-
-    // The list of icons
-    private ArrayList<Icon> iconList = new ArrayList<>();
+    // private ArrayList<Note> mList = new ArrayList<>();
 
     // The number of icons to be displayed per grid
     // when the user is prompted to choose an icon
@@ -90,23 +87,21 @@ public class NoteActivity extends AppCompatActivity {
         // initializing the toolbar
         toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
 
+        // initializing an instance of MyResources
+        // check MyResources Java Class for more documentation
         MY_RESOURCES = new MyResources(this);
 
-        mList = MY_RESOURCES.LOAD_NOTES_FROM_SHARED_PREFERENCES(MyResources.NOTE_LIST_KEY);
-
+        // creating an intent
         Intent i = getIntent();
 
-        // Getting the necessary data from MainActivity
-        // and saving them as local (Class) variable
-        if ((int) i.getSerializableExtra(MyResources.LOAD_NOTE_KEY) != -1)
-            note = mList.get((int) i.getSerializableExtra(MyResources.LOAD_NOTE_KEY));
-        else
-            note = new Note(this);
+        // initializing the note
+        note = (int) i.getSerializableExtra(MyResources.LOAD_NOTE_KEY) != -1
+                ? MY_RESOURCES.LOAD_NOTES_FROM_SHARED_PREFERENCES(MyResources.NOTE_LIST_KEY).get((int) i.getSerializableExtra(MyResources.LOAD_NOTE_KEY))
+                : new Note(this);
 
-        // noteIndex = (int) i.getSerializableExtra("note_index");
-        noteIndex = MY_RESOURCES.GET_NOTE_INDEX(mList,note);
+        noteIndex = MY_RESOURCES.GET_NOTE_INDEX(MY_RESOURCES.LOAD_NOTES_FROM_SHARED_PREFERENCES(MyResources.NOTE_LIST_KEY),note);
 
         // Getting the View for the Note.title
         titleText = findViewById(R.id.note_title);
@@ -184,13 +179,13 @@ public class NoteActivity extends AppCompatActivity {
         // Displaying Note.iconUID
         noteIcon.setImageResource(note.getIcon(getApplicationContext()).id);
 
+        // overriding onClickListener
         noteIcon.setOnClickListener(new View.OnClickListener() {
             // Setting onClickListener for the icon
             // to display the icon list pick dialog
 
             @Override
             public void onClick(View view) {
-                iconList = new MyResources(getApplicationContext()).GET_ICON_LIST();
                 BuildIconDialog();
             }
         });
@@ -421,19 +416,12 @@ public class NoteActivity extends AppCompatActivity {
 
     @Override
     protected void onPause() {
-        // Actions to be made when the activity is on pause
-
         super.onPause();
-
-        // Save(noteIndex);
-        // MY_RESOURCES.SAVE_NOTES_TO_SHARED_PREFERENCES(mList,MyResources.NOTE_LIST_KEY);
 
     }
 
     @Override
     protected void onStop() {
-        // Actions to be made when the activity is on pause
-
         super.onStop();
 
     }
@@ -471,12 +459,12 @@ public class NoteActivity extends AppCompatActivity {
         iconDialog.setOnCreate(new PickIconDialog.OnCreate() {
             @Override
             public void buildRecyclerView() {
-                BuildIconRecyclerView(iconDialog.dialog,iconDialog);
+                BuildIconRecyclerView(iconDialog.dialog,iconDialog,new ArrayList<>(MY_RESOURCES.GET_ICON_LIST()));
             }
         });
     }
 
-    void BuildIconRecyclerView(View view, final PickIconDialog dialog){
+    void BuildIconRecyclerView(View view, final PickIconDialog dialog, final ArrayList<Icon> iconList){
         // Build The RecyclerView
 
         RecyclerView mRecyclerView;
@@ -515,123 +503,6 @@ public class NoteActivity extends AppCompatActivity {
         mRecyclerView.setAdapter(mAdapter);
     }
 
-    void SaveNoteExitOld(final int position){
-        // Local note saving
-
-        // if the note name is empty or too short
-        if (titleText.getText().toString().trim().isEmpty() || titleText.getText().toString().trim().length() < MyResources.NOTE_MINIMUM_NAME_LENGTH){
-
-            // display alert message to the user
-            Toast.makeText(getApplicationContext(),getString(R.string.note_name_short_alert),Toast.LENGTH_SHORT).show();
-        }
-
-        // name is valid
-        // not too short nor empty
-        else {
-
-            ArrayList<Note> tempList = new ArrayList<>(mList);
-
-            if (position != -1){
-                tempList.remove(position);
-            }
-
-            // check if the note name exists already
-            if (MY_RESOURCES.CHECK_IF_NOTE_TITLE_EXIST(tempList,titleText.getText().toString().trim())){
-                final ConfirmDialog confirmDialog = new ConfirmDialog(getApplicationContext(),getString(R.string.duplicate_note_title_alert));
-                confirmDialog.show(getSupportFragmentManager(),"duplicate note title");
-                confirmDialog.setButtons(new ConfirmDialog.Buttons() {
-                    @Override
-                    public void onCancelClickListener() {
-                        confirmDialog.dismiss();
-                    }
-
-                    @Override
-                    public void onConfirmClickListener() {
-
-                        if (position != -1){
-                            // if it is an old note
-
-                            mList.get(position).title = titleText.getText().toString().trim();
-
-                            // ???
-                            mList.get(position).content = contentFragment.getContent();
-
-                            mList.get(position).iconUID = note.iconUID;
-                            mList.get(position).category = note.category;
-                            mList.get(position).lastModifiedDate = new MyDate().GET_CURRENT_DATE();
-
-                            // saving checkList
-                            mList.get(position).checkList = note.checkList;
-
-                        }
-
-                        else {
-                            Note mNote = new Note(getApplicationContext());
-                            mNote.title = titleText.getText().toString().trim();
-
-                            mList.get(position).content = contentFragment.getContent();
-
-                            mNote.iconUID = note.iconUID;
-                            mNote.category = note.category;
-
-                            // saving checkList
-                            mList.get(position).checkList = note.checkList;
-
-                            mList.add(0,mNote);
-                        }
-
-                        MY_RESOURCES.SAVE_NOTES_TO_SHARED_PREFERENCES(mList,MyResources.NOTE_LIST_KEY);
-                        CancelExit();
-
-                    }
-                });
-            } else {
-
-                if (position != -1){
-                    // if it is an old note
-
-                    mList.get(position).title = titleText.getText().toString().trim();
-
-                    // ???
-                    mList.get(position).content = contentFragment.getContent();
-
-                    mList.get(position).iconUID = note.iconUID;
-                    mList.get(position).category = note.category;
-
-                    // saving checkList
-                    mList.get(position).checkList = note.checkList;
-
-                    mList.get(position).lastModifiedDate = new MyDate().GET_CURRENT_DATE();
-
-                }
-
-                else {
-                    Note mNote = new Note(getApplicationContext());
-                    mNote.title = titleText.getText().toString().trim();
-
-
-                    // ???
-                    mList.get(position).content = contentFragment.getContent();
-
-                    mNote.iconUID = note.iconUID;
-                    mNote.category = note.category;
-
-                    // saving checkList
-                    mNote.checkList = note.checkList;
-
-                    mList.add(0,mNote);
-                }
-
-                MY_RESOURCES.SAVE_NOTES_TO_SHARED_PREFERENCES(mList,MyResources.NOTE_LIST_KEY);
-                CancelExit();
-
-            }
-
-
-        }
-
-    }
-
     void CancelExit(){
         // Pass the user to MainActivity
 
@@ -642,7 +513,10 @@ public class NoteActivity extends AppCompatActivity {
         finish();
     }
 
-    void Save(int index){
+    ArrayList<Note> Save(int index){
+
+        ArrayList<Note> mList = MY_RESOURCES.LOAD_NOTES_FROM_SHARED_PREFERENCES(MyResources.NOTE_LIST_KEY);
+
         if (index == -1){
 
             // creating new note
@@ -688,6 +562,8 @@ public class NoteActivity extends AppCompatActivity {
         Log.d("DEBUG_SAVING","Index of Note :"+noteIndex);
         Log.d("DEBUG_SAVING","Total Number of notes :"+mList.size());
 
+        return mList;
+
     }
 
     void SaveNoteExit(final int position){
@@ -704,7 +580,7 @@ public class NoteActivity extends AppCompatActivity {
         // not too short nor empty
         else {
 
-            ArrayList<Note> tempList = new ArrayList<>(mList);
+            ArrayList<Note> tempList = new ArrayList<>(MY_RESOURCES.LOAD_NOTES_FROM_SHARED_PREFERENCES(MyResources.NOTE_LIST_KEY));
 
             if (position != -1){
                 tempList.remove(position);
@@ -723,9 +599,8 @@ public class NoteActivity extends AppCompatActivity {
                     @Override
                     public void onConfirmClickListener() {
 
-                        Save(position);
 
-                        MY_RESOURCES.SAVE_NOTES_TO_SHARED_PREFERENCES(mList,MyResources.NOTE_LIST_KEY);
+                        MY_RESOURCES.SAVE_NOTES_TO_SHARED_PREFERENCES(Save(position) ,MyResources.NOTE_LIST_KEY);
                         CancelExit();
 
                     }
@@ -734,11 +609,10 @@ public class NoteActivity extends AppCompatActivity {
 
                 Save(position);
 
-                MY_RESOURCES.SAVE_NOTES_TO_SHARED_PREFERENCES(mList,MyResources.NOTE_LIST_KEY);
+                MY_RESOURCES.SAVE_NOTES_TO_SHARED_PREFERENCES(Save(position),MyResources.NOTE_LIST_KEY);
                 CancelExit();
 
             }
-
 
         }
 

@@ -107,15 +107,9 @@ public class CheckListFragment extends Fragment{
 
             }
 
-            @Override
-            public void onItemChecked(int position) {
-
-            }
         });
 
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(context);
-
-        rv.setLayoutManager(linearLayoutManager);
+        rv.setLayoutManager(new LinearLayoutManager(context));
         rv.setAdapter(checkListAdapter);
 
         // initializing views

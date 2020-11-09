@@ -1,5 +1,6 @@
 package com.example.noter;
 
+import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -164,7 +165,7 @@ public class MainActivity extends AppCompatActivity implements Serializable {
                             // category name is valid
                             else {
                                 // add new category as it is
-                                AddCategory(newCategory,NEW_CATEGORY_POSITION);
+                                AddCategory(newCategory);
 
                                 // cAdapter.notifyItemInserted(NEW_CATEGORY_POSITION);
 
@@ -208,7 +209,7 @@ public class MainActivity extends AppCompatActivity implements Serializable {
                                     newCategory.name = MY_RESOURCES.GET_SUITABLE_NAME(newCategory.name.trim(),cList);
 
                                     // adding the suitable category name
-                                    AddCategory(newCategory,NEW_CATEGORY_POSITION);
+                                    AddCategory(newCategory);
 
                                     // cAdapter.notifyItemInserted(NEW_CATEGORY_POSITION);
 
@@ -258,12 +259,12 @@ public class MainActivity extends AppCompatActivity implements Serializable {
         sortBy = MY_RESOURCES.LOAD_INTEGER_FROM_SHARED_PREFERENCES(MyResources.CURRENT_SORTING_KEY);
     }
 
-    void AddCategory(Category newCategory, int position){
+    void AddCategory(Category newCategory){
         // Add newCategory to the list of categories
         // @ index position
 
         // Add a new category to the list
-        cList.add(position,newCategory);
+        cList.add(MainActivity.NEW_CATEGORY_POSITION,newCategory);
 
         // saving the category list
         // to the shared preferences
@@ -589,6 +590,7 @@ public class MainActivity extends AppCompatActivity implements Serializable {
         BuildNoteRecyclerView();
     }
 
+    @SuppressLint("NonConstantResourceId")
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         // Overriding the functionality of each option
@@ -629,7 +631,7 @@ public class MainActivity extends AppCompatActivity implements Serializable {
         // if isAscending is false
         // reverse the list
         // for the descending order
-        if (!isAscending) Collections.reverse(nList);
+        if (!sortAscending) Collections.reverse(nList);
 
         // filter by the current filter
         mList = MY_RESOURCES.FILTER_NOTES_BY_CATEGORY(nList,currentCategory);
@@ -657,7 +659,7 @@ public class MainActivity extends AppCompatActivity implements Serializable {
         // if isAscending is false
         // reverse the list
         // for the descending order
-        if (!isAscending) Collections.reverse(nList);
+        if (!sortAscending) Collections.reverse(nList);
 
         mList = MY_RESOURCES.FILTER_NOTES_BY_CATEGORY(nList,currentCategory);
 
@@ -684,7 +686,7 @@ public class MainActivity extends AppCompatActivity implements Serializable {
         // if isAscending is false
         // reverse the list
         // for the descending order
-        if (!isAscending) Collections.reverse(nList);
+        if (!sortAscending) Collections.reverse(nList);
 
         // filter by the current filter
         mList = MY_RESOURCES.FILTER_NOTES_BY_CATEGORY(nList,currentCategory);
@@ -726,15 +728,6 @@ public class MainActivity extends AppCompatActivity implements Serializable {
                 // display the drop down menu
 
                 MY_RESOURCES.LOAD_NOTE_IN_NOTE_ACTIVITY(nList,mList.get(position));
-            }
-
-            @Override
-            public void onOptionClick(int position) {
-                // Do nothing
-                // This function could be deleted
-
-                // deleteNote(position);
-                // saveNoteToSharedPreferences(mList);
             }
 
             @Override

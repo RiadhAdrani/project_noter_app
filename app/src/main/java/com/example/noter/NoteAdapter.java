@@ -1,5 +1,6 @@
 package com.example.noter;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -13,10 +14,8 @@ import android.widget.PopupMenu;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
-import java.nio.file.DirectoryStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -54,7 +53,6 @@ public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.myViewHolder> 
         // Interface containing (Hollow) overridable functions
 
         void onItemClick(int position);
-        void onOptionClick(int position);
         void onDuplicateClick(int position);
         void onCopyContentClick(int position);
         void onDeleteClick(int position);
@@ -81,7 +79,7 @@ public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.myViewHolder> 
         public ImageView mCheckListIcon;
         public TextView mCheckListCount;
 
-        public myViewHolder(@NonNull View itemView, final OnItemClickListener listener, final Context mContext, final NoteAdapter adapter) {
+        public myViewHolder(@NonNull View itemView, final OnItemClickListener listener, final Context mContext) {
             super(itemView);
 
             // initializing views
@@ -98,6 +96,7 @@ public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.myViewHolder> 
             mPopup = new PopupMenu(mContext,mOptions);
             mPopup.inflate(R.menu.card_option_menu);
             mPopup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                @SuppressLint("NonConstantResourceId")
                 @Override
                 public boolean onMenuItemClick(MenuItem menuItem) {
                     int position = getAdapterPosition();
@@ -137,12 +136,6 @@ public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.myViewHolder> 
                 @Override
                 public void onClick(View view) {
                     mPopup.show();
-                    if (listener != null){
-                        int position = getAdapterPosition();
-                        if (position != RecyclerView.NO_POSITION){
-                            listener.onOptionClick(position);
-                        }
-                    }
                 }
             });
         }
@@ -155,9 +148,10 @@ public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.myViewHolder> 
         // Inflate and load the layout of the element
 
         View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.note_card_layout,parent,false);
-        return new myViewHolder(v, mListener,mContext,this);
+        return new myViewHolder(v, mListener,mContext);
     }
 
+    @SuppressLint("SetTextI18n")
     @Override
     public void onBindViewHolder(@NonNull myViewHolder holder, int position) {
         // Assign information to the existing View elements
@@ -165,22 +159,21 @@ public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.myViewHolder> 
 
         MyResources myResources = new MyResources(mContext);
 
-        Note currentNote = mNoteList.get(position);
-        holder.mImageView.setImageResource(new MyResources(mContext).GET_ICON(currentNote.iconUID).id);
-        holder.mTitle.setText(currentNote.title);
+        holder.mImageView.setImageResource(new MyResources(mContext).GET_ICON(mNoteList.get(position).iconUID).id);
+        holder.mTitle.setText(mNoteList.get(position).title);
 
         // if for some reason the note does not have any category UID assigned to it,
         // set the UID to the DEFAULT_CATEGORY_UID
-        if (currentNote.category == null){
-            currentNote.category = MyResources.DEFAULT_CATEGORY.UID;
+        if (mNoteList.get(position).category == null){
+            mNoteList.get(position).category = MyResources.DEFAULT_CATEGORY.UID;
         }
 
-        holder.mCategory.setText(myResources.GET_CATEGORY(currentNote.category).name);
-        holder.mContentPreview.setText(currentNote.content);
+        holder.mCategory.setText(myResources.GET_CATEGORY(mNoteList.get(position).category).name);
+        holder.mContentPreview.setText(mNoteList.get(position).content);
 
         // if there is no additional information to show
         // set section visibility to GONE
-        if (currentNote.checkList.isEmpty()){
+        if (mNoteList.get(position).checkList.isEmpty()){
             holder.mCardInfo.setVisibility(View.GONE);
         }
         // else there is information to display
@@ -188,13 +181,12 @@ public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.myViewHolder> 
 
             // checkList information
             // if empty hide, else display
-            if (currentNote.checkList.isEmpty()){
+            if (mNoteList.get(position).checkList.isEmpty()){
                 holder.mCheckListIcon.setVisibility(View.INVISIBLE);
                 holder.mCheckListCount.setVisibility(View.INVISIBLE);
             }
             else {
-                String checkListCountText = currentNote.getDoneCount()+"/"+currentNote.checkList.size();
-                holder.mCheckListCount.setText(checkListCountText);
+                holder.mCheckListCount.setText(mNoteList.get(position).getDoneCount()+"/"+mNoteList.get(position).checkList.size());
             }
 
         }

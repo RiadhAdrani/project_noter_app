@@ -118,7 +118,6 @@ public class CheckListAdapter extends RecyclerView.Adapter<CheckListAdapter.myVi
 
     public interface OnItemClick{
         void onDeleteClick(int position);
-        void onItemChecked(int position);
     }
 
     public void setOnItemClick(OnItemClick listener){

@@ -6,47 +6,33 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.ImageButton;
-import android.widget.SpinnerAdapter;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.transition.Transition;
 
 import java.util.ArrayList;
-import java.util.Objects;
 
 public class CategorySpinner extends ArrayAdapter<Category> {
 
-    public onClickListener listener;
+
 
     public CategorySpinner(Context context, ArrayList<Category> list){
         super(context,0,list);
     }
 
 
-    public interface onClickListener{
-        void setOnDeleteClickListener(int position);
-    }
-
-
-    public void setOnDeleteClickListener(onClickListener listener){
-        this.listener = listener;
-    }
-
     @NonNull
     @Override
     public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
-        return initView(position,convertView,parent,listener);
+        return initView(position,convertView,parent);
     }
 
     @Override
     public View getDropDownView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
-        return initView(position,convertView,parent,listener);    }
+        return initView(position,convertView,parent);    }
 
-    public View initView(final int position, View convertView, ViewGroup parent, final onClickListener listener){
+    public View initView(final int position, View convertView, ViewGroup parent){
 
         if (convertView == null){
             convertView = LayoutInflater.from(getContext()).inflate(

@@ -2,9 +2,9 @@ package com.example.noter;
 
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.util.Log;
 
 import java.io.Serializable;
-import java.util.Calendar;
 import java.util.Date;
 
 public class CheckListItem implements Serializable, Parcelable {
@@ -50,7 +50,13 @@ public class CheckListItem implements Serializable, Parcelable {
         dest.writeString(text);
         dest.writeByte((byte) (isDone == null ? 0 : isDone ? 1 : 2));
         dest.writeLong(dateCreated.getTime());
-        dest.writeLong(dateDone.getTime());
+
+        try {
+            dest.writeLong(dateDone.getTime());
+        }catch (Exception e){
+            Log.d("DEBUG_EXCEPTION","CheckListItem : Null Object Reference");
+        }
+
     }
 
     @Override

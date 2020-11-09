@@ -78,8 +78,7 @@ public class IconAdapter extends RecyclerView.Adapter<IconAdapter.myViewHolder> 
     public IconAdapter.myViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         // Inflate and load the layout of the element
 
-        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.icon_layout,parent,false);
-        return new IconAdapter.myViewHolder(v,listener);
+        return new IconAdapter.myViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.icon_layout,parent,false),listener);
     }
 
     @Override
@@ -87,9 +86,7 @@ public class IconAdapter extends RecyclerView.Adapter<IconAdapter.myViewHolder> 
         // Assign information to the existing View elements
         // to be displayed
 
-        Icon currentIcon = mList.get(position);
-        holder.mIcon.setImageResource(currentIcon.id);
-        // holder.mName.setText(currentIcon.name);
+        holder.mIcon.setImageResource(mList.get(position).id);
     }
 
     @Override

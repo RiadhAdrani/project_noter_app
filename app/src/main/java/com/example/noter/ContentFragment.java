@@ -1,5 +1,6 @@
 package com.example.noter;
 
+import android.annotation.SuppressLint;
 import android.os.Bundle;
 
 import androidx.annotation.Nullable;
@@ -19,7 +20,6 @@ public class ContentFragment extends Fragment {
 
     private static final String CONTENT = "param1";
 
-    // TODO: Rename and change types of parameters
     public String fContent;
 
     EditText contentView;
@@ -52,6 +52,7 @@ public class ContentFragment extends Fragment {
 
     }
 
+    @SuppressLint("SetTextI18n")
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
@@ -65,8 +66,10 @@ public class ContentFragment extends Fragment {
         contentView.setMovementMethod(new ScrollingMovementMethod());
 
         final TextView contentCounter = getView().findViewById(R.id.f_count_text);
-        int temp = getResources().getInteger(R.integer.note_content_max_length) - contentView.length();
-        contentCounter.setText( temp + "/" + getResources().getInteger(R.integer.note_content_max_length));
+        contentCounter.setText(
+                (getResources().getInteger(R.integer.note_content_max_length) - contentView.length()) +
+                "/" +
+                getResources().getInteger(R.integer.note_content_max_length));
 
         // watcher that will count the number of remaining character for the
         // current note
@@ -86,14 +89,17 @@ public class ContentFragment extends Fragment {
             public void afterTextChanged(Editable s)
             {
                 // this will show characters remaining
-                int temp = getResources().getInteger(R.integer.note_content_max_length) - s.toString().length();
-                contentCounter.setText( temp + "/" + getResources().getInteger(R.integer.note_content_max_length));
+                contentCounter.setText(
+                        (getResources().getInteger(R.integer.note_content_max_length) - s.toString().length()) +
+                        "/" +
+                        getResources().getInteger(R.integer.note_content_max_length));
             }
         });
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_note_content, container, false);
     }

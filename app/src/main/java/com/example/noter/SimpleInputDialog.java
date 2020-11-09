@@ -1,5 +1,6 @@
 package com.example.noter;
 
+import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
@@ -12,6 +13,8 @@ import android.widget.EditText;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatDialogFragment;
+
+import java.util.Objects;
 
 public class SimpleInputDialog extends AppCompatDialogFragment {
 
@@ -48,14 +51,15 @@ public class SimpleInputDialog extends AppCompatDialogFragment {
         this.setButtons = buttons;
     }
 
+    @SuppressLint("InflateParams")
     @NonNull
     @Override
     public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
         // Function called to build the dialog box
 
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-        LayoutInflater inflater = getActivity().getLayoutInflater();
-        dialog = inflater.inflate(R.layout.input_string_dialog_layout,null);
+
+        dialog = Objects.requireNonNull(getActivity()).getLayoutInflater().inflate(R.layout.input_string_dialog_layout,null);
         builder.setView(dialog);
 
         inputField = dialog.findViewById(R.id.input_text);

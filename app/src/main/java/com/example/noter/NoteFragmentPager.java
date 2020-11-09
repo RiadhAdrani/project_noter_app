@@ -8,7 +8,7 @@ import androidx.fragment.app.FragmentPagerAdapter;
 
 public class NoteFragmentPager extends FragmentPagerAdapter {
 
-    private int size;
+    private final int size;
     private FragmentSelect fragmentSelect;
 
     public void FragmentSelect(FragmentSelect fragmentSelect){

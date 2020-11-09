@@ -50,15 +50,6 @@ public class Note implements Serializable {
         return r.GET_ICON(this.iconUID);
     }
 
-    // return the number of undone items in the checklist
-    public int getUndoneCount(){
-        int x = 0;
-        for (CheckListItem item : checkList) {
-            if (!item.isDone) x++;
-        }
-        return x;
-    }
-
     // return the number of done items in the checklist
     public int getDoneCount(){
         int x = 0;

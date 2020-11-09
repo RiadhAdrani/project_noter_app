@@ -39,10 +39,13 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.myView
     public CategoryAdapter.myViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         // Inflate and load the layout of the element
 
-        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.category_card_layout,parent,false);
+        // TODO: delete
+        // View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.category_card_layout,parent,false);
 
         // Return the inflated view to be displayed
-        return new CategoryAdapter.myViewHolder(v,listener);
+        return new CategoryAdapter.myViewHolder(
+                LayoutInflater.from(parent.getContext()).inflate(R.layout.category_card_layout,parent,false),
+                listener);
     }
 
     @Override
@@ -51,10 +54,12 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.myView
         // to be displayed
 
         // get the current category element
-        Category currentCategory = mList.get(position);
+
+        // TODO: delete
+        // Category currentCategory = mList.get(position);
 
         // assign text to the TextView
-        holder.mText.setText(currentCategory.name);
+        holder.mText.setText(mList.get(position).name);
 
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -98,28 +103,6 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.myView
             super(itemView);
 
             mText = itemView.findViewById(R.id.category_name_textView);
-
-//            itemView.setOnClickListener(new View.OnClickListener() {
-//                @Override
-//                public void onClick(View view) {
-//
-//                    if (listener != null){
-//                        listener.onClickListener(getAdapterPosition());
-//                    }
-//
-//                }
-//            });
-//
-//            itemView.setOnLongClickListener(new View.OnLongClickListener() {
-//                @Override
-//                public boolean onLongClick(View view) {
-//
-//                    if (listener != null){
-//                        listener.onLongClickListener(getAdapterPosition());
-//                    }
-//                    return true;
-//                }
-//            });
 
         }
     }

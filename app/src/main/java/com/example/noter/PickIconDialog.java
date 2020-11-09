@@ -27,14 +27,6 @@ public class PickIconDialog extends AppCompatDialogFragment{
     // in which the adapter is used.
     Context mContext;
 
-    public PickIconDialog(View dialog, Context mContext){
-        // [UNUSED]
-        // Constructor 1
-
-        this.dialog = dialog;
-        this.mContext = mContext;
-    }
-
     public PickIconDialog(Context mContext){
         // Constructor 2
 
@@ -60,8 +52,10 @@ public class PickIconDialog extends AppCompatDialogFragment{
         // Function called to build the dialog box
 
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-        LayoutInflater inflater = getActivity().getLayoutInflater();
-        dialog = inflater.inflate(R.layout.icon_pick_layout,null);
+
+        // LayoutInflater inflater = getActivity().getLayoutInflater();
+        dialog = getActivity().getLayoutInflater().inflate(R.layout.icon_pick_layout,null);
+
         builder.setView(dialog);
 
         onCreate.buildRecyclerView();
